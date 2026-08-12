@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 
-// ! getErrorMessage
+
 export const getErrorMessage = (error: unknown): string => {
   if (error && typeof error === "object" && "response" in error) {
     const axiosError = error as AxiosError<{ message?: string }>;
@@ -9,7 +9,7 @@ export const getErrorMessage = (error: unknown): string => {
   return "Something went wrong";
 };
 
-// ! Initial Name Part
+
 export const getInitials = (name: string) => {
   return name
     .split(" ")

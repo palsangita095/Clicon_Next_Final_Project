@@ -19,16 +19,6 @@ export interface AppNotification {
   source: "profile" | "customer" | "driver"; 
 }
 
-// export interface AppNotification {
-//   id: string;
-//   profile_id: string;
-//   title: string;
-//   message: string;
-//   type: NotificationType;
-//   read: boolean;
-//   created_at: string;
-//   link?: string | null;
-// }
 
 export interface CreateNotificationInput {
   profile_id: string;

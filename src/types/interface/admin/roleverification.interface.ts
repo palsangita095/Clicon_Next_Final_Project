@@ -12,7 +12,7 @@ export interface RoleVerification {
   created_at: string;
   updated_at: string;
 
-  // The joined data from the profiles table
+
   profiles?: {
     full_name: string | null;
     email: string;

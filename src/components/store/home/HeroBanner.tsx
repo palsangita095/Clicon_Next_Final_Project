@@ -12,7 +12,7 @@ import { ArrowRight } from "lucide-react";
 export default function HeroBanner() {
   return (
     <div className="flex flex-col md:flex-row gap-4 max-w-7xl mx-auto py-6 px-4">
-      {/* Left side */}
+     
       <div className="flex-1 bg-gray-100 rounded-lg p-8 flex items-center relative overflow-hidden">
         <div className="z-10 max-w-sm">
           <div className="flex items-center gap-2 mb-4">
@@ -46,9 +46,9 @@ export default function HeroBanner() {
         />
       </div>
 
-      {/* Right side */}
+     
       <div className="flex flex-col gap-4 w-full md:w-1/3">
-        {/* Top */}
+        
         <div className="bg-gray-900 text-white rounded-lg p-6 flex flex-col justify-center h-1/2 relative overflow-hidden">
           <div className="z-10">
             <span className="text-brand-yellow font-medium text-sm mb-2 block">Summer Sales</span>
@@ -75,7 +75,7 @@ export default function HeroBanner() {
           />
         </div>
 
-        {/* Bottom */}
+        
         <div className="bg-gray-100 rounded-lg p-6 flex flex-col justify-center h-1/2 relative overflow-hidden">
           <div className="z-10">
             <Image

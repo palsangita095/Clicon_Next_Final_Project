@@ -68,7 +68,7 @@ const productSchema = z.object({
 
 type ProductFormValues = z.infer<typeof productSchema>;
 
-// --- Mock Data ---
+
 const METRICS = [
   { label: "Revenue", value: "₹75,620", change: "+22%", isPositive: true, data: [4, 3, 5, 4, 6, 5, 8] },
   { label: "Orders Paid", value: "520", change: "+5.7%", isPositive: true, data: [3, 4, 3, 5, 4, 6, 7] },
@@ -93,24 +93,24 @@ export default function AdminProductDetailsPage() {
   const [revenueData, setRevenueData] = useState<{ name: string; value: number }[]>([]);
   const [loadingRevenue, setLoadingRevenue] = useState(true);
 
-  // Image Upload State
+  
   const [imageInputMode, setImageInputMode] = useState<"upload" | "url">("upload");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageFilePreview, setImageFilePreview] = useState<string | null>(null);
   const [imageUrls, setImageUrls] = useState("");
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  // Tags
+
   const [allTags, setAllTags] = useState<{ id: string; name: string }[]>([]);
   const [selectedTagIds, setSelectedTagIds] = useState<Set<string>>(new Set());
   const [newTagName, setNewTagName] = useState("");
   const [creatingTag, setCreatingTag] = useState(false);
 
-  // Categories
+  
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
 
-  // Specs
+ 
   const [specs, setSpecs] = useState<{ key: string; value: string }[]>([]);
   const [selectedBrandId, setSelectedBrandId] = useState("");
 
@@ -221,7 +221,7 @@ export default function AdminProductDetailsPage() {
     let finalImageUrls = product.image_urls || [];
 
     try {
-      // Handle Image Mode: Upload vs URL
+      
       if (imageInputMode === "upload" && imageFile) {
         setUploadingImage(true);
         const publicUrl = await uploadStoreImage(imageFile, "products");
@@ -253,7 +253,7 @@ export default function AdminProductDetailsPage() {
         specifications: specs.filter((s) => s.key.trim()),
       });
 
-      // Update tags
+      
       await syncProductTags(product.id, Array.from(selectedTagIds));
 
       setProduct({ ...product, ...data, image_urls: finalImageUrls, category: categories.find(c => c.id === selectedCategoryId) ?? null });
@@ -309,7 +309,7 @@ export default function AdminProductDetailsPage() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Top Bar / Breadcrumb */}
+      
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center gap-2 text-xl">
           <Link href="/admin/products" className="text-brand-orange font-bold hover:underline">Products</Link>
@@ -326,7 +326,7 @@ export default function AdminProductDetailsPage() {
         </div>
       </div>
 
-      {/* Metric Cards */}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {METRICS.map((metric, idx) => (
           <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
@@ -357,10 +357,10 @@ export default function AdminProductDetailsPage() {
         ))}
       </div>
 
-      {/* Main Content Grid */}
+     
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* Product Details Card */}
+       
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center">
           <div className="w-24 h-24 bg-gray-100 rounded-full overflow-hidden relative mb-4 border-4 border-gray-50">
             <Image src={fixImageUrl(product?.image_urls?.[0], product?.name)} alt={product?.name || "Product"} fill sizes="40px" className="object-cover" />
@@ -411,7 +411,7 @@ export default function AdminProductDetailsPage() {
           </div>
         </div>
 
-        {/* Revenue Chart */}
+        
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2">
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-2">
@@ -527,7 +527,7 @@ export default function AdminProductDetailsPage() {
               </select>
             </div>
             
-            {/* IMAGE SECTION */}
+           
             <div className="md:col-span-2 border border-gray-100 rounded-xl p-6 bg-gray-50/50 mt-4 space-y-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide flex items-center gap-2">
@@ -587,7 +587,7 @@ export default function AdminProductDetailsPage() {
               )}
             </div>
 
-            {/* Tags */}
+            
             <div className="md:col-span-2 border-t border-gray-100 pt-6">
               <label className="text-sm font-bold text-gray-900 mb-3 block uppercase tracking-wide">Product Tags</label>
               <div className="flex flex-col sm:flex-row gap-2 mb-4">
@@ -619,7 +619,7 @@ export default function AdminProductDetailsPage() {
               </div>
             </div>
 
-            {/* Specifications */}
+           
             <div className="md:col-span-2 border-t border-gray-100 pt-6">
               <label className="text-sm font-bold text-gray-900 mb-3 block uppercase tracking-wide">Additional Specifications</label>
               <div className="space-y-2">
@@ -701,7 +701,7 @@ export default function AdminProductDetailsPage() {
         )}
       </form>
 
-      {/* Orders Table */}
+      
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
         <div className="p-6 flex justify-between items-center border-b border-gray-50">
           <h3 className="font-bold text-[#1E293B] text-lg">Orders</h3>

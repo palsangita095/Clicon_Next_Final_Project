@@ -5,7 +5,7 @@ import {
   UpdateProfilePayload,
 } from "@/types/interface/admin/profiles.interface";
 
-// ! fetch all profiles
+
 export const getProfilesFns = async ({
   limit,
   page,
@@ -43,7 +43,7 @@ export const getProfilesFns = async ({
   }
 };
 
-// ! create profile
+
 export const createProfileFns = async (payload: CreateProfilePayload) => {
   try {
     const { data, error } = await supabase
@@ -67,7 +67,7 @@ export const createProfileFns = async (payload: CreateProfilePayload) => {
   }
 };
 
-// ! update profile
+
 export const updateProfileFns = async (payload: UpdateProfilePayload) => {
   try {
     const { id, ...updates } = payload;
@@ -94,7 +94,7 @@ export const updateProfileFns = async (payload: UpdateProfilePayload) => {
   }
 };
 
-// ! toggle profile active status
+
 export const toggleProfileStatusFns = async (
   id: string,
   currentStatus: boolean,
@@ -128,7 +128,7 @@ export const toggleProfileStatusFns = async (
   }
 };
 
-// ! verify profile
+
 export const verifyProfileFns = async (id: string, verified: boolean) => {
   try {
     const { data, error } = await supabase
@@ -157,7 +157,7 @@ export const verifyProfileFns = async (id: string, verified: boolean) => {
   }
 };
 
-// ! delete profile
+
 export const deleteProfileFns = async (id: string) => {
   try {
     const { error } = await supabase.from("profiles").delete().eq("id", id);

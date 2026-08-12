@@ -81,7 +81,7 @@ export default function AdminCategoriesPage() {
       try {
         finalImage = await uploadStoreImageMutation.mutateAsync({ file: categoryFile, folder: "categories" });
       } catch {
-        // preserve original behavior: continue even if upload fails
+        
       }
     }
     try {
@@ -130,7 +130,7 @@ export default function AdminCategoriesPage() {
       try {
         finalImage = await uploadStoreImageMutation.mutateAsync({ file: editCategoryFile, folder: "categories" });
       } catch {
-        // preserve original behavior: continue even if upload fails
+        
       }
     }
     try {

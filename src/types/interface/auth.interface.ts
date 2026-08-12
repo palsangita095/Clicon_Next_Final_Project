@@ -11,7 +11,7 @@ export interface SignupPayload extends LoginPayload {
   avatar_url?: string | null;
 }
 
-// Mirrors the profiles table exactly (post-migration)
+
 export interface ProfileSchema {
   id: string;
   email: string;

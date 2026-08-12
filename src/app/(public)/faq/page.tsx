@@ -49,7 +49,7 @@ export default function FaqPage() {
 
   return (
     <div className="bg-white min-h-screen">
-      {/* Breadcrumb */}
+      
       <div className="bg-gray-50 border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500 flex items-center gap-2">
           <Link href="/" className="hover:text-brand-orange flex items-center gap-1">
@@ -65,7 +65,7 @@ export default function FaqPage() {
       <div className="container mx-auto px-4 md:px-8 py-16">
         <div className="flex flex-col lg:flex-row gap-12">
           
-          {/* FAQ Accordion */}
+          
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-gray-900 mb-8">Frequently Asked Questions</h1>
             
@@ -97,7 +97,7 @@ export default function FaqPage() {
             </div>
           </div>
 
-          {/* Contact Form Sidebar */}
+          
           <div className="w-full lg:w-[400px]">
             <div className="bg-[#FEF9E6] rounded-md p-8">
               <h3 className="text-lg font-bold text-gray-900 mb-3">Don&apos;t find your answer, Ask for support.</h3>

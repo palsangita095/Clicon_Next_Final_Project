@@ -11,7 +11,6 @@ interface GenerateAIResponse {
   rateLimited?: boolean;
 }
 
-// ! ai response generation
 export const generateAIResponseFns = async ({
   message,
   language,

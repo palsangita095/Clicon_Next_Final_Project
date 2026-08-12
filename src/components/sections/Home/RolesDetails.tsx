@@ -55,7 +55,7 @@ const ROLES_DATA = [
   },
 ];
 
-// --- Animations ---
+
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
@@ -73,7 +73,7 @@ const RolesSection = () => {
   return (
     <section className="w-full bg-background py-16 text-foreground">
       <div className="container mx-auto max-w-7xl px-6 lg:px-12">
-        {/* ── Header Section ── */}
+        
         <motion.div
           initial="hidden"
           whileInView="show"
@@ -81,7 +81,7 @@ const RolesSection = () => {
           variants={staggerContainer}
           className="mb-16"
         >
-          {/* Eyebrow */}
+          
           <motion.div
             variants={fadeUp}
             className="mb-6 flex items-center gap-2"
@@ -92,7 +92,7 @@ const RolesSection = () => {
             </div>
           </motion.div>
 
-          {/* Headline */}
+        
           <motion.h2
             variants={fadeUp}
             className="max-w-4xl text-5xl font-black uppercase leading-[0.95] tracking-tighter md:text-7xl lg:text-8xl"
@@ -105,7 +105,7 @@ const RolesSection = () => {
           </motion.h2>
         </motion.div>
 
-        {/* ── Top Grid: Four Roles ── */}
+       
         <motion.div
           initial="hidden"
           whileInView="show"
@@ -119,7 +119,7 @@ const RolesSection = () => {
               variants={fadeUp}
               className="flex h-full flex-col rounded-[2rem] border border-border bg-card p-8 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-md"
             >
-              {/* Badge */}
+              
               <div
                 className={`mb-6 inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${item.badgeColor}`}
               >
@@ -127,12 +127,12 @@ const RolesSection = () => {
                 {item.role}
               </div>
 
-              {/* Title */}
+              
               <h3 className="mb-6 text-2xl font-black tracking-tight text-card-foreground">
                 {item.title}
               </h3>
 
-              {/* Bullet Points */}
+              
               <ul className="mt-auto space-y-3">
                 {item.bullets.map((bullet, bIdx) => (
                   <li
@@ -148,7 +148,7 @@ const RolesSection = () => {
           ))}
         </motion.div>
 
-        {/*  Bottom Grid: Bento Boxes  */}
+        
         <motion.div
           initial="hidden"
           whileInView="show"
@@ -156,12 +156,12 @@ const RolesSection = () => {
           variants={staggerContainer}
           className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12"
         >
-          {/* Left Large Card (Live Command Center) */}
+          
           <motion.div
             variants={fadeUp}
             className="relative flex min-h-87.5 flex-col justify-end overflow-hidden rounded-[2rem] bg-secondary p-10 lg:col-span-8"
           >
-            {/* Background Image Container */}
+            
             <div className="absolute inset-0 z-0">
               <Image
                 src={imgLeft}
@@ -172,10 +172,10 @@ const RolesSection = () => {
               />
             </div>
 
-            {/* Dynamic Overlay & Gradient (Adapts to theme background) */}
+            
             <div className="absolute inset-0 z-10 bg-linear-to-b from-background/50 to-transparent opacity-30 mix-blend-overlay" />
 
-            {/* Content Container (Using secondary-foreground for automatic contrast) */}
+           
             <div className="relative z-20 max-w-xl text-secondary-foreground">
               <Bell className="mb-6 h-6 w-6 text-accent" />
               <h3 className="mb-4 text-4xl font-black tracking-tight md:text-5xl lg:text-6xl">
@@ -190,12 +190,12 @@ const RolesSection = () => {
             </div>
           </motion.div>
 
-          {/* Right Smaller Card (Predictive Maintenance) */}
+          
           <motion.div
             variants={fadeUp}
             className="relative flex min-h-87.5 flex-col justify-end overflow-hidden rounded-[2rem] bg-secondary p-10 lg:col-span-4"
           >
-            {/* Background Image Container */}
+           
             <div className="absolute inset-0 z-0">
               <Image
                 src={imgRight}
@@ -206,10 +206,10 @@ const RolesSection = () => {
               />
             </div>
 
-            {/* Dynamic Overlay */}
+            
             <div className="absolute inset-0 z-10 bg-linear-to-b from-background/50 to-transparent opacity-30 mix-blend-overlay" />
 
-            {/* Content Container (Locked to secondary-foreground for automatic contrast) */}
+           
             <div className="relative z-20 text-secondary-foreground">
               <Wrench className="mb-6 h-6 w-6 text-secondary-foreground/90" />
               <h3 className="mb-4 text-3xl font-black tracking-tight md:text-4xl">

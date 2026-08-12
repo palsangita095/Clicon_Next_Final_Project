@@ -105,7 +105,7 @@ const BLOG_POSTS = [
 export default function BlogPage() {
   return (
     <div className="bg-white min-h-screen">
-      {/* Breadcrumb */}
+      
       <div className="bg-gray-50 border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500 flex items-center gap-2">
           <Link href="/" className="hover:text-brand-orange flex items-center gap-1">
@@ -120,10 +120,10 @@ export default function BlogPage() {
 
       <div className="container mx-auto px-4 md:px-8 py-16 flex flex-col lg:flex-row gap-8">
         
-        {/* Left Sidebar */}
+       
         <div className="w-full lg:w-[320px] flex-shrink-0 space-y-8">
           
-          {/* Categories */}
+         
           <div className="border border-gray-100 rounded-md p-6 shadow-sm">
             <h3 className="font-bold text-gray-900 mb-6 uppercase text-sm tracking-wider">CATEGORY</h3>
             <ul className="space-y-4">
@@ -140,7 +140,7 @@ export default function BlogPage() {
             </ul>
           </div>
 
-          {/* Latest Blog */}
+          
           <div className="border border-gray-100 rounded-md p-6 shadow-sm">
             <h3 className="font-bold text-gray-900 mb-6 uppercase text-sm tracking-wider">LATEST BLOG</h3>
             <div className="space-y-6">
@@ -161,10 +161,10 @@ export default function BlogPage() {
           </div>
         </div>
 
-        {/* Main Content Area */}
+        
         <div className="flex-1 flex flex-col">
           
-          {/* Top Bar */}
+          
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
             <div className="relative w-full sm:w-[400px]">
               <Input type="text" placeholder="Search..." className="h-11 pr-10 border-gray-200" />
@@ -183,7 +183,7 @@ export default function BlogPage() {
             </div>
           </div>
 
-          {/* Blog Grid */}
+        
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             {BLOG_POSTS.map(post => (
               <div key={post.id} className="border border-gray-100 rounded-md overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col">
@@ -210,7 +210,7 @@ export default function BlogPage() {
             ))}
           </div>
 
-          {/* Pagination */}
+          
           <div className="flex justify-center items-center gap-2 mt-auto">
             <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-brand-orange hover:bg-orange-50 hover:border-brand-orange transition-colors">
               <span className="sr-only">Previous</span>

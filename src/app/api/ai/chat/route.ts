@@ -17,8 +17,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // The caller's identity is resolved server-side from the session cookie in
-    // ai.service — a userId from the client body is intentionally ignored.
+   
     const response = await generateAIResponse(message, history, undefined, language);
 
     if (!response.success) {

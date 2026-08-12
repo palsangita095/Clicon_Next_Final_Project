@@ -4,13 +4,10 @@ import { getSupabaseAdmin } from "@/api/api-function/supabase.admin";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-// Amounts are verified server-side against the stored order total before an
-// order is marked paid. This prevents a tampered client amount from being
-// accepted — the Stripe charge is the source of truth, never the frontend.
+
 const MATCH_TOLERANCE_MINOR = 1;
 
-// Terminal paid states — once reached, an order must never be downgraded to
-// Pending/Failed, and stock must not be restored for a fulfilled order.
+
 const TERMINAL_PAID = new Set(["Processing", "Shipping", "Delivered", "Completed", "Refund"]);
 
 export async function POST(req: Request) {
@@ -52,8 +49,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ received: true });
       }
 
-      // Idempotency: skip duplicate/out-of-order deliveries — never downgrade
-      // an order that has already progressed past Pending/Failed.
+     
       if (order.status !== "Pending" && order.status !== "Failed") {
         return NextResponse.json({ received: true });
       }
@@ -87,7 +83,7 @@ export async function POST(req: Request) {
 
       if (!order) return NextResponse.json({ received: true });
 
-      // Never overwrite a paid/progressing order with a late failure event.
+     
       if (TERMINAL_PAID.has(order.status)) {
         return NextResponse.json({ received: true });
       }
@@ -112,8 +108,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ received: true });
       }
 
-      // Idempotency: only restore stock once — skip if already cancelled or
-      // the order was actually paid/fulfilled.
+     
       if (order.status === "Cancelled" || TERMINAL_PAID.has(order.status)) {
         return NextResponse.json({ received: true });
       }
@@ -140,8 +135,7 @@ export async function POST(req: Request) {
       if (rpcError) throw rpcError;
     }
   } catch (err: any) {
-    // Return non-2xx so Stripe retries the delivery. A 200 here would
-    // silently drop the event and leave the order stuck.
+   
     console.error("Webhook handler error:", err.message);
     return NextResponse.json(
       { error: "Webhook processing failed" },

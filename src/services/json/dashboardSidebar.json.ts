@@ -29,18 +29,18 @@ import {
 } from "lucide-react";
 
 export const SIDEBAR_ROLES_CONFIG = {
-  // ! customer sidebar navigation
+  
   customer: [
     { label: "Dashboard", path: "/customer/dashboard", icon: LayoutDashboard },
     { label: "Shipments", path: "/customer/shipments", icon: Package },
     { label: "Bookings", path: "/customer/bookings", icon: Waypoints },
-    // { label: "Invoices", path: "/customer/invoices", icon: FileTextIcon },
+   
     { label: "Estimate", path: "/customer/estimate", icon: RouteIcon },
     { label: "Tracking", path: "/customer/tracking", icon: MapPinIcon },
     { label: "Profile", path: "/customer/profile", icon: UserIcon },
   ],
 
-  // ! driver sidebar navigation
+ 
   driver: [
     { label: "Dashboard", path: "/driver/dashboard", icon: LayoutDashboard },
     { label: "Deliveries", path: "/driver/deliveries", icon: Package },
@@ -57,7 +57,7 @@ export const SIDEBAR_ROLES_CONFIG = {
     { label: "Profile", path: "/driver/profile", icon: User },
   ],
 
-  // ! dispatcher sidebar navigation
+
   dispatcher: [
     {
       label: "Dashboard",
@@ -82,7 +82,7 @@ export const SIDEBAR_ROLES_CONFIG = {
     { label: "Profile", path: "/dispatcher/profile", icon: UserIcon },
   ],
 
-  // ! admin sidebar navigation
+ 
   admin: [
     { label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
     { label: "Shipments", path: "/admin/shipments", icon: Package },
@@ -93,8 +93,8 @@ export const SIDEBAR_ROLES_CONFIG = {
     },
     { label: "Customers", path: "/admin/customers", icon: UserStarIcon },
     { label: "Dispatchers", path: "/admin/dispatchers", icon: UserCheck },
-    { label: "Drivers", path: "/admin/drivers", icon: BusFront }, // driver documents
-    { label: "Vehicles", path: "/admin/vehicles", icon: Truck }, // vehicels health
+    { label: "Drivers", path: "/admin/drivers", icon: BusFront }, 
+    { label: "Vehicles", path: "/admin/vehicles", icon: Truck }, 
     { label: "Fuel Logs", path: "/admin/fuellogs", icon: Fuel },
     {
       label: "Roleverification",

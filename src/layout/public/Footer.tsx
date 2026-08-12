@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Apple } from "lucide-react";
-// We use simple divs as placeholders for logos, or Lucide icons if available
+
 import { Play } from "lucide-react"; 
 import { useStoreSettings } from "@/hooks/useStoreSettings";
 import { createClient } from "@/lib/supabase/client";
@@ -58,7 +58,7 @@ const Footer = () => {
 
   return (
     <footer className="w-full font-sans">
-      {/* Newsletter Section */}
+    
       <div className="bg-[#1B6392] py-16 px-4 md:px-8 text-white flex flex-col items-center text-center">
         <h2 className="text-3xl font-bold mb-4">Subscribe to our newsletter</h2>
         <p className="text-blue-100 max-w-lg mb-8 text-sm leading-relaxed">
@@ -76,7 +76,7 @@ const Footer = () => {
           </Button>
         </div>
 
-        {/* Brand Logos */}
+        
         {brands.length > 0 && (
           <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-70">
             {brands.map((brand) => (
@@ -88,11 +88,11 @@ const Footer = () => {
         )}
       </div>
 
-      {/* Main Footer Links */}
+      
       <div className="bg-[#191C1F] text-gray-300 py-16 px-4 md:px-8 border-b border-gray-800">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           
-          {/* Brand & Contact */}
+          
           <div className="flex flex-col gap-6">
             <Link href="/" className="flex items-center gap-2">
               {settings.logoUrl ? (
@@ -114,7 +114,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Top Category */}
+          
           <div className="flex flex-col gap-4">
             <h3 className="text-white font-semibold uppercase tracking-wider text-sm mb-2">Top Category</h3>
             <ul className="flex flex-col gap-3 text-sm font-medium">
@@ -133,7 +133,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Quick Links */}
+         
           <div className="flex flex-col gap-4">
             <h3 className="text-white font-semibold uppercase tracking-wider text-sm mb-2">Quick Links</h3>
             <ul className="flex flex-col gap-3 text-sm font-medium">
@@ -145,7 +145,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Download App */}
+          
           <div className="flex flex-col gap-4">
             <h3 className="text-white font-semibold uppercase tracking-wider text-sm mb-2">Download App</h3>
             <div className="flex flex-col gap-3">
@@ -166,7 +166,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Popular Tag */}
+          
           <div className="flex flex-col gap-4">
             <h3 className="text-white font-semibold uppercase tracking-wider text-sm mb-2">Popular Tag</h3>
             <div className="flex flex-wrap gap-2">
@@ -185,7 +185,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Copyright */}
+      
       <div className="bg-[#191C1F] text-gray-400 text-xs py-6 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
         {settings.storeName}-eCommerce Template © 2026. Design adapted for {settings.storeName}.
       </div>

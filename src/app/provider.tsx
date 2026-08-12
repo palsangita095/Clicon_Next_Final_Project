@@ -25,8 +25,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     setMounted(true);
   }, []);
 
-  // ! Keeps cart / wishlist / compare / history isolated per user on every
-  // ! auth transition (sign-in, sign-out, session expiry, user switch).
+  
   useEffect(() => {
     const unsubscribe = setupStorefrontSessionIsolation();
     return () => unsubscribe();

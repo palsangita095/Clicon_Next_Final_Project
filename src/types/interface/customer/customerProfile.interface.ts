@@ -1,4 +1,3 @@
-// Location: src/types/interface/customerProfile.interface.ts
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -22,8 +21,8 @@ export interface ProfileRow {
 }
 
 export interface CustomerRow {
-  id: string; // The unique ID for the customer record itself
-  profile_id: string; // The foreign key linking to profiles.id
+  id: string;
+  profile_id: string; 
   customer_code: string | null;
   company_name: string | null;
   gst_number: string | null;
@@ -33,12 +32,8 @@ export interface CustomerRow {
   credit_limit: number | null;
   total_shipments: number | null;
   total_spent: number | null;
-  // address: string | null;
-  // city: string | null;
-  // state: string | null;
-  // country: string | null;
   created_at: string | null;
-  updated_at: string | null; // Added based on your screenshot
+  updated_at: string | null; 
 }
 
 export interface CustomerProfileView extends ProfileRow {
@@ -52,10 +47,6 @@ export interface CustomerProfileView extends ProfileRow {
   credit_limit: number | null;
   total_shipments: number | null;
   total_spent: number | null;
-  // address: string | null;
-  // city: string | null;
-  // state: string | null;
-  // country: string | null;
   customer_created_at: string | null;
   profile_created_at: string;
 }
@@ -81,10 +72,7 @@ export interface UpsertCustomerPayload {
   billing_address: string | null;
   shipping_address: string | null;
   preferred_contact: string | null;
-  // address: string | null;
-  // city: string | null;
-  // state: string | null;
-  // country: string | null;
+
 }
 
 export interface EditProfileFormValues {
@@ -95,10 +83,7 @@ export interface EditProfileFormValues {
   billing_address: string | null;
   shipping_address: string | null;
   preferred_contact: string | null;
-  // address: string | null;
-  // city: string | null;
-  // state: string | null;
-  // country: string | null;
+ 
 }
 
 export interface NotificationPref {

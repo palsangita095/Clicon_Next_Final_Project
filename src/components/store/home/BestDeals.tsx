@@ -19,14 +19,14 @@ export default function BestDeals({ products: propProducts }: BestDealsProps) {
     ? dbProducts
     : [];
 
-  // Deal End Time countdown calculation
+
   const firstDealTimeStr = activeProducts.find((p) => p.deal_end_time)?.deal_end_time;
   
   const targetEndTime = useMemo(() => {
     if (firstDealTimeStr) {
       return new Date(firstDealTimeStr).getTime();
     }
-    // Stable fallback 16 days from initial render
+    
     return new Date().getTime() + 16 * 24 * 3600 * 1000 + 21 * 3600 * 1000 + 57 * 60 * 1000;
   }, [firstDealTimeStr]);
 

@@ -32,7 +32,7 @@ export default function BrandInput({ value, onChange, categoryId }: BrandInputPr
     fetchBrands();
   }, [categoryId]);
 
-  // Set input value from the selected brand id
+ 
   useEffect(() => {
     if (value) {
       const brand = brands.find((b) => b.id === value);

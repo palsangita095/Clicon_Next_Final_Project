@@ -21,7 +21,6 @@ interface StatItem {
   label: string;
   value: string;
   icon: React.ElementType;
-  // Full color value, not a Tailwind class — see note below.
   accent: string;
 }
 

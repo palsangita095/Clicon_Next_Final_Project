@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Only an authenticated admin may create accounts through this endpoint.
+   
     const authHeader = req.headers.get("authorization");
     if (!authHeader?.startsWith("Bearer ")) {
       return NextResponse.json(

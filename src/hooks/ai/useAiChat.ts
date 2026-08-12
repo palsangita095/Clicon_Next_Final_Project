@@ -12,7 +12,6 @@ export const useAiChat = () => {
 
     if (!text || isLoading) return;
 
-    // Add user message
     addMessage({
       id: crypto.randomUUID(),
       role: "user",

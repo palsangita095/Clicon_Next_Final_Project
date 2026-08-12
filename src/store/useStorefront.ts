@@ -33,8 +33,7 @@ interface StorefrontState {
   rehydrate: () => Promise<void>;
 }
 
-// ! Only signed-in users persist to Supabase. Guests stay in-memory only, so
-// ! their cart / wishlist / compare are lost on a full page refresh.
+
 async function getCurrentUserId(): Promise<string | null> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
@@ -44,8 +43,7 @@ async function getCurrentUserId(): Promise<string | null> {
   }
 }
 
-// ! Serializes database writes so rapid clicks can't interleave and leave the
-// ! stored state stale.
+
 let dbWriteQueue: Promise<void> = Promise.resolve();
 function enqueueDbWrite(task: () => Promise<void>): void {
   dbWriteQueue = dbWriteQueue.then(task).catch((err) => {

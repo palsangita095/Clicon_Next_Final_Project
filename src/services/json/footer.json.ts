@@ -2,7 +2,7 @@ import logo from "@/assets/images/logo.svg";
 
 export const footerData = {
   brand: {
-    // name: "Clicon",
+    
     logo: logo,
     tagline:
       "Real-time fleet intelligence for modern logistics teams. Track, dispatch, and optimize — all in one place.",

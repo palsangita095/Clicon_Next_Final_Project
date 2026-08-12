@@ -24,7 +24,7 @@ const PendingStatusCard = () => {
       className="w-full max-w-md"
     >
       <Card className="relative overflow-hidden">
-        {/* animated progress strip along the top edge */}
+        
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
@@ -63,7 +63,7 @@ const PendingStatusCard = () => {
         </CardHeader>
 
         <CardContent className="space-y-5">
-          {/* status icon with a soft pulsing ring while under review */}
+         
           <div className="flex justify-center py-2">
             <div className="relative flex h-16 w-16 items-center justify-center">
               {!isRejected && (

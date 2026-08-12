@@ -49,7 +49,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-[#F8F9FA] overflow-hidden font-sans">
-      {/* Mobile Header Bar */}
+   
       <div className="md:hidden bg-brand-orange text-white px-4 py-3 flex items-center justify-between shadow-sm z-50">
         <Link href="/admin/dashboard" className="flex items-center gap-2 font-bold text-lg tracking-wide">
           {settings.logoUrl ? (
@@ -65,7 +65,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </button>
       </div>
 
-      {/* Desktop Sidebar */}
+      
       <aside className="hidden md:flex w-24 bg-brand-orange flex-shrink-0 flex-col items-center py-6 h-full overflow-y-auto z-40">
         <Link href="/admin/dashboard" className="mb-10 flex items-center justify-center">
           {settings.logoUrl ? (
@@ -109,7 +109,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* Mobile Drawer Menu */}
+      
       {isMobileOpen && (
         <div className="md:hidden fixed inset-0 z-40 bg-black/50 flex">
           <div className="w-64 bg-brand-orange text-white p-6 flex flex-col justify-between h-full shadow-2xl">
@@ -157,7 +157,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       )}
 
-      {/* Main Content Area */}
+     
       <main className="flex-1 h-full overflow-y-auto">
         <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
           {children}

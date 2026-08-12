@@ -54,7 +54,7 @@ const TEAM_MEMBERS = [
 export default function AboutPage() {
   return (
     <div className="bg-white min-h-screen">
-      {/* Breadcrumb */}
+      
       <div className="bg-gray-50 border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500 flex items-center gap-2">
           <Link href="/" className="hover:text-brand-orange flex items-center gap-1">
@@ -67,7 +67,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* WHO WE ARE Section */}
+      
       <div className="container mx-auto px-4 md:px-8 py-20">
         <div className="flex flex-col lg:flex-row items-center gap-16">
           <div className="flex-1">
@@ -101,7 +101,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* Core Team Section */}
+      
       <div className="container mx-auto px-4 md:px-8 py-16">
         <h2 className="text-2xl font-bold text-center text-gray-900 mb-12">Our core team member</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -117,7 +117,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* Video Banner Section */}
+      
       <div className="relative w-full h-[400px] bg-gray-900 flex items-center">
         <Image 
           src={fixImageUrl("https://wlqsdguefbabohjsbwab.supabase.co/storage/v1/object/public/product_images/products/BannerAboutPage.png", "Trusted shop banner")} 
@@ -126,51 +126,14 @@ export default function AboutPage() {
           sizes="(max-width: 768px) 100vw, 1200px"
           className="object-cover opacity-60"
         />
-        {/* <div className="container mx-auto px-4 md:px-8 relative z-10 flex">
-          <div className="max-w-md bg-white/90 backdrop-blur p-10 rounded-md">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
-              Your trusted and reliable retail shop
-            </h2>
-            <p className="text-gray-600 mb-8 leading-relaxed text-sm">
-              Every order is handled with care, from secure packaging to fast delivery. Watch how we prepare and ship your products with the reliability you can count on.
-            </p>
-            <button className="w-14 h-14 bg-brand-orange hover:bg-orange-600 text-white rounded-full flex items-center justify-center transition-transform hover:scale-105">
-              <Play className="w-6 h-6 ml-1" fill="currentColor" />
-            </button>
-          </div>
-        </div> */}
+        
       </div>
 
-      {/* Product Columns Section */}
+      
       <FlashSale />
 
-      {/* Newsletter Section */}
-      {/* <div className="bg-[#1B6392] py-20 text-center relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10 flex flex-col items-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Subscribe to our newsletter</h2>
-          <p className="text-blue-100 max-w-lg mb-8 text-sm">
-            Join our newsletter for exclusive deals, new product alerts, and expert tech tips every week.
-          </p>
-          <div className="flex w-full max-w-md shadow-lg rounded-md overflow-hidden bg-white mb-12">
-            <Input 
-              type="email" 
-              placeholder="Email address" 
-              className="border-0 h-12 flex-1 focus-visible:ring-0 rounded-none px-4"
-            />
-            <Button className="bg-brand-orange hover:bg-orange-600 text-white font-bold h-12 rounded-none px-8 uppercase tracking-wide">
-              SUBSCRIBE ➔
-            </Button>
-          </div>
-          <div className="flex items-center justify-center gap-8 opacity-60"> 
-            //  Logos for Google, Amazon, Philips, Toshiba, Samsung placeholder 
-            <span className="text-white font-bold text-xl">Google</span>
-            <span className="text-white font-bold text-xl">amazon</span>
-            <span className="text-white font-bold text-xl">PHILIPS</span>
-            <span className="text-white font-bold text-xl">TOSHIBA</span>
-            <span className="text-white font-bold text-xl">SAMSUNG</span>
-          </div>
-        </div>
-      </div>*/}
+     
+     
     </div>
   );
 }

@@ -32,7 +32,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   openDrawer: () => set({ drawer: true }),
   closeDrawer: () => set({ drawer: false }),
 
-  // ! register
+  
   registerUser: async (payload: SignupPayload) => {
     set({ isLoading: true, isError: null });
 
@@ -56,7 +56,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         return res;
       }
 
-      // Normal signup failed — try admin signup via API route (service_role key)
+      
       if (process.env.NEXT_PUBLIC_ENABLE_ADMIN_SIGNUP === 'true') {
         const adminRes = await adminSignupFns(payload);
         if (adminRes.success) {
@@ -89,7 +89,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  // ! login
+  
   loginUser: async (payload: LoginPayload) => {
     set({ isLoading: true, isError: null });
 
@@ -143,12 +143,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  // ! kicks off Google OAuth — redirects the browser, nothing else to do here
+ 
   loginWithGoogle: async () => {
     set({ isError: null });
     try {
       const redirectTo = `${window.location.origin}/auth/callback`;
-      await loginWithGoogleFns(redirectTo); // <-- call the imported function directly
+      await loginWithGoogleFns(redirectTo);
     } catch (error) {
       const err = getErrorMessage(error);
       set({ isError: err });
@@ -156,7 +156,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  // ! runs on the /auth/callback page after Google redirects back
+
   handleGoogleCallback: async () => {
     set({ isLoading: true, isError: null });
 
@@ -208,7 +208,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  // ! logout
+  
   logout: async () => {
     try {
       await supabase.auth.signOut();
@@ -226,13 +226,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       isError: null,
     });
 
-    // ! Reset in-memory state only. The user's cart / wishlist / compare rows
-    // ! persist in Supabase and restore on next login.
+  
     useStorefront.getState().reset();
     window.location.href = "/";
-    // if (typeof window !== "undefined") {
-    //   window.location.href = "/";
-    // }
+   
 
     toast.success("Logged out successfully");
     return true;

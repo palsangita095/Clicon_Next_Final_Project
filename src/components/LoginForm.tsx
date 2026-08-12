@@ -55,7 +55,7 @@ const LoginForm = () => {
         return;
       }
 
-      // toast.success("Login Successful");
+      
 
       switch (res.data?.role) {
         case "customer":
@@ -84,7 +84,7 @@ const LoginForm = () => {
   return (
     <main className="min-h-fit ">
       <div className="mx-auto flex flex-col lg:flex-row max-w-7xl overflow-hidden rounded-3xl border border-border shadow-xl bg-background">
-        {/* ── Left Panel ── */}
+      
         <div className="hidden lg:flex w-[42%] relative overflow-hidden bg-brand-teal">
           <Image
             src="https://images.unsplash.com/photo-1590796583326-afd3bb20d22d?q=80&w=687&auto=format&fit=crop"
@@ -93,10 +93,10 @@ const LoginForm = () => {
             priority
             className="object-cover"
           />
-          {/* dark overlay */}
+         
           <div className="absolute inset-0 bg-black/60" />
 
-          {/* content over image */}
+         
           <div className="relative z-10 flex flex-col justify-between h-full p-10">
             <div className="space-y-3">
               <h1 className="text-2xl font-bold text-white tracking-tight">
@@ -107,7 +107,7 @@ const LoginForm = () => {
               </p>
             </div>
 
-            {/* bottom badge */}
+            
             <div className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/20 text-primary">
                 <CircleCheckBigIcon className="h-4 w-4" />
@@ -124,7 +124,7 @@ const LoginForm = () => {
           </div>
         </div>
 
-        {/* Right Side */}
+      
         <div className="flex-1 p-8 md:p-12 flex items-center justify-center">
           <div className="w-full max-w-md space-y-6">
             <div className="space-y-2 text-center">
@@ -157,10 +157,7 @@ const LoginForm = () => {
               </div>
 
               <div className="space-y-3">
-                {/* <Button variant="outline" className="w-full">
-                  <MailIcon className="mr-2 h-4 w-4" />
-                  Sign in with Microsoft
-                </Button> */}
+             
 
                 <Button
                   type="button"

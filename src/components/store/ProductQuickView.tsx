@@ -29,7 +29,7 @@ export function ProductQuickView({ trigger }: { trigger: React.ReactNode }) {
       <DialogContent className="max-w-[1000px] p-8 gap-8 border-none rounded-xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           
-          {/* Left Column: Images */}
+          
           <div className="flex flex-col gap-4">
             <div className="w-full aspect-video bg-gray-50 rounded-lg flex items-center justify-center border border-gray-100 overflow-hidden relative">
               <Image src={images[0]} alt="Product" fill className="object-contain p-4" />
@@ -51,7 +51,7 @@ export function ProductQuickView({ trigger }: { trigger: React.ReactNode }) {
             </div>
           </div>
 
-          {/* Right Column: Details */}
+       
           <div className="flex flex-col gap-5 text-gray-900">
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -161,7 +161,7 @@ export function ProductQuickView({ trigger }: { trigger: React.ReactNode }) {
             <div className="mt-2 border border-gray-200 rounded p-4 flex flex-col gap-2 bg-gray-50/50">
               <span className="text-sm font-semibold text-gray-800">100% Guarantee Safe Checkout</span>
               <div className="flex gap-2 opacity-60">
-                 {/* Placeholders for payment icons */}
+                
                  <div className="h-6 w-10 bg-gray-300 rounded-sm"></div>
                  <div className="h-6 w-10 bg-gray-300 rounded-sm"></div>
                  <div className="h-6 w-10 bg-gray-300 rounded-sm"></div>

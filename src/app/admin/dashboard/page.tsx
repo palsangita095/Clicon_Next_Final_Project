@@ -124,8 +124,7 @@ export default function AdminDashboardPage() {
 
     if (latestOrders) setRealOrders(latestOrders);
 
-    // Revenue by category — computed from the 10 latest orders (same request,
-    // no extra fetch; replaces the fabricated 64/20/16 device split).
+    
     const categoryRevenue = new Map<string, number>();
     (latestOrders || []).forEach((order) => {
       (order.order_items || []).forEach((item) => {
@@ -156,8 +155,7 @@ export default function AdminDashboardPage() {
         : null
     );
 
-    // Daily completed-order revenue over the last 16 days (real data;
-    // replaces the fabricated count * 120 traffic series).
+    
     const salesDays = buildDateRange(16);
     setDailySalesData(
       salesDays.map((day) => ({
@@ -186,7 +184,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Top Bar */}
+      
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-[#1E293B]">Dashboard</h1>
         <div className="flex items-center gap-2">
@@ -199,7 +197,7 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Error state */}
+    
       {isError && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-center justify-between gap-4">
           <p className="text-sm text-red-600">Failed to load dashboard data. Please try again.</p>
@@ -212,7 +210,7 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
-      {/* Metric Cards */}
+     
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {isLoading
           ? [0, 1, 2, 3].map((i) => <MetricCardSkeleton key={i} />)
@@ -254,9 +252,9 @@ export default function AdminDashboardPage() {
             ))}
       </div>
 
-      {/* Main Charts Row */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Weekly Revenue Bar Chart */}
+       
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2">
           <div className="flex justify-between items-center mb-8">
             <h3 className="font-bold text-[#1E293B]">Weekly Revenue</h3>
@@ -284,7 +282,7 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Conversion Rate Radial */}
+       
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
           <div className="flex justify-between items-center">
             <h3 className="font-bold text-[#1E293B]">Conversion Rate</h3>
@@ -335,9 +333,9 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Bottom Charts Row */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Revenue by category */}
+       
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
           <div className="flex justify-between items-center mb-6">
             <h3 className="font-bold text-[#1E293B]">Revenue by Category</h3>
@@ -379,7 +377,7 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Daily sales */}
+        
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
           <div className="flex justify-between items-center mb-6">
             <h3 className="font-bold text-[#1E293B]">Daily Sales</h3>
@@ -433,7 +431,7 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Latest Orders Table */}
+      
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 border-b-4 border-b-blue-500">
         <div className="p-6 flex justify-between items-center border-b border-gray-50">
           <h3 className="font-bold text-[#1E293B] text-lg">Latest Orders</h3>

@@ -6,11 +6,11 @@ import {
   SubmitHandler,
 } from "react-hook-form";
 
-// ── DialogMode
+
 
 export type DialogMode = "create" | "edit";
 
-// ── Field Types
+
 
 export type DynamicFieldType =
   | "text"
@@ -28,7 +28,7 @@ export type DynamicFieldType =
   | "time"
   | "custom";
 
-// ── DynamicFieldConfig
+
 export interface DynamicFieldConfig<TFormValues = Record<string, unknown>> {
   name: keyof TFormValues & string;
   label: string;
@@ -46,7 +46,7 @@ export interface DynamicFieldConfig<TFormValues = Record<string, unknown>> {
   render?: () => ReactNode;
 }
 
-// ── DynamicFieldProps
+
 export interface DynamicFieldProps<TFormValues = Record<string, unknown>> {
   field: DynamicFieldConfig<TFormValues>;
   value: unknown;
@@ -57,7 +57,7 @@ export interface DynamicFieldProps<TFormValues = Record<string, unknown>> {
   loading?: boolean;
 }
 
-// ── DynamicFormProps
+
 export interface DynamicFormProps<
   TFormValues extends FieldValues = FieldValues,
 > {
@@ -67,12 +67,12 @@ export interface DynamicFormProps<
   mode: DialogMode;
   loading?: boolean;
   onSubmit: (values: TFormValues) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
   resolver?: any;
   className?: string;
 }
 
-// ── DynamicDialogProps
+
 
 export interface DynamicDialogProps<
   TFormValues extends FieldValues = FieldValues,

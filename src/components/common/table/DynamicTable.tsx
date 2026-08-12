@@ -29,7 +29,7 @@ import type {
   ImageColumnDef,
 } from "@/types/type/table.type";
 
-//  Pure Helpers
+
 
 function resolveRowKey<TRow>(
   row: TRow,
@@ -131,7 +131,7 @@ function renderBadgeCell<TRow>(
   );
 }
 
-// DynamicTableRow
+
 
 interface DynamicTableRowProps<TRow, TOption extends Record<string, unknown>> {
   row: TRow;
@@ -243,7 +243,7 @@ const DynamicTableRow = memo(function DynamicTableRow<
   props: DynamicTableRowProps<TRow, TOption>,
 ) => React.ReactElement;
 
-//  DynamicTable
+
 
 function DynamicTableInner<
   TRow,

@@ -43,8 +43,7 @@ export async function generateAIResponse(
   try {
     const supabase = await createClient();
 
-    // The caller's identity is derived from the session cookie server-side.
-    // A userId sent by the client is never trusted.
+   
     const {
       data: { user: sessionUser },
     } = await supabase.auth.getUser();
@@ -81,7 +80,7 @@ export async function generateAIResponse(
       languageInstruction,
     ].join("\n\n");
 
-    // ! model is overridable via AI_MODEL; gemini-flash-latest works for new keys (2.5-flash was retired)
+   
     const model = process.env.AI_MODEL || "gemini-flash-latest";
 
     const { text } = await generateText({

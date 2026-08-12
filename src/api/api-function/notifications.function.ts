@@ -29,7 +29,7 @@ const normalizeDriver = (n: any): AppNotification => ({
   source: "driver",
 });
 
-// ! fetch every notification relevant to this user, merged + sorted
+
 export const getCombinedNotificationsFns = async (
   profileId: string,
   role?: string,
@@ -86,7 +86,7 @@ export const getCombinedNotificationsFns = async (
   );
 };
 
-// ! mark every notification (across all 3 tables) as read
+
 export const markAllCombinedNotificationsReadFns = async (
   profileId: string,
   role?: string,
@@ -132,77 +132,4 @@ export const markAllCombinedNotificationsReadFns = async (
   return { success: true };
 };
 
-// import { supabase } from "@/lib/supabase.config";
-// import type {
-//   AppNotification,
-//   CreateNotificationInput,
-// } from "@/types/interface/notification.interface";
 
-// const TABLE = "notifications";
-
-// // ! Fetch notifications for a single profile (customer/driver/dispatcher/admin)
-// export async function fetchNotificationsByProfile(
-//   profileId: string,
-//   limit = 30,
-// ): Promise<AppNotification[]> {
-//   const { data, error } = await supabase
-//     .from(TABLE)
-//     .select("*")
-//     .eq("profile_id", profileId)
-//     .order("created_at", { ascending: false })
-//     .limit(limit);
-
-//   if (error) throw error;
-//   return data ?? [];
-// }
-
-// // ! Admin-style "all notifications" fetch — used only if you build a global admin feed
-// export async function fetchAllNotifications(
-//   limit = 100,
-// ): Promise<AppNotification[]> {
-//   const { data, error } = await supabase
-//     .from(TABLE)
-//     .select("*")
-//     .order("created_at", { ascending: false })
-//     .limit(limit);
-
-//   if (error) throw error;
-//   return data ?? [];
-// }
-
-// // ! mark notification as read
-// export async function markNotificationAsRead(id: string): Promise<void> {
-//   const { error } = await supabase
-//     .from(TABLE)
-//     .update({ read: true })
-//     .eq("id", id);
-
-//   if (error) throw error;
-// }
-
-// // ! mark all notification as read
-// export async function markAllNotificationsAsRead(
-//   profileId: string,
-// ): Promise<void> {
-//   const { error } = await supabase
-//     .from(TABLE)
-//     .update({ read: true })
-//     .eq("profile_id", profileId)
-//     .eq("read", false);
-
-//   if (error) throw error;
-// }
-
-// // ! Used by other services (deliveryAssign.function.ts, roleVerification.function.ts, etc.)
-// export async function createNotification(
-//   input: CreateNotificationInput,
-// ): Promise<AppNotification> {
-//   const { data, error } = await supabase
-//     .from(TABLE)
-//     .insert({ ...input, read: false })
-//     .select()
-//     .single();
-
-//   if (error) throw error;
-//   return data;
-// }

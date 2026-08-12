@@ -1,6 +1,6 @@
 import { ChartConfig } from "@/components/ui/chart";
 
-// ! status colors pulled from globals.css --chart-1 through --chart-5
+
 export const STATUS_CHART_CONFIG: ChartConfig = {
   pending: { label: "Pending", color: "hsl(var(--chart-1))" },
   in_transit: { label: "In Transit", color: "hsl(var(--chart-2))" },

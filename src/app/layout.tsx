@@ -5,8 +5,7 @@ import Provider from "./provider";
 import AIChatbot from "@/components/common/chat/AIChatbot";
 import ThemeApplier from "@/components/common/ThemeApplier";
 
-const SITE_URL = "https://your-domain.com"; // Replace after deployment
-
+const SITE_URL = "https://your-domain.com"; 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 

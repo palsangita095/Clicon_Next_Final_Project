@@ -50,9 +50,7 @@ function OrderTrackingDetailInner() {
       setLoading(true);
       const supabase = createClient();
       try {
-        // Public tracking is served by a SECURITY DEFINER function that only
-        // matches the order id prefix AND the billing email, and returns a
-        // non-sensitive field set (no billing/shipping addresses).
+       
         const { data, error } = await supabase.rpc("get_trackable_order", {
           p_order_id: id,
           p_email: email ?? "",
@@ -157,7 +155,7 @@ function OrderTrackingDetailInner() {
               </div>
             </div>
 
-            {/* Order Items */}
+          
             {order.order_items?.length > 0 && (
               <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6 mb-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Items</h2>

@@ -12,7 +12,7 @@ import { useStorefront } from "@/store/useStorefront";
 import { createClient } from "@/lib/supabase/client";
 import { useShopPageData } from "@/hooks/queries/customer/useShopPageData";
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+
 interface Product {
   id: string | number;
   name: string;
@@ -32,7 +32,7 @@ interface Product {
 const BRANDS = ["Apple", "Google", "Microsoft", "Samsung", "Bose", "Huawei", "Sony", "Panasonic", "Dell", "Intel"];
 const POPULAR_TAGS = ["Game", "iPhone", "TV", "Asus Laptops", "Macbook", "SSD", "Graphics Card", "Power Bank", "Smart TV", "Speaker"];
 
-// ── Star Rating Component ─────────────────────────────────────────────────────
+
 function StarRating({ rating, reviewCount }: { rating: number; reviewCount: number }) {
   return (
     <div className="flex items-center gap-1">
@@ -47,7 +47,7 @@ function StarRating({ rating, reviewCount }: { rating: number; reviewCount: numb
   );
 }
 
-// ── Product Card ───────────────────────────────────────────────────────────────
+
 function ProductCard({ product }: { product: Product }) {
   const addToCart = useStorefront((s) => s.addToCart);
   const addToWishlist = useStorefront((s) => s.addToWishlist);
@@ -89,7 +89,7 @@ function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="group bg-white border border-gray-100 rounded overflow-hidden hover:shadow-lg transition-shadow duration-200 relative">
-      {/* Badge */}
+  
       {product.badge && (
         <span className={`absolute top-2 left-2 z-10 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm ${badgeColors[product.badge]}`}>
           {product.badge}
@@ -101,7 +101,7 @@ function ProductCard({ product }: { product: Product }) {
         </span>
       )}
 
-      {/* Image */}
+     
       <div className="relative w-full h-48 bg-gray-50 flex items-center justify-center overflow-hidden">
         <Image
           src={product.image}
@@ -111,7 +111,7 @@ function ProductCard({ product }: { product: Product }) {
           className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
         />
 
-        {/* Hover actions */}
+      
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button
             onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, image: product.image })}
@@ -148,7 +148,7 @@ function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      {/* Details */}
+      
       <div className="p-3">
         <StarRating rating={product.rating} reviewCount={product.reviewCount} />
         <Link href={`/products/${product.id}`} className="block mt-1">
@@ -167,7 +167,7 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-// ── Main Shop Page ─────────────────────────────────────────────────────────────
+
 export default function ShopPage() {
   const searchParams = useSearchParams();
   const urlCategory = searchParams.get('category');
@@ -188,7 +188,7 @@ export default function ShopPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  // Sync URL search params with state
+  
   useEffect(() => {
     if (urlCategory) setSelectedCategory(urlCategory);
     if (urlSearch) setSearchQuery(urlSearch);
@@ -197,7 +197,7 @@ export default function ShopPage() {
 
   const { data: shopData } = useShopPageData();
 
-  // Fetch Data
+ 
   useEffect(() => {
     if (!shopData) return;
     setCategories(shopData.categories);
@@ -240,7 +240,7 @@ export default function ShopPage() {
 
   const filterSidebar = (
     <>
-      {/* Categories */}
+     
       <div className="bg-white rounded border border-gray-100 p-4 mb-4">
         <h3 className="font-bold text-[#191C1F] mb-4">CATEGORY</h3>
         <div className="space-y-3">
@@ -265,7 +265,7 @@ export default function ShopPage() {
         </div>
       </div>
 
-      {/* Price Range */}
+      
       <div className="bg-white rounded border border-gray-100 p-4 mb-4">
         <h3 className="text-sm font-bold uppercase tracking-wider text-gray-800 mb-3">Price Range</h3>
         <input
@@ -282,7 +282,7 @@ export default function ShopPage() {
         </div>
       </div>
 
-      {/* Popular Brands */}
+      
       <div className="bg-white rounded border border-gray-100 p-4 mb-4">
         <h3 className="text-sm font-bold uppercase tracking-wider text-gray-800 mb-3">Popular Brands</h3>
         <div className="grid grid-cols-2 gap-2">
@@ -307,7 +307,7 @@ export default function ShopPage() {
       <div className="container mx-auto px-4 md:px-8 py-8">
         <div className="flex gap-6">
 
-          {/* ── Left Sidebar ────────────────────────────────────── */}
+          
           <aside className="hidden lg:block w-64 shrink-0">
             {filterSidebar}
           </aside>
@@ -327,10 +327,10 @@ export default function ShopPage() {
             </div>
           )}
 
-          {/* ── Main Content ─────────────────────────────────────── */}
+          
           <main className="flex-1 min-w-0">
 
-            {/* Search bar + sort */}
+           
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-4">
               <button
                 onClick={() => setShowMobileFilters((v) => !v)}
@@ -362,7 +362,7 @@ export default function ShopPage() {
               </div>
             </div>
 
-            {/* Product Grid */}
+            
             {isLoading ? (
               <div className="flex items-center justify-center min-h-[400px]">
                 <div className="w-8 h-8 border-4 border-brand-orange border-t-transparent rounded-full animate-spin"></div>

@@ -75,10 +75,7 @@ function SignInForm() {
 
       if (!profile) {
         const fallbackName = data.user.user_metadata?.full_name || data.user.email?.split("@")[0] || "Customer";
-        // Fallback profiles are always "customer". Role is never taken from
-        // client-controlled user_metadata, which would allow privilege
-        // escalation (the DB trigger must also be patched — see
-        // supabase/rls-security-fixes.sql).
+        
         const fallbackRole = "customer";
         const { data: createdProfile } = await supabase
           .from("profiles")
@@ -160,7 +157,7 @@ function SignInForm() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* Breadcrumb */}
+     
       <div className="bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500 flex items-center gap-2">
           <Link href="/" className="hover:text-brand-orange flex items-center gap-1">
@@ -176,7 +173,7 @@ function SignInForm() {
       <div className="container mx-auto px-4 py-16 flex justify-center">
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 w-full max-w-[420px] overflow-hidden">
           
-          {/* Tabs */}
+          
           <div className="flex border-b border-gray-100">
             <div className="flex-1 text-center py-4 border-b-2 border-brand-orange text-gray-900 font-semibold cursor-pointer">
               Sign In

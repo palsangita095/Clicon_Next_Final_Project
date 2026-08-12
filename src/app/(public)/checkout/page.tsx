@@ -459,10 +459,10 @@ export default function CheckoutPage() {
       <div className="container mx-auto px-4 md:px-8 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-          {/* Left Column: Forms */}
+          
           <div className="lg:col-span-2 space-y-10">
 
-            {/* Billing Information */}
+          
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Billing Information</h2>
 
@@ -542,7 +542,7 @@ export default function CheckoutPage() {
               </label>
             </div>
 
-            {/* Payment Option */}
+           
             <div className="border border-gray-100 rounded-lg overflow-hidden">
               <div className="p-4 border-b border-gray-100">
                 <h2 className="text-lg font-semibold text-gray-900">Payment Option</h2>
@@ -617,7 +617,7 @@ export default function CheckoutPage() {
               )}
             </div>
 
-            {/* Additional Information */}
+           
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h2>
               <label className="text-sm font-medium text-gray-700 mb-1.5 block">Order Notes <span className="text-gray-400 font-normal">(Optional)</span></label>
@@ -627,7 +627,7 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          {/* Right Column: Order Summary */}
+          
           <div>
             <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6 sticky top-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-5">Order Summary</h2>
@@ -677,7 +677,7 @@ export default function CheckoutPage() {
 
               {error && <div className="text-red-500 text-sm mb-4 text-center bg-red-50 p-3 rounded">{error}</div>}
 
-              {/* Coupon Code */}
+              
               <div className="border-t border-gray-100 pt-4 mb-4">
                 <label className="text-sm font-medium text-gray-700 mb-2 block">Coupon Code</label>
                 <div className="flex gap-2">
@@ -717,7 +717,7 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {/* Login Popup */}
+      
       {showLoginPopup && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl max-w-md w-full p-8 shadow-2xl text-center">

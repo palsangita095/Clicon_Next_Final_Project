@@ -20,7 +20,7 @@ function getDefaultTitle(mode: "create" | "edit"): string {
 const FORM_ID = "dynamic-dialog-form";
 
 export function DynamicDialog<
-  // TFormValues extends Record<string, unknown> = Record<string, unknown>,
+ 
   TFormValues extends FieldValues = FieldValues,
 >({
   open,

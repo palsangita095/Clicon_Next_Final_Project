@@ -145,8 +145,7 @@ export default function OrderDetailPage() {
       return;
     }
 
-    // Check for an existing (pending) review by this user for this product and
-    // update it instead of inserting a duplicate (unique on user_id + product_id).
+    
     const { data: existingReview } = await supabase
       .from("reviews")
       .select("id")

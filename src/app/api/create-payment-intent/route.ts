@@ -10,7 +10,7 @@ function getStripe() {
 
 export async function POST(req: Request) {
   try {
-    // Only signed-in users may create/update payment intents.
+  
     const authHeader = req.headers.get("authorization");
     if (!authHeader?.startsWith("Bearer ")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

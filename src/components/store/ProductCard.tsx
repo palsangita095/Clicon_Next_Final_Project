@@ -73,7 +73,7 @@ export function ProductCard({
             <Image src={fixImageUrl(image, title)} alt={title} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-contain max-h-full max-w-full group-hover:scale-105 transition-transform duration-300" />
           </Link>
 
-          {/* Hover Actions */}
+          
           <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 z-10">
             <button
               onClick={handleToggleWishlist}

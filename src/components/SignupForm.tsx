@@ -53,20 +53,20 @@ const SignupForm = () => {
       reset();
       setActiveTab("login");
     }
-    // closeDrawer();
+    
   };
 
   return (
     <main className="min-h-fit">
       <div className="mx-auto flex flex-col lg:flex-row max-w-7xl overflow-hidden rounded-3xl border border-border shadow-xl bg-background">
-        {/* ── Left Panel ── */}
+       
         <div className="hidden lg:flex w-[42%] relative overflow-hidden bg-brand-teal">
           <Image
             src={signupImage}
             alt="Clicon store background"
             fill
             priority
-            sizes="(max-w-7xl) 42vw, 500px" // Provide an absolute fallback layout size
+            sizes="(max-w-7xl) 42vw, 500px" 
             className="object-cover"
           />
           <div className="absolute inset-0 bg-black/60" />
@@ -95,7 +95,7 @@ const SignupForm = () => {
           </div>
         </div>
 
-        {/* ── Right Side ── */}
+        
         <div className="flex-1 p-8 md:p-12 flex items-center justify-center">
           <div className="w-full max-w-md space-y-6">
             <div className="space-y-2 text-center">
@@ -108,14 +108,14 @@ const SignupForm = () => {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              {/* Avatar upload */}
+             
               <AvatarUploadField
                 onUploaded={(url) =>
                   setValue("avatar_url", url, { shouldValidate: true })
                 }
               />
 
-              {/* Dynamic input fields */}
+          
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ">
                 {signupInputFields.map((field, index) => (
                   <div
@@ -133,7 +133,7 @@ const SignupForm = () => {
                 ))}
               </div>
 
-              {/* Role selector */}
+             
               <div className="space-y-2">
                 <p className="text-sm font-medium">Your Role</p>
 

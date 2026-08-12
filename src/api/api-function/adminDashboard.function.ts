@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase.config";
 import { getErrorMessage } from "@/services/helper/global.helper";
 
-// ! fetch admin dashboard analytics
+
 export const getAdminDashboardFns = async () => {
   try {
     const [

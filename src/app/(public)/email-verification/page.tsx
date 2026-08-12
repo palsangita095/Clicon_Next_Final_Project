@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 export default function EmailVerificationPage() {
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
-      {/* Breadcrumb */}
+      
       <div className="bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500 flex items-center gap-2">
           <Link href="/" className="hover:text-brand-orange flex items-center gap-1">

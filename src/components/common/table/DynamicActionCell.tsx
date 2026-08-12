@@ -11,7 +11,7 @@ import {
 import { Pencil, Trash2 } from "lucide-react";
 import type { TableActions } from "@/types/type/table.type";
 
-//  ActionButton
+
 
 interface ActionButtonProps {
   label: string;
@@ -57,7 +57,7 @@ const ActionButton = memo(function ActionButton({
 
 ActionButton.displayName = "ActionButton";
 
-// DynamicActionCell
+
 
 interface DynamicActionCellProps<TData> {
   row: TData;

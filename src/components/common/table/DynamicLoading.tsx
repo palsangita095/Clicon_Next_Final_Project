@@ -4,7 +4,7 @@ import React, { memo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TableCell, TableRow } from "@/components/ui/table";
 
-// Props
+
 
 interface DynamicLoadingProps {
   rowCount?: number;
@@ -13,7 +13,7 @@ interface DynamicLoadingProps {
   hasSerialNumber?: boolean;
 }
 
-//  SkeletonRow
+
 
 const SkeletonRow = memo(function SkeletonRow({
   columnCount,
@@ -66,7 +66,7 @@ const SkeletonRow = memo(function SkeletonRow({
   );
 });
 
-// DynamicLoading
+
 
 const DynamicLoading = memo(function DynamicLoading({
   rowCount = 5,

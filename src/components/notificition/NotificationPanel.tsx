@@ -30,7 +30,7 @@ export default function NotificationPanel({
   } = useNotifications(profileId);
   const markAllAsRead = useMarkAllNotificationsAsRead(profileId);
 
-  // Guard so we only fire the auto-mark-as-read once per time the panel opens
+  
   const hasAutoMarkedRef = useRef(false);
 
   useEffect(() => {
@@ -43,11 +43,11 @@ export default function NotificationPanel({
     }
     hasAutoMarkedRef.current = true;
 
-    // Reset the guard when this panel instance unmounts (i.e. next time it opens)
+    
     return () => {
       hasAutoMarkedRef.current = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [notifications === undefined]);
 
   return (

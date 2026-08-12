@@ -1,6 +1,6 @@
 import { Eye, Truck, Zap, Handshake, type LucideIcon } from "lucide-react";
 
-// Types
+
 
 type Value = {
   icon: LucideIcon;
@@ -35,7 +35,7 @@ const VALUES: Value[] = [
   },
 ];
 
-// Component
+
 
 export function AboutValuesSection() {
   return (

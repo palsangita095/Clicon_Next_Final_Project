@@ -9,7 +9,7 @@ import { supabase } from "@/lib/supabase.config";
 const CUSTOMER_ROLE = "customer";
 const SEVEN_DAYS = 60 * 60 * 24 * 7;
 
-// ! signup function
+
 export const signupFns = async (payload: SignupPayload) => {
   try {
     const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -41,7 +41,7 @@ export const signupFns = async (payload: SignupPayload) => {
     if (profileError) throw profileError;
     if (!profile) throw new Error("Profile update failed");
 
-    // Customers auto-approve; every other role waits on a verification_requests row
+   
     const isCustomer = profile.role === CUSTOMER_ROLE;
 
     return {
@@ -70,7 +70,7 @@ export const signupFns = async (payload: SignupPayload) => {
   }
 };
 
-// ! verification data fetch — unchanged signature, still your source of truth
+
 export const fetchVerificationRequestByProfileId = async (
   profileId: string,
 ) => {
@@ -86,12 +86,7 @@ export const fetchVerificationRequestByProfileId = async (
   return data;
 };
 
-// ! for the supabase & Google-O-auth
-/* 
- * Shared gating pipeline: Supabase session -> profile fetch -> last_login
- * stamp -> is_active check -> driver/dispatcher verification gate -> cookies.
- * Used by both password login and Google login so the rules never diverge.
- */
+
 const resolveLoginOutcome = async (
   userId: string,
   accessToken: string,
@@ -169,7 +164,7 @@ const resolveLoginOutcome = async (
     };
   }
 
-  // approved
+  
   setCookie("token", accessToken, { maxAge: SEVEN_DAYS });
   setCookie("role", profile.role, { maxAge: SEVEN_DAYS });
   setCookie("user", JSON.stringify(profile), { maxAge: SEVEN_DAYS });
@@ -183,7 +178,7 @@ const resolveLoginOutcome = async (
   };
 };
 
-// ! admin signup — used as fallback when normal signup fails (e.g. deleted user re-registration)
+
 export const adminSignupFns = async (payload: SignupPayload) => {
   try {
     const res = await fetch("/api/auth/signup", {
@@ -207,9 +202,7 @@ export const adminSignupFns = async (payload: SignupPayload) => {
       };
     }
 
-    // ! The service-role API creates the user without a client session. Sign
-    // ! in right away so the cart / wishlist / compare tables (RLS keyed on
-    // ! auth.uid()) are usable immediately for this account.
+   
     try {
       await supabase.auth.signInWithPassword({
         email: payload.email,
@@ -233,7 +226,7 @@ export const adminSignupFns = async (payload: SignupPayload) => {
   }
 };
 
-// ! login function — authenticate, then hand off to the shared resolver
+
 export const loginFns = async (
   payload: LoginPayload,
 ): Promise<AuthResponse> => {
@@ -263,8 +256,7 @@ export const loginFns = async (
   }
 };
 
-// ! kicks off the Google OAuth redirect. Nothing to return —
-// ! the browser navigates away to Google, then to /auth/callback.
+
 export const loginWithGoogleFns = async (redirectTo: string) => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
@@ -274,12 +266,7 @@ export const loginWithGoogleFns = async (redirectTo: string) => {
   if (error) throw error;
 };
 
-// ! login with google OAuth
-/**
- * Called from /auth/callback once Google has redirected back.
- * Fills in role/name/avatar on first-ever Google sign-in, then reuses
- * the exact same gating pipeline as password login.
- */
+
 export const completeGoogleLogin = async (): Promise<AuthResponse> => {
   try {
     const { data: sessionData, error: sessionError } =

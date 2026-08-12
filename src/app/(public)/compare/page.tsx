@@ -61,13 +61,13 @@ export default function ComparePage() {
     setIsLoggedIn(!!getCookie("token"));
   }, []);
 
-  // Search modal state to add products
+  
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [modalSearch, setModalSearch] = useState("");
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [modalLoading, setModalLoading] = useState(false);
 
-  // Fetch product details from Supabase
+  
   useEffect(() => {
     async function loadCompareDetails() {
       setLoading(true);
@@ -85,7 +85,7 @@ export default function ComparePage() {
           .select("*, categories!products_category_id_fkey(name), brands!products_brand_id_fkey(name)")
           .in("id", productIds);
 
-        // Compute real review stats (approved reviews only)
+       
         const { data: reviewData } = productIds.length
           ? await supabase
               .from("reviews")
@@ -174,7 +174,7 @@ export default function ComparePage() {
     loadCompareDetails();
   }, [compareItems]);
 
-  // Handle opening modal to add products
+  
   const handleOpenAddModal = async () => {
     setIsAddModalOpen(true);
     setModalLoading(true);
@@ -238,7 +238,7 @@ export default function ComparePage() {
 
   return (
     <div className="bg-white min-h-screen font-sans">
-      {/* Breadcrumb */}
+      
       <div className="bg-gray-50 border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500 flex items-center justify-between">
           <div>
@@ -261,7 +261,7 @@ export default function ComparePage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {isLoggedIn && <AccountSidebar />}
           <div className="flex-1 min-w-0">
-        {/* Controls / Sorting Bar */}
+        
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold text-gray-700">Sort Columns By:</span>
@@ -325,7 +325,7 @@ export default function ComparePage() {
           <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
             <table className="w-full min-w-[800px] border-collapse bg-white">
               <tbody>
-                {/* Products Header Row */}
+                
                 <tr>
                   <td className="w-[200px] p-6 border-b border-r border-gray-200 bg-gray-50 align-top">
                     <span className="font-bold text-gray-800 text-sm">Product Summary</span>
@@ -367,7 +367,7 @@ export default function ComparePage() {
                   ))}
                 </tr>
 
-                {/* Customer Feedback */}
+               
                 <tr className="bg-gray-50/50">
                   <td className="p-4 border-b border-r border-gray-200 text-sm font-semibold text-gray-700">Customer feedback:</td>
                   {detailedItems.map((item) => (
@@ -380,7 +380,7 @@ export default function ComparePage() {
                   ))}
                 </tr>
 
-                {/* Price */}
+                
                 <tr>
                   <td className="p-4 border-b border-r border-gray-200 text-sm font-semibold text-gray-700">Price:</td>
                   {detailedItems.map((item) => (
@@ -390,7 +390,7 @@ export default function ComparePage() {
                   ))}
                 </tr>
 
-                {/* Sold By */}
+                
                 <tr className="bg-gray-50/50">
                   <td className="p-4 border-b border-r border-gray-200 text-sm font-semibold text-gray-700">Sold by:</td>
                   {detailedItems.map((item) => (
@@ -398,7 +398,7 @@ export default function ComparePage() {
                   ))}
                 </tr>
 
-                {/* Brand */}
+               
                 <tr>
                   <td className="p-4 border-b border-r border-gray-200 text-sm font-semibold text-gray-700">Brand:</td>
                   {detailedItems.map((item) => (
@@ -406,7 +406,7 @@ export default function ComparePage() {
                   ))}
                 </tr>
 
-                {/* Model */}
+               
                 <tr className="bg-gray-50/50">
                   <td className="p-4 border-b border-r border-gray-200 text-sm font-semibold text-gray-700">Model / Slug:</td>
                   {detailedItems.map((item) => (
@@ -414,7 +414,7 @@ export default function ComparePage() {
                   ))}
                 </tr>
 
-                {/* Stock Status */}
+               
                 <tr>
                   <td className="p-4 border-b border-r border-gray-200 text-sm font-semibold text-gray-700">Stock status:</td>
                   {detailedItems.map((item) => (
@@ -426,7 +426,7 @@ export default function ComparePage() {
                   ))}
                 </tr>
 
-                {/* Size */}
+               
                 <tr className="bg-gray-50/50">
                   <td className="p-4 border-b border-r border-gray-200 text-sm font-semibold text-gray-700">Size:</td>
                   {detailedItems.map((item) => (
@@ -434,7 +434,7 @@ export default function ComparePage() {
                   ))}
                 </tr>
 
-                {/* Weight */}
+               
                 <tr>
                   <td className="p-4 border-r border-gray-200 text-sm font-semibold text-gray-700">Weight:</td>
                   {detailedItems.map((item) => (
@@ -449,7 +449,7 @@ export default function ComparePage() {
         </div>
       </div>
 
-      {/* Add Product Modal */}
+      
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl relative max-h-[85vh] flex flex-col">

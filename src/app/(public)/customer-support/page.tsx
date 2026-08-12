@@ -12,7 +12,7 @@ export default function CustomerSupportPage() {
   const settings = useStoreSettings();
   return (
     <div className="bg-white min-h-screen">
-      {/* Breadcrumb */}
+     
       <div className="bg-gray-50 border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500 flex items-center gap-2">
           <Link href="/" className="hover:text-brand-orange flex items-center gap-1">
@@ -25,7 +25,7 @@ export default function CustomerSupportPage() {
         </div>
       </div>
 
-      {/* Hero Section */}
+      
       <div className="container mx-auto px-4 md:px-8 py-16 flex flex-col md:flex-row items-center justify-between gap-12">
         <div className="flex-1 max-w-lg">
           <span className="bg-[#F3C83A] text-gray-900 text-xs font-bold uppercase tracking-wider py-1.5 px-3 rounded-sm inline-block mb-4">
@@ -49,7 +49,7 @@ export default function CustomerSupportPage() {
         </div>
         
         <div className="flex-1 flex justify-end relative h-[300px] w-full max-w-[400px]">
-          {/* Placeholder for customer support agent image */}
+          
           <Image 
             src={fixImageUrl("https://wlqsdguefbabohjsbwab.supabase.co/storage/v1/object/public/product_images/products/Customer%20Support.png", "Customer Support")} 
             alt="Customer Support" 
@@ -60,7 +60,7 @@ export default function CustomerSupportPage() {
         </div>
       </div>
 
-      {/* Categories */}
+      
       <div className="container mx-auto px-4 md:px-8 py-16 text-center border-t border-gray-100">
         <h2 className="text-2xl font-bold text-gray-900 mb-10">What can we assist you with today?</h2>
         
@@ -83,7 +83,7 @@ export default function CustomerSupportPage() {
         </div>
       </div>
 
-      {/* Popular Topics */}
+      
       <div className="container mx-auto px-4 md:px-8 py-16 border-t border-gray-100">
         <h2 className="text-2xl font-bold text-gray-900 mb-10 text-center">Popular Topics</h2>
         
@@ -106,7 +106,7 @@ export default function CustomerSupportPage() {
         </div>
       </div>
 
-      {/* Submit a Ticket */}
+      
       <div className="container mx-auto px-4 md:px-8 py-12 text-center border-t border-gray-100">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Submit a Support Ticket</h2>
         <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">Can't find what you're looking for? Send us a message and we'll get back to you.</p>
@@ -117,7 +117,7 @@ export default function CustomerSupportPage() {
         </Link>
       </div>
 
-      {/* Contact Section */}
+     
       <div className="bg-gray-50 py-20 text-center">
         <div className="container mx-auto px-4">
           <span className="bg-[#2DB2FF] text-white text-xs font-bold uppercase tracking-wider py-1.5 px-3 rounded-sm inline-block mb-4">
@@ -145,7 +145,7 @@ export default function CustomerSupportPage() {
               </div>
             </div>
 
-            {/* Chat with Us */}
+            
             <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100 flex-1 text-left flex gap-6">
               <div className="w-16 h-16 bg-green-50 rounded-md flex items-center justify-center flex-shrink-0">
                 <MessageSquare className="w-8 h-8 text-[#22C55E]" />

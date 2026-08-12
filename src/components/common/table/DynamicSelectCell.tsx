@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import type { DropdownConfig } from "@/types/type/table.type";
 
-// Props
+
 
 interface DynamicSelectCellProps<TData> {
   row: TData;
@@ -18,7 +18,7 @@ interface DynamicSelectCellProps<TData> {
   dropdown: DropdownConfig<TData, Record<string, unknown>>;
 }
 
-// DynamicSelectCell
+
 
 function DynamicSelectCell<TData>({
   row,

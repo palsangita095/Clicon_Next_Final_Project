@@ -28,8 +28,7 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Service-role client: bypasses RLS so the lookup is reliable, but ownership
-  // and admin-role authorization are enforced explicitly below (IDOR guard).
+  
   const admin = getSupabaseAdmin();
 
   const { data: order, error: orderError } = await admin

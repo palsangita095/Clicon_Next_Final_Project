@@ -265,7 +265,7 @@ export default function BlogDetailPage() {
 
   return (
     <div key={article.id} className="bg-white min-h-screen">
-      {/* Breadcrumb */}
+      
       <div className="bg-gray-50 border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500 flex items-center gap-2">
           <Link href="/" className="hover:text-brand-orange flex items-center gap-1">
@@ -284,10 +284,10 @@ export default function BlogDetailPage() {
 
       <div className="container mx-auto px-4 md:px-8 py-16 flex flex-col lg:flex-row gap-12">
         
-        {/* Main Article Content */}
+      
         <div className="flex-1 max-w-4xl">
           
-          {/* Header Info */}
+         
           <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-6 border-b border-gray-100 pb-4">
             <div className="flex items-center gap-2">
               <User size={18} className="text-brand-orange" />
@@ -307,7 +307,7 @@ export default function BlogDetailPage() {
             {article.title}
           </h1>
 
-          {/* Author & Share */}
+         
           <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
             <div className="flex items-center gap-3">
               <Image src={fixImageUrl(article.authorAvatar, article.author)} alt={article.author} width={48} height={48} className="rounded-full" />
@@ -325,7 +325,7 @@ export default function BlogDetailPage() {
             </div>
           </div>
 
-          {/* Hero Image */}
+         
           <div className="relative w-full h-[400px] rounded-md overflow-hidden mb-10">
             <Image src={fixImageUrl(article.heroImage, "Article Hero")} alt={article.title} fill sizes="(max-width: 768px) 100vw, 800px" className="object-cover" />
           </div>
@@ -347,7 +347,7 @@ export default function BlogDetailPage() {
             <p>{article.paragraphs[1]}</p>
             <p>{article.paragraphs[2]}</p>
 
-            {/* In-article Images */}
+            
             <div className="grid grid-cols-2 gap-6 my-10">
               <div className="relative h-64 rounded-md overflow-hidden">
                  <Image src={fixImageUrl(article.contentImages[0], "Content Image 1")} alt="Content Image 1" fill sizes="(max-width: 768px) 100vw, 400px" className="object-cover" />
@@ -362,7 +362,7 @@ export default function BlogDetailPage() {
 
           <hr className="my-12 border-gray-100" />
 
-          {/* Leave a Comment */}
+       
           <div className="mb-16">
             <h3 className="text-xl font-bold text-gray-900 mb-8">Leave a Comment</h3>
             <form className="space-y-6" onSubmit={postComment}>
@@ -391,7 +391,7 @@ export default function BlogDetailPage() {
             </form>
           </div>
 
-          {/* Comments List */}
+          
           <div>
             <h3 className="text-xl font-bold text-gray-900 mb-8">Comments</h3>
             <div className="space-y-8">
@@ -416,10 +416,9 @@ export default function BlogDetailPage() {
           </div>
         </div>
 
-        {/* Right Sidebar */}
+        
         <div className="w-full lg:w-[320px] flex-shrink-0 space-y-8">
           
-          {/* Search */}
           <div className="border border-gray-100 rounded-md p-6 shadow-sm">
             <h3 className="font-bold text-gray-900 mb-6 uppercase text-sm tracking-wider">SEARCH</h3>
             <div className="relative w-full">
@@ -428,7 +427,7 @@ export default function BlogDetailPage() {
             </div>
           </div>
 
-          {/* Categories */}
+        
           <div className="border border-gray-100 rounded-md p-6 shadow-sm">
             <h3 className="font-bold text-gray-900 mb-6 uppercase text-sm tracking-wider">CATEGORY</h3>
             <ul className="space-y-4">
@@ -445,7 +444,7 @@ export default function BlogDetailPage() {
             </ul>
           </div>
 
-          {/* Latest Blog */}
+          
           <div className="border border-gray-100 rounded-md p-6 shadow-sm">
             <h3 className="font-bold text-gray-900 mb-6 uppercase text-sm tracking-wider">LATEST BLOG</h3>
             <div className="space-y-6">
@@ -465,7 +464,7 @@ export default function BlogDetailPage() {
             </div>
           </div>
 
-          {/* Popular Tags */}
+          
           <div className="border border-gray-100 rounded-md p-6 shadow-sm">
             <h3 className="font-bold text-gray-900 mb-6 uppercase text-sm tracking-wider">POPULAR TAG</h3>
             <div className="flex flex-wrap gap-2">

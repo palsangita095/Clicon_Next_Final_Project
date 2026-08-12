@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase.config";
 
-// ! shipment status counts for the logged-in customer
+
 export const getShipmentStatusCounts = async (customerId: string) => {
   const { data, error } = await supabase
     .from("shipments")
@@ -17,7 +17,7 @@ export const getShipmentStatusCounts = async (customerId: string) => {
   return counts;
 };
 
-// ! shipments created per month, last 6 months
+
 export const getMonthlyShipmentTrend = async (customerId: string) => {
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
@@ -33,7 +33,7 @@ export const getMonthlyShipmentTrend = async (customerId: string) => {
   return data;
 };
 
-// ! estimated cost per month, last 6 months
+
 export const getMonthlySpendTrend = async (customerId: string) => {
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
@@ -49,7 +49,7 @@ export const getMonthlySpendTrend = async (customerId: string) => {
   return data;
 };
 
-// ! latest 5 shipments for the recent activity table
+
 export const getRecentShipments = async (customerId: string) => {
   const { data, error } = await supabase
     .from("shipments")
@@ -62,7 +62,7 @@ export const getRecentShipments = async (customerId: string) => {
   return data;
 };
 
-// ! quick stat totals for the top cards
+
 export const getCustomerStats = async (customerId: string) => {
   const { data, error } = await supabase
     .from("shipments")

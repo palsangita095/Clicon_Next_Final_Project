@@ -31,7 +31,7 @@ export default function AccountDashboardPage() {
         setProfile(data || { full_name: user.email?.split('@')[0], email: user.email });
         setOrders(orderData ?? []);
 
-        // ! Browsing history + saved cards now come from Supabase tables
+       
         const { data: browsingData } = await supabase
           .from("browsing_history")
           .select("viewed_at, products(id, name, price, image_urls)")
@@ -94,7 +94,7 @@ export default function AccountDashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* Welcome Section */}
+      
       <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Hello, {displayName}</h1>
         <p className="text-sm text-gray-500 leading-relaxed">
@@ -106,9 +106,8 @@ export default function AccountDashboardPage() {
         </p>
       </div>
 
-      {/* Account Info + Billing + Stats */}
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Account Info */}
+      
         <div className="flex-1 bg-white rounded-md border border-gray-100 p-6 shadow-sm">
           <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">ACCOUNT INFO</h3>
           <div className="flex items-center gap-4 mb-5">
@@ -131,7 +130,7 @@ export default function AccountDashboardPage() {
           </Link>
         </div>
 
-        {/* Billing Address */}
+        
         <div className="flex-1 bg-white rounded-md border border-gray-100 p-6 shadow-sm">
           <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">BILLING ADDRESS</h3>
           <div className="mb-5">
@@ -153,7 +152,7 @@ export default function AccountDashboardPage() {
           </Link>
         </div>
 
-        {/* Stats */}
+        
         <div className="w-full lg:w-48 flex flex-col gap-4">
           <div className="bg-white rounded-md border border-gray-100 p-5 shadow-sm text-center">
             <p className="text-3xl font-bold text-gray-900">{orders.length}</p>
@@ -170,7 +169,7 @@ export default function AccountDashboardPage() {
         </div>
       </div>
 
-        {/* Payment Option */}
+        
       <div className="bg-white rounded-md border border-gray-100 p-6 shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">PAYMENT OPTION</h3>
@@ -202,7 +201,7 @@ export default function AccountDashboardPage() {
         </div>
       </div>
 
-      {/* Recent Orders */}
+    
       <div className="bg-white rounded-md border border-gray-100 p-6 shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">RECENT ORDER</h3>
@@ -246,7 +245,7 @@ export default function AccountDashboardPage() {
         </div>
       </div>
 
-      {/* Browsing History */}
+      
       <div className="bg-white rounded-md border border-gray-100 p-6 shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">BROWSING HISTORY</h3>

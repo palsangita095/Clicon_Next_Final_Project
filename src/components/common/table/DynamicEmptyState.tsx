@@ -4,7 +4,7 @@ import React, { memo } from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { PackageOpen } from "lucide-react";
 
-//  Props
+
 
 interface DynamicEmptyStateProps {
   columnCount: number;
@@ -13,7 +13,7 @@ interface DynamicEmptyStateProps {
   action?: React.ReactNode;
 }
 
-//  DynamicEmptyState
+
 
 const DynamicEmptyState = memo(function DynamicEmptyState({
   columnCount,

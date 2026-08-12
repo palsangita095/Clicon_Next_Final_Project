@@ -30,7 +30,7 @@ export function WordRotate({
       setIndex((prevIndex) => (prevIndex + 1) % words.length)
     }, duration)
 
-    // Clean up interval on unmount
+    
     return () => clearInterval(interval)
   }, [words, duration])
 

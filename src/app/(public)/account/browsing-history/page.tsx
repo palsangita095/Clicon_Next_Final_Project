@@ -116,7 +116,7 @@ export default function BrowsingHistoryPage() {
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-md border border-gray-100 p-6 shadow-sm">
-        {/* Header */}
+        
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <h2 className="text-lg font-bold text-gray-900">Purchase History</h2>
           <div className="flex items-center gap-2">
@@ -130,7 +130,6 @@ export default function BrowsingHistoryPage() {
           </div>
         </div>
 
-        {/* Search & Date Filter */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
@@ -153,12 +152,12 @@ export default function BrowsingHistoryPage() {
           </div>
         </div>
 
-        {/* Loading */}
+      
         {loading && (
           <div className="text-center py-16 text-gray-400">Loading...</div>
         )}
 
-        {/* Date Groups */}
+       
         {!loading && historyEnabled && groups.length > 0 && (
           <div className="space-y-10">
             {groups.map((group, groupIdx) => (
@@ -190,7 +189,7 @@ export default function BrowsingHistoryPage() {
           </div>
         )}
 
-        {/* Empty state */}
+       
         {!loading && historyEnabled && groups.length === 0 && (
           <div className="text-center py-16">
             <Package className="w-16 h-16 text-gray-200 mx-auto mb-4" />
@@ -198,7 +197,7 @@ export default function BrowsingHistoryPage() {
           </div>
         )}
 
-        {/* Load More */}
+        
         {groups.length > 0 && (
           <div className="flex justify-center mt-10">
             <Button variant="outline" className="border-brand-orange text-brand-orange hover:bg-orange-50 font-bold h-11 px-8 uppercase tracking-wide">

@@ -6,7 +6,7 @@ import {
   UpdateCustomerPayload,
 } from "@/types/interface/admin/customers.interface";
 
-// ! fetch all customers
+
 export const getCustomersWLFns = async ({
   limit,
   page,
@@ -56,7 +56,7 @@ export const getCustomersWLFns = async ({
   }
 };
 
-// ! fetch all customers
+
 export const getCustomersFns = async () => {
   try {
     const { data, error } = await supabase
@@ -76,7 +76,7 @@ export const getCustomersFns = async () => {
       `,
       )
       .order("created_at", { ascending: false });
-    // .in("role", RoleFilter);
+   
 
     if (error) throw error;
 
@@ -93,7 +93,7 @@ export const getCustomersFns = async () => {
   }
 };
 
-// ! fetch available customer profiles
+
 export const getAvailableCustomerProfilesFns = async () => {
   try {
     const { data, error } = await supabase
@@ -117,7 +117,7 @@ export const getAvailableCustomerProfilesFns = async () => {
   }
 };
 
-// ! create customer
+
 export const createCustomerFns = async (payload: CreateCustomerPayload) => {
   try {
     const { data, error } = await supabase
@@ -141,7 +141,7 @@ export const createCustomerFns = async (payload: CreateCustomerPayload) => {
   }
 };
 
-// ! update customer
+
 export const updateCustomerFns = async (payload: UpdateCustomerPayload) => {
   try {
     const { id, ...updates } = payload;
@@ -168,7 +168,7 @@ export const updateCustomerFns = async (payload: UpdateCustomerPayload) => {
   }
 };
 
-// ! update customer credit limit
+
 export const updateCustomerCreditLimitFns = async (
   id: string,
   credit_limit: number,
@@ -198,7 +198,7 @@ export const updateCustomerCreditLimitFns = async (
   }
 };
 
-// ! delete customer
+
 export const deleteCustomerFns = async (id: string) => {
   try {
     const { error } = await supabase.from("customers").delete().eq("id", id);

@@ -8,12 +8,12 @@ import type {
   UpsertCustomerPayload,
 } from "@/types/interface/customer/customerProfile.interface";
 
-// ─── Helpers
+
 
 const generateCustomerCode = (): string =>
   `CUST-${Math.floor(100000 + Math.random() * 900000)}`;
 
-// ! Fetch full customer profile
+
 export const getCustomerProfileFns = async (
   userId: string,
 ): Promise<ApiResponse<CustomerProfileView>> => {
@@ -65,7 +65,7 @@ export const getCustomerProfileFns = async (
   }
 };
 
-// ! Fetch recent shipments
+
 export const getRecentShipmentsFns = async (
   customerId: string,
   limit = 5,
@@ -100,7 +100,7 @@ export const getRecentShipmentsFns = async (
   }
 };
 
-// ! Update profile identity (name + phone)
+
 export const updateProfileIdentityFns = async (
   payload: UpdateProfileIdentityPayload,
 ): Promise<ApiResponse> => {
@@ -117,12 +117,12 @@ export const updateProfileIdentityFns = async (
   }
 };
 
-// ! Upsert customer row
+
 export const upsertCustomerFns = async (
   payload: UpsertCustomerPayload,
 ): Promise<ApiResponse> => {
   try {
-    // 1. Check for an existing row
+   
     const { data: existing, error: fetchError } = await supabase
       .from("customers")
       .select("id")
@@ -137,14 +137,11 @@ export const upsertCustomerFns = async (
       billing_address: payload.billing_address,
       shipping_address: payload.shipping_address,
       preferred_contact: payload.preferred_contact,
-      // address: payload.address,
-      // city: payload.city,
-      // state: payload.state,
-      // country: payload.country,
+     
     };
 
     if (!existing) {
-      // 2a. First-time: INSERT with a generated customer_code
+      
       const { error } = await supabase.from("customers").insert({
         profile_id: payload.profile_id,
         customer_code: generateCustomerCode(),
@@ -153,7 +150,7 @@ export const upsertCustomerFns = async (
 
       if (error) throw error;
     } else {
-      // 2b. Returning user: UPDATE without touching customer_code
+     
       const { error } = await supabase
         .from("customers")
         .update(editableFields)

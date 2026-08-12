@@ -46,7 +46,7 @@ export default function FeaturedProducts({ products: propProducts }: { products?
     ? propProducts
     : [];
 
-  // Strictly limit to 8 products per tab
+ 
   const products = rawProducts.length > 0
     ? rawProducts.slice(0, 8).map((p) => ({
         id: p.id,
@@ -92,7 +92,7 @@ export default function FeaturedProducts({ products: propProducts }: { products?
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Left Banner */}
+        
         <div className="w-full lg:w-1/4 bg-brand-yellow rounded-lg p-8 flex flex-col items-center text-center justify-center relative min-h-[400px]">
           <h3 className="text-brand-blue font-bold text-sm mb-4 uppercase">{promo.title}</h3>
           <h2 className="text-3xl font-bold text-gray-900 mb-6 leading-tight">{promo.discount_text}</h2>
@@ -108,7 +108,7 @@ export default function FeaturedProducts({ products: propProducts }: { products?
           <Image src={fixImageUrl(promo.image_url, promo.title)} alt={promo.title} width={240} height={200} sizes="(max-width: 1024px) 50vw, 240px" className="mt-8 object-contain max-w-full" style={{ width: "auto", height: "auto" }} />
         </div>
 
-        {/* Right Grid */}
+        
         <div className="w-full lg:w-3/4 grid grid-cols-2 md:grid-cols-4 gap-4">
           {products.map((product) => (
             <ProductCard key={product.id} {...product} />

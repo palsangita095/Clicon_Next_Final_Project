@@ -84,7 +84,7 @@ export default function AdminUsersPage() {
       setReplyModal(null);
       setReplyText("");
     } catch {
-      // keep modal open on failure
+     
     }
     setSendingReply(false);
   };
@@ -129,7 +129,7 @@ export default function AdminUsersPage() {
         <h1 className="text-2xl font-bold text-[#1E293B]">Users</h1>
       </div>
 
-      {/* Users Table */}
+      
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
         <div className="p-4 border-b border-gray-50 flex flex-wrap items-center gap-3">
           <div className="relative w-72">
@@ -214,7 +214,7 @@ export default function AdminUsersPage() {
         )}
       </div>
 
-      {/* Customer Queries with Reply */}
+      
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
         <div className="p-6 border-b border-gray-50 flex items-center gap-2">
           <MessageSquare className="w-5 h-5 text-brand-orange" />
@@ -271,7 +271,7 @@ export default function AdminUsersPage() {
         )}
       </div>
 
-      {/* Reply Modal */}
+      
       {replyModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl max-w-lg w-full p-6 shadow-2xl">
@@ -296,7 +296,7 @@ export default function AdminUsersPage() {
         </div>
       )}
 
-      {/* Customer Detail Modal */}
+      
       {detailUser && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl max-w-4xl w-full p-6 shadow-2xl max-h-[90vh] flex flex-col">
@@ -349,7 +349,7 @@ export default function AdminUsersPage() {
                 <p className="text-sm text-gray-500">Loading customer details...</p>
               ) : (
                 <>
-                  {/* Order History */}
+                  
                   <div>
                     <h4 className="font-bold text-[#1E293B] mb-3">Order History</h4>
                     {detailData?.orders?.length === 0 ? (
@@ -390,7 +390,7 @@ export default function AdminUsersPage() {
                     )}
                   </div>
 
-                  {/* Address Book */}
+                  
                   <div>
                     <h4 className="font-bold text-[#1E293B] mb-3">Address Book</h4>
                     <div className="bg-gray-50 rounded-lg p-4">
@@ -400,7 +400,7 @@ export default function AdminUsersPage() {
                     </div>
                   </div>
 
-                  {/* Submitted Reviews */}
+                  
                   <div>
                     <h4 className="font-bold text-[#1E293B] mb-3">Submitted Reviews</h4>
                     {detailData?.reviews?.length === 0 ? (

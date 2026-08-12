@@ -5,7 +5,7 @@ export function useProducts(filters: ProductFilters = {}) {
   return useQuery({
     queryKey: ["products", filters],
     queryFn: () => fetchProducts(filters),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5, 
   });
 }
 
@@ -13,6 +13,6 @@ export function useBestDeals() {
   return useQuery({
     queryKey: ["products", "best-deals"],
     queryFn: () => fetchBestDealsProducts(),
-    staleTime: 1000 * 60 * 2, // 2 minutes
+    staleTime: 1000 * 60 * 2, 
   });
 }

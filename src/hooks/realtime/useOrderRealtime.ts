@@ -10,11 +10,7 @@ const ADMIN_ORDERS_KEYS = [
   ["admin-store", "orders", "metrics"],
 ];
 
-/**
- * Live order status updates for a single order (order tracking / order detail).
- * Realtime events respect RLS, so anonymous trackers will not receive events —
- * logged-in owners and admins will. Falls back to manual refresh otherwise.
- */
+
 export function useOrderStatusRealtime(
   orderId: string | null,
   onStatusChange?: (status: OrderStatus) => void,
@@ -48,10 +44,7 @@ export function useOrderStatusRealtime(
   }, [orderId]);
 }
 
-/**
- * Live refresh for the admin orders list: invalidates the orders + metrics
- * React Query caches whenever an order is inserted, updated or deleted.
- */
+
 export function useAdminOrdersRealtime() {
   const queryClient = useQueryClient();
 

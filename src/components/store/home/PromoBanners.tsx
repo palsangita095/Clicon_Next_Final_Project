@@ -8,7 +8,7 @@ import { fixImageUrl } from "@/lib/imageFallback";
 export default function PromoBanners() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* Left Banner */}
+     
       <div className="bg-gray-100 rounded-lg p-8 flex items-center relative overflow-hidden min-h-[250px]">
         <div className="z-10 max-w-[60%]">
           <span className="bg-brand-blue text-white text-xs font-bold px-2 py-1 rounded inline-block mb-3">INTRODUCING</span>
@@ -21,7 +21,7 @@ export default function PromoBanners() {
         <Image src={fixImageUrl('https://wlqsdguefbabohjsbwab.supabase.co/storage/v1/object/public/product_images/products/New%20Apple%20Homepod%20Mini.png', "Homepod Mini")} alt="Homepod Mini" width={240} height={200} className="absolute right-0 bottom-0 object-contain w-[40%] h-[80%]" />
       </div>
 
-      {/* Right Banner */}
+     
       <div className="bg-gray-900 rounded-lg p-8 flex items-center relative overflow-hidden min-h-[250px]">
         <div className="z-10 max-w-[60%]">
           <span className="bg-brand-yellow text-gray-900 text-xs font-bold px-2 py-1 rounded inline-block mb-3">INTRODUCING NEW</span>

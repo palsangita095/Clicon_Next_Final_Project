@@ -6,7 +6,6 @@ import {
 } from "@/types/interface/admin/roleverification.interface";
 import { getErrorMessage } from "@/services/helper/global.helper";
 
-// ! get role verification list with pagination
 export const getRoleVerificationListWL = async ({
   limit,
   page,
@@ -51,7 +50,6 @@ export const getRoleVerificationListWL = async ({
   }
 };
 
-// ! get role verification
 export const getRoleVerification = async (id: string) => {
   const { data, error } = await supabase
     .from("verification_requests")
@@ -71,7 +69,6 @@ export const getRoleVerification = async (id: string) => {
   return data;
 };
 
-// ! create the role verification
 export const createRoleVerification = async (
   payload: CreateVerificationPayload,
 ) => {
@@ -89,7 +86,6 @@ export const createRoleVerification = async (
   return data;
 };
 
-// ! update the roleverification status
 export const updateRoleVerificationStatus = async (
   payload: ReviewVerificationPayload,
 ) => {
@@ -109,7 +105,6 @@ export const updateRoleVerificationStatus = async (
   return data;
 };
 
-// ! delete roleverifications
 export const deleteRoleVerification = async (id: string) => {
   const { error } = await supabase
     .from("verification_requests")

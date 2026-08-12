@@ -79,7 +79,7 @@ export default function CartPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* Breadcrumb */}
+     
       <div className="bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500">
           <Link href="/" className="hover:text-brand-orange">Home</Link>
@@ -104,10 +104,10 @@ export default function CartPage() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            {/* Cart Items */}
+            
             <div className="lg:col-span-2">
               <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
-                {/* Header */}
+              
                 <div className="hidden sm:grid grid-cols-12 py-3 px-5 bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   <div className="col-span-6">Product</div>
                   <div className="col-span-2 text-center">Price</div>
@@ -115,10 +115,10 @@ export default function CartPage() {
                   <div className="col-span-2 text-right">Total</div>
                 </div>
 
-                {/* Items */}
+               
                 {cart.map((item) => (
                   <div key={item.id} className="grid grid-cols-12 items-center py-4 px-4 sm:px-5 border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                    {/* Product */}
+                    
                     <div className="col-span-12 sm:col-span-6 flex items-center gap-3 sm:gap-4">
                       <button aria-label={`Remove ${item.name} from cart`} onClick={() => removeFromCart(item.id)} className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0">
                         <X className="w-4 h-4" />
@@ -131,12 +131,12 @@ export default function CartPage() {
                       </Link>
                     </div>
 
-                    {/* Price */}
+                
                     <div className="col-span-4 sm:col-span-2 mt-3 sm:mt-0 text-center text-sm font-medium text-gray-700">
                       ₹{item.price.toLocaleString()}
                     </div>
 
-                    {/* Quantity */}
+                   
                     <div className="col-span-4 sm:col-span-2 mt-3 sm:mt-0 flex items-center justify-center">
                       <div className="flex items-center border border-gray-200 rounded h-9">
                         <button aria-label={`Decrease quantity of ${item.name}`} onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-8 h-full flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-l text-lg leading-none">
@@ -149,7 +149,7 @@ export default function CartPage() {
                       </div>
                     </div>
 
-                    {/* Total */}
+                   
                     <div className="col-span-4 sm:col-span-2 mt-3 sm:mt-0 text-right text-sm font-bold text-brand-blue">
                       ₹{(item.price * item.quantity).toLocaleString()}
                     </div>
@@ -157,7 +157,7 @@ export default function CartPage() {
                 ))}
               </div>
 
-              {/* Coupon Row */}
+              
               <div className="flex flex-col sm:flex-row justify-between gap-4 mt-4">
                 <div className="flex gap-2 flex-1">
                   {appliedCoupon ? (
@@ -205,7 +205,7 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* Order Summary */}
+           
             <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6 h-fit">
               <h2 className="text-lg font-semibold text-gray-900 mb-5">Order Summary</h2>
 
@@ -244,7 +244,7 @@ export default function CartPage() {
                 <Link href="/shop">Continue Shopping</Link>
               </Button>
 
-              {/* Safe checkout badge */}
+
               <div className="mt-4 text-center text-xs text-gray-400">
                 🔒 100% Secure checkout
               </div>

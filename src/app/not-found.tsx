@@ -10,10 +10,10 @@ export default function NotFound() {
   return (
     <div className="bg-white min-h-screen flex flex-col items-center justify-center px-4">
       <div className="w-full max-w-lg text-center flex flex-col items-center">
-        {/* Placeholder for the Robot Error SVG */}
+        
         <div className="mb-8 w-64 h-64 relative">
           <Image 
-            src={fixImageUrl("https://placehold.co/300x300?text=404+Robot+Image", "404 Robot")} 
+            src={fixImageUrl("https://wlqsdguefbabohjsbwab.supabase.co/storage/v1/object/public/product_images/products/Oops!%20404%20Error%20with%20a%20broken%20robot-rafiki%20(1)%201.png", "404 Robot")} 
             alt="404 Error Robot" 
             fill
             sizes="256px"

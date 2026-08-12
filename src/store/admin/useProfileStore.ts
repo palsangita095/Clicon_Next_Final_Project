@@ -2,12 +2,12 @@ import { Profile } from "@/types/interface/admin/profiles.interface";
 import { create } from "zustand";
 
 interface ProfileStore {
-  // Dialog State
+  
   isCreateDialogOpen: boolean;
   isEditDialogOpen: boolean;
   isDeleteDialogOpen: boolean;
 
-  // Selected Profile
+  
   selectedProfile: Profile | null;
 
   page: number;
@@ -16,7 +16,7 @@ interface ProfileStore {
   setPage: (page: number) => void;
   setLimit: (limit: number) => void;
 
-  // Actions
+  
   openCreateDialog: () => void;
   closeCreateDialog: () => void;
 
@@ -30,7 +30,7 @@ interface ProfileStore {
 }
 
 export const useProfileStore = create<ProfileStore>((set) => ({
-  // Initial State
+
   isCreateDialogOpen: false,
   isEditDialogOpen: false,
   isDeleteDialogOpen: false,
@@ -43,7 +43,7 @@ export const useProfileStore = create<ProfileStore>((set) => ({
   setPage: (page) => set({ page }),
   setLimit: (limit) => set({ limit, page: 1 }),
 
-  // Create Dialog
+  
   openCreateDialog: () =>
     set({
       isCreateDialogOpen: true,
@@ -54,7 +54,7 @@ export const useProfileStore = create<ProfileStore>((set) => ({
       isCreateDialogOpen: false,
     }),
 
-  // Edit Dialog
+ 
   openEditDialog: (profile) =>
     set({
       selectedProfile: profile,
@@ -67,7 +67,7 @@ export const useProfileStore = create<ProfileStore>((set) => ({
       isEditDialogOpen: false,
     }),
 
-  // Delete Dialog
+ 
   openDeleteDialog: (profile) =>
     set({
       selectedProfile: profile,
@@ -80,7 +80,7 @@ export const useProfileStore = create<ProfileStore>((set) => ({
       isDeleteDialogOpen: false,
     }),
 
-  // Reset Store
+  
   reset: () =>
     set({
       isCreateDialogOpen: false,

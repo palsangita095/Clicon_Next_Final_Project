@@ -66,7 +66,7 @@ export default function AdminOrdersPage() {
     { name: 'Thu', value: 0 }, { name: 'Fri', value: 0 }, { name: 'Sat', value: 0 }, { name: 'Sun', value: 0 },
   ]);
 
-  // Edit Address modal
+ 
   const [editModalOrder, setEditModalOrder] = useState<any>(null);
   const [editAddress, setEditAddress] = useState({ address: "", city: "", state: "", zip: "" });
 
@@ -164,7 +164,7 @@ export default function AdminOrdersPage() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Top Bar */}
+      
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <h1 className="text-2xl font-bold text-[#1E293B]">Orders</h1>
         <div className="flex items-center gap-2">
@@ -174,7 +174,7 @@ export default function AdminOrdersPage() {
         </div>
       </div>
 
-      {/* Metric Cards */}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((metric, idx) => (
           <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
@@ -199,7 +199,7 @@ export default function AdminOrdersPage() {
         ))}
       </div>
 
-      {/* Orders Update Chart */}
+      
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-2">
@@ -218,7 +218,7 @@ export default function AdminOrdersPage() {
         </div>
       </div>
 
-      {/* Orders Table */}
+    
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
         <div className="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-50">
           <h3 className="font-bold text-[#1E293B] text-lg">All Orders</h3>
@@ -279,7 +279,7 @@ export default function AdminOrdersPage() {
           </table>
         </div>
 
-        {/* Pagination */}
+        
         {!isLoadingOrders && filteredOrders.length > 0 && (
           <div className="p-4 border-t border-gray-50 flex justify-between items-center text-sm text-gray-500">
             <span>Showing {(page - 1) * ITEMS_PER_PAGE + 1}-{Math.min(page * ITEMS_PER_PAGE, filteredOrders.length)} of {filteredOrders.length}</span>
@@ -294,7 +294,7 @@ export default function AdminOrdersPage() {
         )}
       </div>
 
-      {/* Edit Address Modal */}
+     
       {editModalOrder && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl">

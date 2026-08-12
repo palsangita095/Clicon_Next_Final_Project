@@ -51,7 +51,7 @@ const FEATURES_DATA = [
   },
 ];
 
-// --- Animation Variants ---
+
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
@@ -69,9 +69,9 @@ const FeaturesSection = () => {
   return (
     <section className="w-full bg-background py-16 text-foreground">
       <div className="container mx-auto max-w-7xl px-6 lg:px-12">
-        {/* --- Header Area --- */}
+       
         <div className="flex flex-col justify-between gap-12 lg:flex-row lg:items-end">
-          {/* Left: Headline & Badge */}
+         
           <div className="max-w-2xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -95,7 +95,7 @@ const FeaturesSection = () => {
             </motion.h2>
           </div>
 
-          {/* Right: Description */}
+         
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -110,7 +110,7 @@ const FeaturesSection = () => {
           </motion.div>
         </div>
 
-        {/* --- Grid Area --- */}
+       
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -125,12 +125,12 @@ const FeaturesSection = () => {
                 variants={itemVariants}
                 className="group bg-background p-10 transition-colors hover:bg-muted/10 md:p-12"
               >
-                {/* Icon Circle: Using semantic primary colors */}
+               
                 <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-transform duration-300 group-hover:scale-110">
                   <feature.icon className="h-6 w-6" />
                 </div>
 
-                {/* Text Content: Using semantic foreground tokens */}
+                
                 <h3 className="mb-3 text-xl font-bold text-foreground tracking-tight">
                   {feature.title}
                 </h3>

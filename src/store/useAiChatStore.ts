@@ -8,25 +8,25 @@ import {
 import { AI_PROMPTS } from "@/constants/ai-prompts";
 
 interface AiChatStore {
-  // Window
+  
   isOpen: boolean;
 
-  // Language
+  
   language: AiLanguage;
 
-  // Messages
+ 
   messages: ChatMessage[];
 
-  // Conversation
+ 
   conversationId: string | null;
 
   conversations: ChatConversation[];
 
-  // States
+  
   isTyping: boolean;
   isLoading: boolean;
 
-  // Actions
+  
   open: () => void;
   close: () => void;
   toggle: () => void;
@@ -54,14 +54,14 @@ interface AiChatStore {
 }
 
 export const useAiChatStore = create<AiChatStore>((set) => ({
-  // Window
+
   isOpen: false,
 
-  // Language
+ 
   language: "en",
   currentPrompt: 0,
 
-  // Messages
+
   messages: [
     {
       id: crypto.randomUUID(),
@@ -71,16 +71,16 @@ export const useAiChatStore = create<AiChatStore>((set) => ({
     },
   ],
 
-  // Conversation
+  
   conversationId: null,
 
   conversations: [],
 
-  // States
+  
   isTyping: false,
   isLoading: false,
 
-  // Window Actions
+  
   open: () =>
     set({
       isOpen: true,
@@ -96,13 +96,13 @@ export const useAiChatStore = create<AiChatStore>((set) => ({
       isOpen: !state.isOpen,
     })),
 
-  // Language
+
   setLanguage: (language) =>
     set({
       language,
     }),
 
-  // Messages
+  
   addMessage: (message) =>
     set((state) => ({
       messages: [...state.messages, message],
@@ -118,7 +118,7 @@ export const useAiChatStore = create<AiChatStore>((set) => ({
       messages: [],
     }),
 
-  // States
+ 
   setTyping: (value) =>
     set({
       isTyping: value,
@@ -129,7 +129,7 @@ export const useAiChatStore = create<AiChatStore>((set) => ({
       isLoading: value,
     }),
 
-  // New Chat
+  
   startNewChat: () =>
     set({
       conversationId: null,

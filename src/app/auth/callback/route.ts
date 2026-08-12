@@ -24,9 +24,7 @@ export async function GET(request: Request) {
                 cookieStore.set(name, value, options)
               )
             } catch {
-              // The `setAll` method was called from a Server Component.
-              // This can be ignored if you have middleware refreshing
-              // user sessions.
+            
             }
           },
         },
@@ -56,6 +54,6 @@ export async function GET(request: Request) {
     }
   }
 
-  // return the user to an error page with instructions
+  
   return NextResponse.redirect(`${origin}/signin?error=auth-callback-failed`)
 }

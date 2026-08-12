@@ -83,7 +83,7 @@ function useRevealOnScroll<T extends HTMLElement>() {
   return { ref, inView };
 }
 
-// Component
+
 
 export function AboutStorySection() {
   const { ref, inView } = useRevealOnScroll<HTMLOListElement>();
@@ -92,7 +92,7 @@ export function AboutStorySection() {
     <section className="relative overflow-hidden bg-background px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-16 md:grid-cols-[0.9fr_1.1fr]">
-          {/* Left: intro */}
+          
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange">
               # how we started
@@ -125,7 +125,7 @@ export function AboutStorySection() {
             </div>
           </div>
 
-          {/* Right: route-style timeline */}
+          
           <div className="relative">
             <div
               aria-hidden

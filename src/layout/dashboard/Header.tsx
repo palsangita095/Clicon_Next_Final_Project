@@ -33,21 +33,21 @@ const Header = () => {
   useEffect(() => {
     if (debouncedSearchTerm) {
       console.log("Ready to send to server:", debouncedSearchTerm);
-      // await fetch(`/api/search?q=${debouncedSearchTerm}`)
+     
     }
   }, [debouncedSearchTerm]);
 
   return (
     <header className="sticky top-0 z-20 flex justify-between items-center h-16 border-b bg-background px-4 md:px-6 overflow-hidden">
-      {/* Left Section: Sidebar Toggle & Search Bar */}
+      
       <div className="flex items-center gap-4 flex-1">
         <div
-        // className="lg:hidden"
+        
         >
           <SidebarTrigger />
         </div>
 
-        {/* Clean Search Input with embedded icon */}
+        
         <div className="hidden sm:flex relative w-fit max-w-md items-center">
           <SearchIcon className="absolute left-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -60,37 +60,14 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Right Section: Actions & Profile */}
+     
       <div className="flex items-center gap-3 md:gap-4">
-        {/* Mobile Search Button (Visible only on small screens) */}
+        
         <Button variant="ghost" size="icon" className="sm:hidden">
           <SearchIcon className="h-5 w-5" />
         </Button>
 
-        {/* <Button variant="outline" size="icon">
-          <HeadsetIcon className="h-4 w-4" />
-        </Button> */}
-
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="relative" variant="outline" size="icon">
-              <BellIcon className="h-4 w-4" />
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-600 border border-background" />
-            </Button>
-          </DropdownMenuTrigger>
-          
-          <DropdownMenuContent className="w-fit">
-            <Empty>
-              <EmptyHeader>
-                <EmptyDescription>No Notification found</EmptyDescription>
-              </EmptyHeader>
-              <EmptyContent>
-                <Button>Refresh</Button>
-              </EmptyContent>
-            </Empty>
-          </DropdownMenuContent>
-        </DropdownMenu> */}
-
+        
         <NotificationBell />
 
         <DropdownMenu>
@@ -101,7 +78,7 @@ const Header = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-fit">
             <DropdownMenuGroup>
-              {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
+              
               {user?.role !== "admin" && (
                 <DropdownMenuItem
                   onClick={() => router.push(`/${user?.role}/profile`)}
@@ -121,7 +98,7 @@ const Header = () => {
 
         <AnimatedThemeToggler />
 
-        {/* User Details & Avatar */}
+        
         <div className="flex items-center gap-3 pl-2 border-l">
           <div className="hidden md:flex flex-col items-end">
             <span className="text-sm font-medium leading-none capitalize">

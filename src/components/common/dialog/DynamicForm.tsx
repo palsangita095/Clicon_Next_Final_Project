@@ -25,7 +25,7 @@ export function DynamicForm<TFormValues extends FieldValues = FieldValues>({
     handleSubmit,
     formState: { errors },
   } = useForm<TFormValues>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    
     defaultValues: defaultValues as any,
     resolver,
     mode: "onSubmit",
@@ -47,7 +47,7 @@ export function DynamicForm<TFormValues extends FieldValues = FieldValues>({
       {visibleFields.map((field: DynamicFieldConfig<TFormValues>) => (
         <Controller
           key={field.name}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          
           name={field.name as any}
           control={control}
           render={({ field: rhfField }) => (

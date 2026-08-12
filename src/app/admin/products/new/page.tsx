@@ -58,7 +58,7 @@ export default function AdminNewProductPage() {
   const [newTagName, setNewTagName] = useState("");
   const [creatingTag, setCreatingTag] = useState(false);
   
-  // Image Upload State
+
   const [imageInputMode, setImageInputMode] = useState<"upload" | "url">("upload");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageFilePreview, setImageFilePreview] = useState<string | null>(null);
@@ -120,7 +120,7 @@ export default function AdminNewProductPage() {
     }
   };
 
-  // Auto-generate slug from name
+  
   useEffect(() => {
     if (watchName) {
       setValue("slug", watchName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
@@ -142,7 +142,7 @@ export default function AdminNewProductPage() {
     let finalImageUrls: string[] = [];
 
     try {
-      // Handle Image Mode: Upload vs URL
+      
       if (imageInputMode === "upload" && imageFile) {
         setUploadingImage(true);
         const publicUrl = await uploadStoreImage(imageFile, "products");
@@ -283,7 +283,7 @@ export default function AdminNewProductPage() {
           </div>
         </div>
 
-        {/* IMAGE SECTION */}
+        
         <div className="border border-gray-100 rounded-xl p-6 bg-gray-50/50 space-y-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide flex items-center gap-2">
@@ -344,7 +344,7 @@ export default function AdminNewProductPage() {
           )}
         </div>
 
-        {/* TAGS */}
+        
         <div className="border border-gray-100 rounded-xl p-6 bg-gray-50/50 space-y-4">
           <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Product Tags</h3>
           <div className="flex flex-col sm:flex-row gap-2">

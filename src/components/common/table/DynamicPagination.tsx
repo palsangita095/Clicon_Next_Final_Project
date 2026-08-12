@@ -12,12 +12,12 @@ import {
 } from "@/components/ui/pagination";
 import type { PaginationConfig } from "@/types/type/table.type";
 
-//  Props
+
 interface DynamicPaginationProps {
   pagination: PaginationConfig;
 }
 
-//  Helpers
+
 function buildPageRange(
   current: number,
   total: number,
@@ -53,7 +53,7 @@ function buildPageRange(
   return pages;
 }
 
-//  DynamicPagination
+
 const DynamicPagination = memo(function DynamicPagination({
   pagination,
 }: DynamicPaginationProps) {
@@ -83,7 +83,7 @@ const DynamicPagination = memo(function DynamicPagination({
       className="flex flex-col items-center justify-between gap-3 px-2 py-3 sm:flex-row sm:gap-0"
       aria-label="Table pagination"
     >
-      {/* Results summary */}
+    
       <p className="order-2 text-xs text-muted-foreground sm:order-1">
         Showing{" "}
         <span className="font-medium text-foreground">{rangeStart}</span>
@@ -94,7 +94,7 @@ const DynamicPagination = memo(function DynamicPagination({
         {" results"}
       </p>
 
-      {/* Pagination controls */}
+      
       <div className="order-1 sm:order-2">
         <Pagination>
           <PaginationContent className="gap-0.5">

@@ -53,7 +53,7 @@ export default function ProductDetailPage() {
   const [reviewRating, setReviewRating] = useState(5);
   const [submittingReview, setSubmittingReview] = useState(false);
 
-  // Review Gating State
+
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [canReview, setCanReview] = useState<boolean>(false);
   const [reviewEligibilityMessage, setReviewEligibilityMessage] = useState<string>("");
@@ -86,8 +86,7 @@ export default function ProductDetailPage() {
       }
 
       setProduct(pData);
-      // ! Record browsing history in Supabase (signed-in users only; guests
-      // ! are not persisted).
+     
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
@@ -98,7 +97,7 @@ export default function ProductDetailPage() {
         }
       } catch {}
 
-      // Fetch Reviews
+     
       const { data: rData } = await supabase
         .from('reviews')
         .select('*')
@@ -121,7 +120,7 @@ export default function ProductDetailPage() {
         );
       }
 
-      // Fetch Related Products
+      
       const { data: relData } = await supabase
         .from('products')
         .select('id, name, price, image_urls, slug')
@@ -131,7 +130,7 @@ export default function ProductDetailPage() {
 
       if (relData) setRelatedProducts(relData);
 
-      // Fetch product tags
+   
       const { data: ptData } = await supabase
         .from('product_tags')
         .select('tag_id')
@@ -151,7 +150,7 @@ export default function ProductDetailPage() {
     fetchData();
   }, [slug]);
 
-  // Check review eligibility for logged-in user
+  
   useEffect(() => {
     async function checkReviewEligibility() {
       if (!product?.id) return;
@@ -165,7 +164,7 @@ export default function ProductDetailPage() {
         return;
       }
 
-      // Query user's delivered orders for this product
+      
       const { data: userOrders } = await supabase
         .from("orders")
         .select("id, status, order_items(product_id)")
@@ -201,8 +200,7 @@ export default function ProductDetailPage() {
       return;
     }
 
-    // Check for an existing (pending) review by this user for this product and
-    // update it instead of inserting a duplicate (unique on user_id + product_id).
+   
     const { data: existingReview } = await supabase
       .from('reviews')
       .select('id')
@@ -279,13 +277,13 @@ export default function ProductDetailPage() {
   const avgRating = reviews.length ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length : 0;
   const displayImages = product.image_urls?.length ? product.image_urls : [fixImageUrl(null, product.name)];
 
-  // Category & Attribute checks
+ 
   const categoryName = product.category?.name || "Electronics";
   const isComputerOrTech = categoryName.toLowerCase().includes("laptop") || 
                            categoryName.toLowerCase().includes("smartphone") ||
                            categoryName.toLowerCase().includes("computer");
 
-  // Dynamic specifications object / entries
+ 
   const dynamicSpecs: [string, string][] = Array.isArray(product.specifications) && product.specifications.length > 0
     ? product.specifications.map((s: any) => [String(s.key || ''), String(s.value || '')])
     : product.specifications && typeof product.specifications === 'object'
@@ -301,7 +299,7 @@ export default function ProductDetailPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen font-sans">
-      {/* Breadcrumb */}
+    
       <div className="bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500">
           <Link href="/" className="hover:text-brand-orange">Home</Link>
@@ -315,13 +313,13 @@ export default function ProductDetailPage() {
       <div className="container mx-auto px-4 md:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 bg-white rounded-lg shadow-sm border border-gray-100 p-6 md:p-8">
 
-          {/* ── Left: Image Gallery ── */}
+       
           <div className="flex flex-col gap-4">
             <div className="relative bg-gray-50 rounded-lg border border-gray-100 w-full aspect-[4/3] flex items-center justify-center overflow-hidden">
               <Image src={fixImageUrl(displayImages[selectedImage], product.name)} alt={product.name} fill priority sizes="(max-width: 768px) 100vw, 50vw" className="object-contain p-8" />
             </div>
 
-            {/* Thumbnails */}
+         
             <div className="flex items-center gap-3">
               <button
                 aria-label="Previous image"
@@ -351,23 +349,23 @@ export default function ProductDetailPage() {
             </div>
           </div>
 
-          {/* ── Right: Product Info ── */}
+          
           <div className="flex flex-col gap-4">
-            {/* Rating */}
+            
             <StarRating rating={avgRating} count={reviews.length} />
 
-            {/* Title */}
+            
             <h1 className="text-xl md:text-2xl font-semibold text-gray-900 leading-snug">
               {product.name}
             </h1>
 
-            {/* Meta */}
+            
             <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm">
               <div className="flex gap-2"><span className="text-gray-400">Availability:</span><span className={`${product.stock_quantity > 0 ? "text-green-600 font-bold" : "text-red-500 font-bold"}`}>{product.stock_quantity > 0 ? "In Stock" : "Out of Stock"} ({product.stock_quantity})</span></div>
               <div className="flex gap-2"><span className="text-gray-400">Category:</span><span className="font-medium">{categoryName}</span></div>
             </div>
 
-            {/* Tags */}
+           
             {productTags.length > 0 && (
               <div className="flex flex-wrap items-center gap-2">
                 {productTags.map((tag) => (
@@ -382,14 +380,14 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* Price */}
+          
             <div className="flex items-center gap-3 pt-2">
               <span className="text-3xl font-bold text-brand-blue">₹{displayPrice.toLocaleString()}</span>
               {product.old_price && <span className="text-lg text-gray-400 line-through">₹{product.old_price.toLocaleString()}</span>}
               {discountPercent > 0 && <span className="bg-brand-yellow text-gray-900 text-sm font-bold px-2.5 py-0.5 rounded">{discountPercent}% OFF</span>}
             </div>
 
-            {/* Conditional Variant Selectors (Only shown for tech/computers) */}
+           
             {isComputerOrTech && (
               <div className="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100">
                 <div>
@@ -417,7 +415,7 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* Qty + CTA */}
+            
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <div className="flex items-center border border-gray-200 rounded h-12 w-32">
                 <button aria-label="Decrease quantity" onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-full flex items-center justify-center text-gray-600 hover:bg-gray-50 rounded-l">
@@ -436,7 +434,7 @@ export default function ProductDetailPage() {
               </Button>
             </div>
 
-            {/* Wishlist + Compare + Share */}
+            
             <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-gray-600 pt-1">
               <div className="flex items-center gap-4">
                 <button onClick={handleAddToWishlist} className={`flex items-center gap-1.5 transition-colors ${inWishlist ? "text-red-500 font-semibold" : "hover:text-brand-orange"}`}>
@@ -453,7 +451,7 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            {/* Safe Checkout */}
+          
             <div className="mt-2 border border-gray-100 rounded p-4 bg-gray-50">
               <div className="flex items-center gap-2 mb-2">
                 <ShieldCheck className="w-5 h-5 text-green-500" />
@@ -468,7 +466,7 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        {/* ── Product Tabs ── */}
+        
         <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-100">
           <Tabs defaultValue="description">
             <TabsList className="border-b border-gray-100 bg-transparent rounded-none w-full justify-start px-6 pt-2 h-auto gap-0">
@@ -483,7 +481,7 @@ export default function ProductDetailPage() {
               ))}
             </TabsList>
 
-            {/* Description Tab */}
+            
             <TabsContent value="description" className="p-6 md:p-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
@@ -515,10 +513,10 @@ export default function ProductDetailPage() {
               </div>
             </TabsContent>
 
-            {/* Review Tab with Gating */}
+            
             <TabsContent value="review" className="p-6 md:p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                {/* Existing Reviews */}
+                
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-4">Customer Reviews ({reviews.length})</h3>
                   <div className="space-y-5">
@@ -536,7 +534,7 @@ export default function ProductDetailPage() {
                   </div>
                 </div>
 
-                {/* Write Review Section (Gated) */}
+                
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-4">Write a Review</h3>
 
@@ -587,7 +585,7 @@ export default function ProductDetailPage() {
               </div>
             </TabsContent>
 
-            {/* Additional Info Tab */}
+            
             <TabsContent value="additional" className="p-6 md:p-8">
               <div className="space-y-3 text-sm text-gray-600">
                 <p><span className="font-semibold text-gray-800">Warranty Info:</span> {product.warranty_info || "1 Year Limited Warranty provided by manufacturer/seller."}</p>
@@ -596,7 +594,7 @@ export default function ProductDetailPage() {
               </div>
             </TabsContent>
 
-            {/* Dynamic Specification Tab */}
+          
             <TabsContent value="specification" className="p-6 md:p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm max-w-2xl">
                 {dynamicSpecs.map(([k, v]) => (
@@ -610,7 +608,7 @@ export default function ProductDetailPage() {
           </Tabs>
         </div>
 
-        {/* ── Related Products ── */}
+       
         <div className="mt-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[

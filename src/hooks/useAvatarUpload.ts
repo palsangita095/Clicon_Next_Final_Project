@@ -22,7 +22,7 @@ export const useAvatarUpload = () => {
       return null;
     }
 
-    // ! instant local preview — doesn't wait on the network
+   
     setPreview(URL.createObjectURL(file));
     setUploading(true);
 

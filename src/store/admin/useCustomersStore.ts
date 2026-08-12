@@ -2,12 +2,12 @@ import { Customer } from "@/types/interface/admin/customers.interface";
 import { create } from "zustand";
 
 interface CustomerStore {
-  // Dialog State
+  
   isCreateDialogOpen: boolean;
   isEditDialogOpen: boolean;
   isDeleteDialogOpen: boolean;
 
-  // Selected Customer
+
   selectedCustomer: Customer | null;
 
   page: number;
@@ -16,7 +16,7 @@ interface CustomerStore {
   setPage: (page: number) => void;
   setLimit: (limit: number) => void;
 
-  // Actions
+ 
   openCreateDialog: () => void;
   closeCreateDialog: () => void;
 
@@ -30,7 +30,7 @@ interface CustomerStore {
 }
 
 export const useCustomerStore = create<CustomerStore>((set) => ({
-  // Initial State
+  
   isCreateDialogOpen: false,
   isEditDialogOpen: false,
   isDeleteDialogOpen: false,
@@ -43,7 +43,7 @@ export const useCustomerStore = create<CustomerStore>((set) => ({
   setPage: (page) => set({ page }),
   setLimit: (limit) => set({ limit, page: 1 }),
 
-  // Create Dialog
+ 
   openCreateDialog: () =>
     set({
       isCreateDialogOpen: true,
@@ -54,7 +54,7 @@ export const useCustomerStore = create<CustomerStore>((set) => ({
       isCreateDialogOpen: false,
     }),
 
-  // Edit Dialog
+ 
   openEditDialog: (customer) =>
     set({
       selectedCustomer: customer,
@@ -67,7 +67,7 @@ export const useCustomerStore = create<CustomerStore>((set) => ({
       isEditDialogOpen: false,
     }),
 
-  // Delete Dialog
+  
   openDeleteDialog: (customer) =>
     set({
       selectedCustomer: customer,
@@ -80,7 +80,7 @@ export const useCustomerStore = create<CustomerStore>((set) => ({
       isDeleteDialogOpen: false,
     }),
 
-  // Reset Store
+  
   reset: () =>
     set({
       isCreateDialogOpen: false,

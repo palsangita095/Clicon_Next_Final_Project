@@ -38,7 +38,7 @@ export default function ComputerAccessories({ products: propProducts }: { produc
     ? propProducts
     : [];
 
-  // Strictly limit to 8 products per tab
+  
   const products = rawProducts.length > 0
     ? rawProducts.slice(0, 8).map((p) => ({
         id: p.id,
@@ -84,14 +84,14 @@ export default function ComputerAccessories({ products: propProducts }: { produc
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Left Grid (8 Products Limit) */}
+        
         <div className="w-full lg:w-3/4 grid grid-cols-2 md:grid-cols-4 gap-4">
           {products.map((product) => (
             <ProductCard key={product.id} {...product} />
           ))}
         </div>
 
-        {/* Right Banner */}
+        
         <div className="w-full lg:w-1/4 bg-brand-yellow rounded-lg p-8 flex flex-col items-center text-center justify-center relative min-h-[400px]">
           <Image src={fixImageUrl(promo.image_url, promo.title)} alt={promo.title} width={240} height={200} sizes="(max-width: 1024px) 50vw, 240px" className="mb-6 object-contain max-h-48 max-w-full" style={{ width: "auto", height: "auto" }} />
           <h2 className="text-2xl font-bold text-gray-900 mb-2 leading-tight">{promo.title}</h2>

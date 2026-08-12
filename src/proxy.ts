@@ -58,8 +58,7 @@ export async function proxy(request: NextRequest) {
     return supabaseResponse
   }
 
-  // IMPORTANT: Avoid writing custom logic before getUser. If Supabase is
-  // temporarily unreachable, keep public pages alive and protect private pages.
+  
   try {
     const { data } = await supabase.auth.getUser()
     user = data.user
@@ -75,7 +74,7 @@ export async function proxy(request: NextRequest) {
     return supabaseResponse
   }
 
-  // Protect /account and /admin routes
+  
   if (
     !user &&
     (isAccountRoute || isAdminRoute)
@@ -112,7 +111,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // If user is logged in, but tries to access signin/signup, redirect by role.
+  
   if (isAuthRoute) {
     const url = request.nextUrl.clone()
     url.pathname = getDashboardPath(role)

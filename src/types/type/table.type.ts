@@ -1,12 +1,8 @@
 import React from "react";
 
-// Column Types
-
 export type ColumnType = "text" | "image" | "badge" | "dropdown" | "custom";
 
 export type ColumnAlign = "left" | "center" | "right";
-
-//  Dropdown Config
 
 export interface DropdownConfig<TRow, TOption extends Record<string, unknown>> {
   options: TOption[];
@@ -15,8 +11,6 @@ export interface DropdownConfig<TRow, TOption extends Record<string, unknown>> {
   onChange: (row: TRow, newValue: string) => void;
 }
 
-//  Badge Config
-
 export type BadgeVariant = "default" | "secondary" | "destructive" | "outline";
 
 export interface BadgeConfig<TRow> {
@@ -24,15 +18,11 @@ export interface BadgeConfig<TRow> {
   getLabel?: (row: TRow) => string;
 }
 
-//  Image Config
-
 export interface ImageConfig<TRow> {
   getFallback?: (row: TRow) => string;
   getAlt?: (row: TRow) => string;
   avatarClassName?: string;
 }
-
-// Column Definition
 
 interface BaseColumnDef<TRow> {
   key: keyof TRow | string;
@@ -80,8 +70,6 @@ export type ColumnDef<
   | DropdownColumnDef<TRow, TOption>
   | CustomColumnDef<TRow>;
 
-//  Actions Config
-
 export interface ActionConfig<TRow> {
   show: boolean;
   onClick: (row: TRow) => void;
@@ -95,8 +83,6 @@ export interface ActionsConfig<TRow> {
 
 export type TableActions<TRow> = ActionsConfig<TRow>;
 
-//  Pagination Config
-
 export interface PaginationConfig {
   enabled: boolean;
   page: number;
@@ -105,32 +91,22 @@ export interface PaginationConfig {
   onPageChange: (page: number) => void;
 }
 
-//  Empty State Config
-
 export interface EmptyStateConfig {
   title: string;
   description: string;
   action?: React.ReactNode;
 }
 
-// Loading Config
-
 export interface LoadingConfig {
   skeletonRows?: number;
 }
 
-// Row Key
-
 export type RowKey<TRow> = keyof TRow | ((row: TRow) => string | number);
-
-//  Serial Number Config
 
 export interface SerialNumberConfig {
   header?: string;
   align?: ColumnAlign;
 }
-
-//  DynamicTable Props
 
 export interface DynamicTableProps<
   TRow,
@@ -147,8 +123,6 @@ export interface DynamicTableProps<
   loadingConfig?: LoadingConfig;
   className?: string;
 }
-
-//  Sub-component Props
 
 export interface DynamicActionCellProps<TRow> {
   row: TRow;

@@ -18,14 +18,11 @@ export type TransitionVariant =
 interface AnimatedThemeTogglerProps extends React.ComponentPropsWithoutRef<"button"> {
   duration?: number
   variant?: TransitionVariant
-  /** When true, the transition expands from the viewport center instead of the button center. */
+ 
   fromCenter?: boolean
-  /**
-   * Controlled theme value. When provided, the parent owns persistence
-   * (e.g. `next-themes`) and this component will not write to localStorage.
-   */
+  
   theme?: "light" | "dark"
-  /** Called on toggle. Pair with `theme` for controlled usage. */
+ 
   onThemeChange?: (theme: "light" | "dark") => void
 }
 
@@ -74,7 +71,7 @@ function getThemeTransitionClipPaths(
       return [polygonCollapsed(cx, cy, 3), `polygon(${verts})`]
     }
     case "diamond": {
-      // Slightly larger than the view-transition circle radius so axis-aligned coverage matches the circle reveal.
+      
       const R = maxRadius * Math.SQRT2
       const end = [
         `${cx}px ${cy - R}px`,
@@ -105,7 +102,7 @@ function getThemeTransitionClipPaths(
       return [polygonCollapsed(cx, cy, 4), `polygon(${end})`]
     }
     case "star": {
-      // Small overscan so the last frames never leave a 1px seam before the transition group ends.
+      
       const R = maxRadius * Math.SQRT2 * 1.03
       const innerRatio = 0.42
       const starPolygon = (radius: number) => {
@@ -191,8 +188,7 @@ export const AnimatedThemeToggler = ({
 
     const applyTheme = () => {
       const newTheme = !isDark
-      // Always toggle the class synchronously so the View Transitions API
-      // snapshots the new theme inside the startViewTransition callback.
+    
       document.documentElement.classList.toggle("dark")
       if (isControlled) {
         onThemeChange?.(newTheme ? "dark" : "light")
@@ -222,8 +218,7 @@ export const AnimatedThemeToggler = ({
       "--magicui-theme-toggle-vt-duration",
       `${duration}ms`
     )
-    // Pin the collapsed clip-path via CSS so Firefox does not paint the new
-    // theme unclipped between snapshot and the ready.then() JS animation.
+ 
     root.style.setProperty("--magicui-theme-vt-clip-from", clipPath[0])
     const cleanup = () => {
       delete root.dataset.magicuiThemeVt
@@ -249,7 +244,7 @@ export const AnimatedThemeToggler = ({
           },
           {
             duration,
-            // Star: linear avoids easing overshoot that fights polygon interpolation at t→1; VT group duration is synced above.
+           
             easing: shape === "star" ? "linear" : "ease-in-out",
             fill: "forwards",
             pseudoElement: "::view-transition-new(root)",
@@ -271,10 +266,7 @@ export const AnimatedThemeToggler = ({
       )}
       {...props}
     >
-      {/* Remove any 'size' props from the icons. 
-        Use h-4 w-4 (16px) or h-5 w-5 (20px) for a standard, 
-        clean look that matches typical icon buttons. 
-      */}
+      
       {isDark ? (
         <SunIcon className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" />
       ) : (

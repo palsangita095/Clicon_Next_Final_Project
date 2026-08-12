@@ -43,7 +43,7 @@ import {
 import { CartDropdown } from "@/components/store/CartDropdown";
 import { useStorefront } from "@/store/useStorefront";
 
-// Map category names to icons for the dropdown
+
 const CATEGORY_ICONS: Record<string, any> = {
   "Computer & Laptop": Laptop,
   "SmartPhone": Smartphone,
@@ -69,7 +69,7 @@ const Header = () => {
   const [loading, setLoading] = useState(true);
   const [themeReady, setThemeReady] = useState(false);
 
-  // Category dropdown state
+ 
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const [hoveredCategory, setHoveredCategory] = useState<any | null>(null);
@@ -79,7 +79,7 @@ const Header = () => {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Amazon-style search bar state
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSearchCategory, setSelectedSearchCategory] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -113,7 +113,7 @@ const Header = () => {
     };
   }, []);
 
-  // Fetch categories from Supabase
+ 
   useEffect(() => {
     const fetchCategories = async () => {
       const supabase = createClient();
@@ -126,7 +126,7 @@ const Header = () => {
     fetchCategories();
   }, []);
 
-  // Fetch products and brands when hovering on a category or brand in mega dropdown
+ 
   useEffect(() => {
     if (!hoveredCategory) {
       setCategoryProducts([]);
@@ -180,7 +180,7 @@ const Header = () => {
     return () => { cancelled = true; };
   }, [hoveredCategory, hoveredBrand]);
 
-  // Live debounced search
+  
   useEffect(() => {
     if (!searchQuery.trim()) {
       setSearchResults([]);
@@ -224,7 +224,7 @@ const Header = () => {
     router.push(`/shop?${params.toString()}`);
   };
 
-  // Close dropdowns on outside click
+  
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -241,7 +241,7 @@ const Header = () => {
 
   return (
     <header className="w-full flex flex-col font-sans">
-      {/* Top Banner */}
+      
       <div className="bg-[#191C1F] text-white w-full py-2 px-4 relative flex items-center justify-center text-sm md:text-base">
         <div className="flex items-center gap-4">
           <div className="flex items-center">
@@ -264,7 +264,7 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Info Bar */}
+      
       <div className="bg-[#1B6392] text-white py-2 px-4 md:px-8 flex justify-between items-center text-xs border-b border-blue-800/30">
         <div className="hidden md:block">
           Welcome to {settings.storeName} online eCommerce store.
@@ -273,7 +273,7 @@ const Header = () => {
           <div className="flex items-center gap-3">
             <span>Follow us:</span>
             <div className="flex gap-4">
-          {/* Replaced invalid lucide social icons with placeholder svgs or text if needed */}
+        
           <span className="text-gray-400 hover:text-white cursor-pointer">Twitter</span>
           <span className="text-gray-400 hover:text-white cursor-pointer">Facebook</span>
           <span className="text-gray-400 hover:text-white cursor-pointer">Instagram</span>
@@ -291,7 +291,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Main Header */}
+      
       <div className="bg-[#1B6392] py-5 px-4 md:px-8 text-white">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center justify-between w-full md:w-auto">
@@ -310,10 +310,10 @@ const Header = () => {
             </button>
           </div>
 
-          {/* Amazon-Style Multi-Filter Search Bar */}
+         
           <div className="w-full md:max-w-2xl flex-1 px-0 md:px-8 hidden md:block" ref={searchRef}>
             <form onSubmit={handleSearchSubmit} className="relative w-full flex items-center bg-white rounded-sm overflow-hidden">
-              {/* Category Select Dropdown */}
+              
               <select
                 value={selectedSearchCategory}
                 onChange={(e) => setSelectedSearchCategory(e.target.value)}
@@ -336,7 +336,7 @@ const Header = () => {
                 <Search className="w-5 h-5" />
               </button>
 
-              {/* Live Search Suggestions Dropdown */}
+             
               {isSearchOpen && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 shadow-xl rounded-b-md z-50 max-h-80 overflow-y-auto">
                   {searchResults.map((product) => (
@@ -365,7 +365,7 @@ const Header = () => {
             </form>
           </div>
 
-          {/* Icons */}
+        
           <div className="hidden md:flex items-center gap-6">
             <button
               type="button"
@@ -407,7 +407,7 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Search - Visible only when menu is open or on mobile */}
+       
         {isMobileMenuOpen && (
           <div className="mt-4 flex flex-col gap-4 md:hidden">
             <form onSubmit={handleSearchSubmit} className="relative w-full">
@@ -422,7 +422,7 @@ const Header = () => {
                 <Search className="w-5 h-5" />
               </button>
 
-              {/* Live Search Suggestions Dropdown for Mobile */}
+              
               {isSearchOpen && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 shadow-xl rounded-b-md z-50 max-h-80 overflow-y-auto text-black">
                   {searchResults.map((product) => (
@@ -449,6 +449,29 @@ const Header = () => {
                 </div>
               )}
             </form>
+
+            <nav className="flex flex-col bg-white/10 rounded-sm overflow-hidden">
+              <Link href="/track-order" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-white hover:bg-white/10 transition-colors">
+                <MapPin className="w-4 h-4 text-brand-yellow" /> Track Order
+              </Link>
+              <Link href="/compare" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-white hover:bg-white/10 transition-colors border-t border-white/10">
+                <RefreshCcw className="w-4 h-4 text-brand-yellow" /> Compare
+              </Link>
+              <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-white hover:bg-white/10 transition-colors border-t border-white/10">
+                <Info className="w-4 h-4 text-brand-yellow" /> About Us
+              </Link>
+              <Link href="/customer-support" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-white hover:bg-white/10 transition-colors border-t border-white/10">
+                <Headphones className="w-4 h-4 text-brand-yellow" /> Customer Support
+              </Link>
+              <Link href="/need-help" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-white hover:bg-white/10 transition-colors border-t border-white/10">
+                <Info className="w-4 h-4 text-brand-yellow" /> Need Help
+              </Link>
+              <div className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-white font-semibold border-t border-white/10">
+                <PhoneCall className="w-4 h-4 text-brand-yellow" />
+                <span>{settings.contactPhone}</span>
+              </div>
+            </nav>
+
             <div className="flex justify-around py-2 border-t border-blue-700/50">
                <button
                  type="button"
@@ -482,44 +505,38 @@ const Header = () => {
         )}
       </div>
 
-      {/* Bottom Nav */}
-      <div className="hidden md:flex bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 md:px-8 flex items-center justify-between h-14">
-          <div className="flex items-center gap-8">
-            {/* ── Category Dropdown Button ── */}
-            <div className="relative" ref={dropdownRef}>
+      
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-2 md:px-8">
+          <div className="flex items-center h-14">
+            
+            <div className="relative flex-shrink-0" ref={dropdownRef}>
               <button
                 onClick={() => { setIsCategoryOpen(!isCategoryOpen); setHoveredCategory(null); }}
-                className="bg-brand-orange text-white font-semibold h-14 px-6 flex items-center gap-2 border-none hover:bg-orange-600 transition-colors"
+                className="bg-brand-orange text-white font-semibold h-14 px-3 md:px-6 flex items-center gap-2 border-none hover:bg-orange-600 transition-colors text-xs md:text-sm"
               >
-                All Category
+                <span className="whitespace-nowrap">All Category</span>
                 <ChevronDown className={`w-4 h-4 transition-transform ${isCategoryOpen ? "rotate-180" : ""}`} />
               </button>
 
-              {/* ── Mega Dropdown ── */}
+              
               {isCategoryOpen && (
-                <div className="absolute top-full left-0 z-50 flex shadow-2xl border border-gray-200 rounded-b-lg bg-white min-w-[700px]">
-                  {/* Left: Category List */}
-                  <div className="w-[240px] border-r border-gray-100 py-2 flex-shrink-0">
+                <div className="absolute top-full left-0 z-50 bg-white shadow-2xl border border-gray-200 rounded-b-lg overflow-hidden">
+                 
+                  <div className="md:hidden w-[80vw] max-w-[320px] py-2 max-h-[70vh] overflow-y-auto">
                     {categories.length === 0 && (
                       <p className="text-sm text-gray-400 px-4 py-3">No categories found.</p>
                     )}
                     {categories.map((cat) => {
                       const Icon = CATEGORY_ICONS[cat.name] || Package;
-                      const isHovered = hoveredCategory?.id === cat.id;
                       return (
                         <button
                           key={cat.id}
-                          onMouseEnter={() => { setHoveredCategory(cat); setHoveredBrand(null); }}
                           onClick={() => {
                             router.push(`/shop?category=${encodeURIComponent(cat.name)}`);
                             setIsCategoryOpen(false);
                           }}
-                          className={`w-full flex items-center justify-between px-5 py-2.5 text-sm transition-colors ${
-                            isHovered
-                              ? "bg-gray-50 text-gray-900 font-semibold"
-                              : "text-gray-600 hover:bg-gray-50"
-                          }`}
+                          className="w-full flex items-center justify-between px-5 py-2.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
                         >
                           <span className="flex items-center gap-3">
                             <Icon className="w-4 h-4 text-gray-400" />
@@ -531,135 +548,168 @@ const Header = () => {
                     })}
                   </div>
 
-                  {/* Right: Products for the hovered category */}
-                  <div className="flex-1 p-5 min-h-[300px]">
-                    {!hoveredCategory && (
-                      <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-                        Hover a category to see products
-                      </div>
-                    )}
-                    {hoveredCategory && (
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-                          <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
-                            {hoveredCategory.name}
-                          </h3>
+                 
+                  <div className="hidden md:flex min-w-[700px]">
+                    <div className="w-[240px] border-r border-gray-100 py-2 flex-shrink-0">
+                      {categories.length === 0 && (
+                        <p className="text-sm text-gray-400 px-4 py-3">No categories found.</p>
+                      )}
+                      {categories.map((cat) => {
+                        const Icon = CATEGORY_ICONS[cat.name] || Package;
+                        const isHovered = hoveredCategory?.id === cat.id;
+                        return (
+                          <button
+                            key={cat.id}
+                            onMouseEnter={() => { setHoveredCategory(cat); setHoveredBrand(null); }}
+                            onClick={() => {
+                              router.push(`/shop?category=${encodeURIComponent(cat.name)}`);
+                              setIsCategoryOpen(false);
+                            }}
+                            className={`w-full flex items-center justify-between px-5 py-2.5 text-sm transition-colors ${
+                              isHovered
+                                ? "bg-gray-50 text-gray-900 font-semibold"
+                                : "text-gray-600 hover:bg-gray-50"
+                            }`}
+                          >
+                            <span className="flex items-center gap-3">
+                              <Icon className="w-4 h-4 text-gray-400" />
+                              {cat.name}
+                            </span>
+                            <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <div className="flex-1 p-5 min-h-[300px]">
+                      {!hoveredCategory && (
+                        <div className="flex items-center justify-center h-full text-gray-400 text-sm">
+                          Hover a category to see products
                         </div>
+                      )}
+                      {hoveredCategory && (
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
+                              {hoveredCategory.name}
+                            </h3>
+                          </div>
 
-                        {/* Dependent Brands List for this Category */}
-                        {categoryBrands.length > 0 && (
-                          <div className="mb-4">
-                            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-2">Featured Brands</span>
-                            <div className="flex flex-wrap gap-2">
-                              <button
-                                onMouseEnter={() => setHoveredBrand(null)}
-                                className={`text-xs px-2.5 py-1 rounded transition-colors font-medium ${!hoveredBrand ? 'bg-brand-orange text-white' : 'bg-gray-100 hover:bg-brand-orange hover:text-white text-gray-700'}`}
-                              >
-                                All
-                              </button>
-                              {categoryBrands.map((brand) => (
+                          
+                          {categoryBrands.length > 0 && (
+                            <div className="mb-4">
+                              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-2">Featured Brands</span>
+                              <div className="flex flex-wrap gap-2">
                                 <button
-                                  key={brand.id}
-                                  onMouseEnter={() => setHoveredBrand(brand)}
-                                  onClick={() => {
-                                    router.push(`/shop?category=${encodeURIComponent(hoveredCategory.slug || hoveredCategory.name)}&brand=${encodeURIComponent(brand.slug || brand.name)}`);
-                                    setIsCategoryOpen(false);
-                                  }}
-                                  className={`text-xs px-2.5 py-1 rounded transition-colors font-medium ${hoveredBrand?.id === brand.id ? 'bg-brand-orange text-white' : 'bg-gray-100 hover:bg-brand-orange hover:text-white text-gray-700'}`}
+                                  onMouseEnter={() => setHoveredBrand(null)}
+                                  className={`text-xs px-2.5 py-1 rounded transition-colors font-medium ${!hoveredBrand ? 'bg-brand-orange text-white' : 'bg-gray-100 hover:bg-brand-orange hover:text-white text-gray-700'}`}
                                 >
-                                  {brand.name}
+                                  All
                                 </button>
-                              ))}
+                                {categoryBrands.map((brand) => (
+                                  <button
+                                    key={brand.id}
+                                    onMouseEnter={() => setHoveredBrand(brand)}
+                                    onClick={() => {
+                                      router.push(`/shop?category=${encodeURIComponent(hoveredCategory.slug || hoveredCategory.name)}&brand=${encodeURIComponent(brand.slug || brand.name)}`);
+                                      setIsCategoryOpen(false);
+                                    }}
+                                    className={`text-xs px-2.5 py-1 rounded transition-colors font-medium ${hoveredBrand?.id === brand.id ? 'bg-brand-orange text-white' : 'bg-gray-100 hover:bg-brand-orange hover:text-white text-gray-700'}`}
+                                  >
+                                    {brand.name}
+                                  </button>
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
 
-                        {loadingProducts ? (
-                          <div className="flex items-center gap-2 text-sm text-gray-400 py-4">
-                            <div className="w-4 h-4 border-2 border-brand-orange border-t-transparent rounded-full animate-spin"></div>
-                            Loading products...
-                          </div>
-                        ) : categoryProducts.length === 0 ? (
-                          <p className="text-sm text-gray-400 py-2">No products in this category yet.</p>
-                        ) : (
-                          <div className="space-y-3">
-                            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider block">{hoveredBrand ? `${hoveredBrand.name} Items` : 'Top Items'}</span>
-                            {categoryProducts.map((product) => (
-                              <Link
-                                key={product.id}
-                                href={`/products/${product.slug || product.id}`}
-                                onClick={() => setIsCategoryOpen(false)}
-                                className="flex items-center gap-3 group hover:bg-gray-50 p-1.5 rounded-md transition-colors"
-                              >
-                                <div className="w-12 h-12 bg-gray-50 rounded border border-gray-100 flex-shrink-0 relative overflow-hidden">
-                                  <Image
-                                    src={fixImageUrl(product.image_urls?.[0], product.name)}
-                                    alt={product.name}
-                                    fill
-                                    sizes="48px"
-                                    className="object-contain p-1"
-                                  />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  {product.brand && (
-                                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
-                                      {Array.isArray(product.brand) ? product.brand[0]?.name : product.brand?.name}
-                                    </p>
-                                  )}
-                                  <p className="text-xs text-gray-700 line-clamp-1 group-hover:text-brand-orange transition-colors font-medium">
-                                    {product.name}
-                                  </p>
-                                  <div className="flex items-center gap-2 mt-0.5">
-                                    <span className="text-brand-blue font-semibold text-xs">
-                                      ₹{product.price?.toLocaleString()}
-                                    </span>
-                                    {product.old_price && (
-                                      <span className="text-gray-400 text-[10px] line-through">
-                                        ₹{product.old_price.toLocaleString()}
-                                      </span>
-                                    )}
+                          {loadingProducts ? (
+                            <div className="flex items-center gap-2 text-sm text-gray-400 py-4">
+                              <div className="w-4 h-4 border-2 border-brand-orange border-t-transparent rounded-full animate-spin"></div>
+                              Loading products...
+                            </div>
+                          ) : categoryProducts.length === 0 ? (
+                            <p className="text-sm text-gray-400 py-2">No products in this category yet.</p>
+                          ) : (
+                            <div className="space-y-3">
+                              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider block">{hoveredBrand ? `${hoveredBrand.name} Items` : 'Top Items'}</span>
+                              {categoryProducts.map((product) => (
+                                <Link
+                                  key={product.id}
+                                  href={`/products/${product.slug || product.id}`}
+                                  onClick={() => setIsCategoryOpen(false)}
+                                  className="flex items-center gap-3 group hover:bg-gray-50 p-1.5 rounded-md transition-colors"
+                                >
+                                  <div className="w-12 h-12 bg-gray-50 rounded border border-gray-100 flex-shrink-0 relative overflow-hidden">
+                                    <Image
+                                      src={fixImageUrl(product.image_urls?.[0], product.name)}
+                                      alt={product.name}
+                                      fill
+                                      sizes="48px"
+                                      className="object-contain p-1"
+                                    />
                                   </div>
-                                </div>
+                                  <div className="flex-1 min-w-0">
+                                    {product.brand && (
+                                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+                                        {Array.isArray(product.brand) ? product.brand[0]?.name : product.brand?.name}
+                                      </p>
+                                    )}
+                                    <p className="text-xs text-gray-700 line-clamp-1 group-hover:text-brand-orange transition-colors font-medium">
+                                      {product.name}
+                                    </p>
+                                    <div className="flex items-center gap-2 mt-0.5">
+                                      <span className="text-brand-blue font-semibold text-xs">
+                                        ₹{product.price?.toLocaleString()}
+                                      </span>
+                                      {product.old_price && (
+                                        <span className="text-gray-400 text-[10px] line-through">
+                                          ₹{product.old_price.toLocaleString()}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </Link>
+                              ))}
+                              <Link
+                                href={`/shop?category=${encodeURIComponent(hoveredCategory.slug || hoveredCategory.name)}`}
+                                onClick={() => setIsCategoryOpen(false)}
+                                className="inline-flex items-center gap-1 text-brand-orange text-xs font-semibold hover:underline mt-2"
+                              >
+                                SHOP ALL {hoveredCategory.name.toUpperCase()} <ArrowRight className="w-3.5 h-3.5" />
                               </Link>
-                            ))}
-                            <Link
-                              href={`/shop?category=${encodeURIComponent(hoveredCategory.slug || hoveredCategory.name)}`}
-                              onClick={() => setIsCategoryOpen(false)}
-                              className="inline-flex items-center gap-1 text-brand-orange text-xs font-semibold hover:underline mt-2"
-                            >
-                              SHOP ALL {hoveredCategory.name.toUpperCase()} <ArrowRight className="w-3.5 h-3.5" />
-                            </Link>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
             </div>
-            
-            <nav className="flex items-center gap-6 text-sm text-gray-600 font-medium">
-              <Link href="/track-order" className="flex items-center gap-2 hover:text-brand-orange transition-colors">
-                <MapPin className="w-4 h-4 text-gray-400" /> Track Order
-              </Link>
-              <Link href="/compare" className="flex items-center gap-2 hover:text-brand-orange transition-colors">
-                <RefreshCcw className="w-4 h-4 text-gray-400" /> Compare
-              </Link>
-              <Link href="/about" className="flex items-center gap-2 hover:text-brand-orange transition-colors">
-                <Info className="w-4 h-4 text-gray-400" /> About Us
-              </Link>
-              <Link href="/customer-support" className="flex items-center gap-2 hover:text-brand-orange transition-colors">
-                <Headphones className="w-4 h-4 text-gray-400" /> Customer Support
-              </Link>
-              <Link href="/need-help" className="flex items-center gap-2 hover:text-brand-orange transition-colors">
-                <Info className="w-4 h-4 text-gray-400" /> Need Help
-              </Link>
-            </nav>
-          </div>
 
-          <div className="flex items-center gap-2 font-medium text-gray-800">
-            <PhoneCall className="w-4 h-4 text-gray-400" />
-            <span>{settings.contactPhone}</span>
+            
+            <nav className="flex items-center gap-3 md:gap-6 text-xs md:text-sm text-gray-600 font-medium overflow-x-auto flex-1 min-w-0 px-2 md:px-4 h-14 no-scrollbar">
+              <Link href="/track-order" className="flex items-center gap-1 md:gap-2 whitespace-nowrap hover:text-brand-orange transition-colors">
+                <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-400" /> Track Order
+              </Link>
+              <Link href="/compare" className="flex items-center gap-1 md:gap-2 whitespace-nowrap hover:text-brand-orange transition-colors">
+                <RefreshCcw className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-400" /> Compare
+              </Link>
+              <Link href="/about" className="flex items-center gap-1 md:gap-2 whitespace-nowrap hover:text-brand-orange transition-colors">
+                <Info className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-400" /> About Us
+              </Link>
+              <Link href="/customer-support" className="flex items-center gap-1 md:gap-2 whitespace-nowrap hover:text-brand-orange transition-colors">
+                <Headphones className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-400" /> Customer Support
+              </Link>
+              <Link href="/need-help" className="flex items-center gap-1 md:gap-2 whitespace-nowrap hover:text-brand-orange transition-colors">
+                <Info className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-400" /> Need Help
+              </Link>
+              <div className="flex items-center gap-1 md:gap-2 whitespace-nowrap font-semibold text-gray-800 md:ml-auto md:pl-4 md:border-l md:border-gray-200">
+                <PhoneCall className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-400" />
+                <span>{settings.contactPhone}</span>
+              </div>
+            </nav>
           </div>
         </div>
       </div>

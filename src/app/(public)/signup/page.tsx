@@ -32,8 +32,7 @@ export default function SignUpPage() {
     mode: "onTouched",
   });
 
-  // ! Countdown so the "Resend verification email" button can't hammer
-  // ! Supabase's email rate limit.
+  
   useEffect(() => {
     if (resendCooldown <= 0) return;
     const timer = setTimeout(() => setResendCooldown((seconds) => seconds - 1), 1000);
@@ -69,7 +68,7 @@ export default function SignUpPage() {
       }, { onConflict: "id" });
       if (error) {
         if (error.code === "42501") {
-          // RLS violation — the trigger already created the profile, this is fine
+          
         } else {
           console.error("Profile upsert fallback failed:", error);
         }
@@ -153,7 +152,7 @@ export default function SignUpPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* Breadcrumb */}
+      
       <div className="bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500 flex items-center gap-2">
           <Link href="/" className="hover:text-brand-orange flex items-center gap-1">
@@ -169,7 +168,7 @@ export default function SignUpPage() {
       <div className="container mx-auto px-4 py-16 flex justify-center">
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 w-full max-w-[420px] overflow-hidden">
           
-          {/* Tabs */}
+          
           <div className="flex border-b border-gray-100">
             <Link href="/signin" className="flex-1 text-center py-4 text-gray-500 font-medium hover:text-gray-900 transition-colors cursor-pointer">
               Sign In

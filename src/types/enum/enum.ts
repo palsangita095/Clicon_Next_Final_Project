@@ -1,4 +1,4 @@
-// User Role
+
 export enum user_role {
   CUSTOMER = "customer",
   DRIVER = "driver",
@@ -6,7 +6,7 @@ export enum user_role {
   ADMIN = "admin",
 }
 
-// Approval Status
+
 export enum approval_status {
   PENDING = "pending",
   APPROVED = "approved",
@@ -14,9 +14,7 @@ export enum approval_status {
   SUSPENDED = "suspended",
 }
 
-// ! optionals
 
-// Shipment Status
 export enum shipment_status {
   PENDING = "pending",
   CONFIRMED = "confirmed",
@@ -28,7 +26,7 @@ export enum shipment_status {
   CANCELLED = "cancelled",
 }
 
-// Shipment Type
+
 export enum shipment_type {
   STANDARD = "standard",
   EXPRESS = "express",
@@ -38,7 +36,7 @@ export enum shipment_type {
   HAZARDOUS = "hazardous",
 }
 
-// Delivery Priority
+
 export enum delivery_priority {
   LOW = "low",
   NORMAL = "normal",
@@ -46,7 +44,7 @@ export enum delivery_priority {
   URGENT = "urgent",
 }
 
-// Driver Status
+
 export enum driver_status {
   AVAILABLE = "available",
   ON_DELIVERY = "on_delivery",
@@ -54,7 +52,7 @@ export enum driver_status {
   INACTIVE = "inactive",
 }
 
-// Vehicle Status
+
 export enum vehicle_status {
   AVAILABLE = "available",
   ON_DELIVERY = "on_delivery",
@@ -62,7 +60,7 @@ export enum vehicle_status {
   INACTIVE = "inactive",
 }
 
-// Maintenance Status
+
 export enum maintenance_status {
   SCHEDULED = "scheduled",
   IN_PROGRESS = "in_progress",
@@ -70,7 +68,7 @@ export enum maintenance_status {
   OVERDUE = "overdue",
 }
 
-// Notification Type
+
 export enum notification_type {
   SHIPMENT_UPDATE = "shipment_update",
   DELIVERY_CONFIRMED = "delivery_confirmed",
@@ -80,7 +78,7 @@ export enum notification_type {
   SYSTEM = "system",
 }
 
-// Document Type
+
 export enum document_type {
   INVOICE = "invoice",
   DELIVERY_RECEIPT = "delivery_receipt",
