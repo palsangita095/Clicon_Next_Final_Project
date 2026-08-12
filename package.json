@@ -13,6 +13,7 @@
     "@animateicons/react": "^0.3.5",
     "@google/genai": "^2.15.0",
     "@hookform/resolvers": "^3.10.0",
+    "@lottiefiles/dotlottie-react": "^0.19.13",
     "@react-pdf/renderer": "^4.5.1",
     "@stripe/react-stripe-js": "^6.8.0",
     "@stripe/stripe-js": "^9.13.0",

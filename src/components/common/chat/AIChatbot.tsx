@@ -2,7 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Sparkles, Send, X, Bot, Loader2 } from "lucide-react";
+import { Send, X, Bot, Loader2 } from "lucide-react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import botAnimation from "@/services/json/bot.json";
 
 type Message = {
   role: "user" | "assistant";
@@ -80,7 +82,13 @@ export default function AIChatbot() {
           className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-brand-orange to-orange-500 text-white shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 flex items-center justify-center group"
           aria-label="Open AI Chatbot"
         >
-          <Sparkles className="w-6 h-6 group-hover:animate-pulse" />
+          <DotLottieReact
+            data={botAnimation}
+            loop
+            autoplay
+            className="w-full h-full"
+            style={{ objectFit: "cover" }}
+          />
           <span className="absolute top-0 right-0 w-3.5 h-3.5 rounded-full bg-green-400 border-2 border-white shadow-sm" />
         </button>
       )}
