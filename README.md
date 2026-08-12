@@ -4,7 +4,7 @@ A full-stack e-commerce platform with a customer storefront and a complete admin
 
 ## Live Website
 
-[![Deployed on Vercel](https://img.shields.io/badge/🌐%20Live%20Demo-https%3A%2F%2Fclicon-next-final-project.vercel.app-blue?style=for-the-badge)](https://clicon-next-final-project.vercel.app/)
+[![Deployed on Vercel](https://img.shields.io/badge/%F0%9F%8C%90%20Live%20Demo-https%3A%2F%2Fclicon-next-final-project.vercel.app-blue?style=for-the-badge)](https://clicon-next-final-project.vercel.app/)
 
 Click the badge above to visit the deployed live website.
 
