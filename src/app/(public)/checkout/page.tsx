@@ -73,6 +73,16 @@ const schema = yup.object().shape({
   })
 });
 
+type BaseFormValues = yup.InferType<typeof schema>;
+type FormValues = Omit<BaseFormValues, "fallbackCard"> & {
+  fallbackCard?: {
+    nameOnCard?: string;
+    cardNumber?: string;
+    expiry?: string;
+    cvc?: string;
+  };
+};
+
 export default function CheckoutPage() {
   const cart = useStorefront((s) => s.cart);
   const clearCart = useStorefront((s) => s.clearCart);
@@ -84,8 +94,8 @@ export default function CheckoutPage() {
     if (key) setStripePromise(loadStripe(key));
   }, []);
 
-  const { register, handleSubmit, formState: { errors }, watch, setValue, control } = useForm({
-    resolver: yupResolver(schema),
+  const { register, handleSubmit, formState: { errors }, watch, setValue, control } = useForm<FormValues>({
+    resolver: yupResolver(schema) as any,
     mode: "onBlur",
     defaultValues: {
       firstName: "", lastName: "", company: "", address: "",
@@ -411,7 +421,7 @@ export default function CheckoutPage() {
   const states = country ? Object.keys(COUNTRIES[country]?.states || {}) : [];
   const cities = country && region ? COUNTRIES[country]?.states[region] || [] : [];
 
-  const renderInput = (field: any, label: string, opts?: { type?: string; placeholder?: string; optional?: boolean }) => {
+  const renderInput = (field: keyof FormValues, label: string, opts?: { type?: string; placeholder?: string; optional?: boolean }) => {
     const err = errors[field]?.message as string;
     return (
       <div>
