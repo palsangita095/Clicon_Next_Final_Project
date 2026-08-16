@@ -74,12 +74,12 @@ export function ProductCard({
           </Link>
 
           
-          <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 z-10">
+          <div className="absolute inset-0 bg-black/5 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 z-20">
             <button
               onClick={handleToggleWishlist}
               title={isLiked ? "Remove from wishlist" : "Add to wishlist"}
               aria-label={isLiked ? "Remove from wishlist" : "Add to wishlist"}
-              className={`p-2 rounded-full shadow transition-colors ${
+              className={`p-1.5 sm:p-2 rounded-full shadow transition-colors ${
                 isLiked ? "bg-brand-orange text-white" : "bg-white text-gray-700 hover:bg-brand-orange hover:text-white"
               }`}
             >
@@ -89,7 +89,7 @@ export function ProductCard({
               onClick={handleAddToCart}
               title="Add to cart"
               aria-label="Add to cart"
-              className="bg-white p-2 rounded-full shadow hover:bg-brand-orange hover:text-white transition-colors text-gray-700"
+              className="bg-white p-1.5 sm:p-2 rounded-full shadow hover:bg-brand-orange hover:text-white transition-colors text-gray-700"
             >
               <ShoppingCart size={20} />
             </button>
@@ -97,7 +97,7 @@ export function ProductCard({
               href={targetHref}
               title="View details"
               aria-label="View details"
-              className="bg-white p-2 rounded-full shadow hover:bg-brand-orange hover:text-white transition-colors text-gray-700"
+              className="bg-white p-1.5 sm:p-2 rounded-full shadow hover:bg-brand-orange hover:text-white transition-colors text-gray-700"
             >
               <Eye size={20} />
             </Link>

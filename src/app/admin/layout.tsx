@@ -112,15 +112,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       
       {isMobileOpen && (
         <div className="md:hidden fixed inset-0 z-40 bg-black/50 flex">
-          <div className="w-64 bg-brand-orange text-white p-6 flex flex-col justify-between h-full shadow-2xl">
-            <div>
-              <div className="flex items-center justify-between mb-8">
+          <div className="w-64 bg-brand-orange text-white p-6 flex flex-col h-full shadow-2xl overflow-y-auto">
+            <div className="flex-1 flex flex-col">
+              <div className="flex items-center justify-between mb-8 shrink-0">
                 <span className="font-bold text-xl">Admin Menu</span>
                 <button onClick={() => setIsMobileOpen(false)} className="text-white/80 hover:text-white">
                   <X className="w-6 h-6" />
                 </button>
               </div>
-              <nav className="space-y-2">
+              <nav className="space-y-2 shrink-0">
                 {SIDEBAR_ITEMS.map((item, idx) => {
                   const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
                   return (
@@ -141,17 +141,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 })}
               </nav>
             </div>
-            <Link href="/" target="_blank" className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white transition-colors">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-              <span>View Store</span>
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-white/80 hover:bg-white/10 hover:text-red-200 transition-colors"
-            >
-              <LogOut className="w-5 h-5" />
-              <span>Logout</span>
-            </button>
+            <div className="mt-8 space-y-2 shrink-0">
+              <Link href="/" target="_blank" className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white transition-colors w-full">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                <span>View Store</span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-white/80 hover:bg-white/10 hover:text-red-200 transition-colors w-full"
+              >
+                <LogOut className="w-5 h-5" />
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
           <div className="flex-1" onClick={() => setIsMobileOpen(false)}></div>
         </div>

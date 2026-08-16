@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase.config";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { adminSignupSchema } from "@/services/validation/admin-signup.validation";
+import { getSiteUrl } from "@/lib/siteUrl";
 
 type FormValues = yup.InferType<typeof adminSignupSchema>;
 
@@ -38,7 +39,7 @@ export default function AdminSignupForm() {
           full_name: values.name,
           role: "admin",
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${getSiteUrl()}/auth/callback`,
       },
     });
 

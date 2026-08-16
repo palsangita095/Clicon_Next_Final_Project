@@ -269,10 +269,10 @@ const Header = () => {
         <div className="hidden md:block">
           Welcome to {settings.storeName} online eCommerce store.
         </div>
-        <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 w-full md:w-auto justify-center sm:justify-between md:justify-end">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <span>Follow us:</span>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
         
           <span className="text-gray-400 hover:text-white cursor-pointer">Twitter</span>
           <span className="text-gray-400 hover:text-white cursor-pointer">Facebook</span>

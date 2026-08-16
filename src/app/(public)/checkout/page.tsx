@@ -14,7 +14,9 @@ import { fixImageUrl } from "@/lib/imageFallback";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useStoreSettings } from "@/hooks/useStoreSettings";
-
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 function StripeElementsInner({ onReady }: { onReady: (s: any, e: any) => void }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -47,6 +49,30 @@ const COUNTRIES: Record<string, { states: Record<string, string[]> }> = {
 
 const COUNTRY_OPTIONS = Object.keys(COUNTRIES);
 
+const schema = yup.object().shape({
+  firstName: yup.string().required("First name is required").matches(NAME_PATTERN, "Only letters, spaces, and hyphens allowed"),
+  lastName: yup.string().required("Last name is required").matches(NAME_PATTERN, "Only letters, spaces, and hyphens allowed"),
+  company: yup.string(),
+  address: yup.string().required("Address is required"),
+  country: yup.string().required("Country is required"),
+  region: yup.string().required("Region/State is required"),
+  city: yup.string().required("City is required"),
+  zipCode: yup.string().required("Zip Code is required").matches(ZIP_PATTERN, "Zip code must be numeric (4-10 digits)"),
+  email: yup.string().required("Email is required").matches(EMAIL_PATTERN, "Invalid email format"),
+  phone: yup.string().required("Phone number is required").matches(PHONE_PATTERN, "Invalid phone number"),
+  shipDifferentAddress: yup.boolean().default(false),
+  orderNotes: yup.string(),
+  paymentMethod: yup.string().required(),
+  fallbackCard: yup.object().when(["paymentMethod"], ([paymentMethod], schema) => {
+    return paymentMethod === "card" && !process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ? schema.shape({
+      nameOnCard: yup.string().required("Name on card is required"),
+      cardNumber: yup.string().required("Card number is required").test("card-num", "Enter a valid card number", val => CARD_PATTERN.test((val || "").replace(/\s/g, ""))),
+      expiry: yup.string().required("Expiry is required").matches(EXPIRY_PATTERN, "Use MM/YY format"),
+      cvc: yup.string().required("CVC is required").matches(CVC_PATTERN, "CVC must be 3-4 digits")
+    }) : schema;
+  })
+});
+
 export default function CheckoutPage() {
   const cart = useStorefront((s) => s.cart);
   const clearCart = useStorefront((s) => s.clearCart);
@@ -58,15 +84,25 @@ export default function CheckoutPage() {
     if (key) setStripePromise(loadStripe(key));
   }, []);
 
-  const [paymentMethod, setPaymentMethod] = useState("card");
-  const [billing, setBilling] = useState({
-    firstName: "", lastName: "", company: "", address: "",
-    country: "United States", region: "", city: "", zipCode: "",
-    email: "", phone: "",
+  const { register, handleSubmit, formState: { errors }, watch, setValue, control } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onBlur",
+    defaultValues: {
+      firstName: "", lastName: "", company: "", address: "",
+      country: "United States", region: "", city: "", zipCode: "",
+      email: "", phone: "", shipDifferentAddress: false, orderNotes: "",
+      paymentMethod: "card",
+      fallbackCard: { nameOnCard: "", cardNumber: "", expiry: "", cvc: "" }
+    }
   });
-  const [shipDifferentAddress, setShipDifferentAddress] = useState(false);
-  const [orderNotes, setOrderNotes] = useState("");
-  const [touched, setTouched] = useState<Set<string>>(new Set());
+
+  const paymentMethod = watch("paymentMethod");
+  const shipDifferentAddress = watch("shipDifferentAddress");
+  const country = watch("country");
+  const region = watch("region");
+  const fallbackCard = watch("fallbackCard");
+  const orderNotes = watch("orderNotes");
+
   const [outOfStockIds, setOutOfStockIds] = useState<Set<string | number>>(new Set());
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
@@ -95,9 +131,7 @@ export default function CheckoutPage() {
   const stripeInstanceRef = useRef<any>(null);
   const elementsInstanceRef = useRef<any>(null);
 
-  const [fallbackCard, setFallbackCard] = useState({ nameOnCard: "", cardNumber: "", expiry: "", cvc: "" });
-  const [cardTouched, setCardTouched] = useState<Set<string>>(new Set());
-  const [cardErrors, setCardErrors] = useState<Record<string, string>>({});
+
 
   const availableCart = cart.filter((item) => !outOfStockIds.has(item.id));
 
@@ -172,54 +206,8 @@ export default function CheckoutPage() {
     }
   }, [total, paymentIntentId, paymentMethod]);
 
-  const markTouched = (field: string) => {
-    setTouched((prev) => new Set(prev).add(field));
-  };
 
-  const getError = (field: string, value: string): string | null => {
-    if (!touched.has(field)) return null;
-    if (!value.trim()) return `${field.replace(/([A-Z])/g, ' $1')} is required`;
-    if ((field === "firstName" || field === "lastName") && !NAME_PATTERN.test(value)) return "Only letters, spaces, and hyphens allowed";
-    if (field === "email" && !EMAIL_PATTERN.test(value)) return "Invalid email format";
-    if (field === "phone" && !PHONE_PATTERN.test(value)) return "Invalid phone number";
-    if (field === "zipCode" && !ZIP_PATTERN.test(value)) return "Zip code must be numeric (4-10 digits)";
-    return null;
-  };
-
-  const updateBilling = (field: keyof typeof billing, value: string) => {
-    if ((field === "firstName" || field === "lastName") && /[<>{}\\]/.test(value)) return;
-    setBilling((current) => ({ ...current, [field]: value }));
-  };
-
-  const validateCardFields = (): boolean => {
-    if (paymentMethod !== "card" || stripePromise) return true;
-    const errs: Record<string, string> = {};
-    if (!fallbackCard.nameOnCard.trim()) errs.nameOnCard = "Name on card is required";
-    const digits = fallbackCard.cardNumber.replace(/\s/g, "");
-    if (!digits || !CARD_PATTERN.test(digits)) errs.cardNumber = "Enter a valid card number (13-19 digits)";
-    if (!EXPIRY_PATTERN.test(fallbackCard.expiry)) errs.expiry = "Use MM/YY format";
-    if (!CVC_PATTERN.test(fallbackCard.cvc)) errs.cvc = "CVC must be 3-4 digits";
-    setCardErrors(errs);
-    setCardTouched(new Set(["nameOnCard", "cardNumber", "expiry", "cvc"]));
-    return Object.keys(errs).length === 0;
-  };
-
-  const validateAll = (): boolean => {
-    const fields: (keyof typeof billing)[] = ["firstName", "lastName", "address", "email", "phone", "zipCode"];
-    const allTouched = new Set(touched);
-    let valid = true;
-    for (const f of fields) {
-      allTouched.add(f);
-      const err = getError(f, billing[f]);
-      if (err) valid = false;
-    }
-    setTouched(allTouched);
-    const cardValid = validateCardFields();
-    return valid && cardValid;
-  };
-
-  const handlePlaceOrder = async () => {
-    if (!validateAll()) return;
+  const onSubmit = async (data: any) => {
     if (availableCart.length === 0) {
       setError("All items in your cart are out of stock.");
       return;
@@ -239,8 +227,10 @@ export default function CheckoutPage() {
       }
 
       const billingWithEmail = {
-        ...billing,
-        email: billing.email || user.email || "",
+        firstName: data.firstName, lastName: data.lastName, company: data.company,
+        address: data.address, country: data.country, region: data.region,
+        city: data.city, zipCode: data.zipCode, phone: data.phone,
+        email: data.email || user.email || "",
       };
 
       const productIdsToCheck = availableCart
@@ -316,8 +306,8 @@ export default function CheckoutPage() {
         if (paymentIntentId) {
           await supabase.from('orders').update({ stripe_payment_intent_id: paymentIntentId }).eq('id', orderData.id);
 
-          const piName = `${billing.firstName} ${billing.lastName}`.trim();
-          const piEmail = billing.email || user.email || "";
+          const piName = `${billingWithEmail.firstName} ${billingWithEmail.lastName}`.trim();
+          const piEmail = billingWithEmail.email || user.email || "";
           await fetch("/api/create-payment-intent", {
             method: "POST",
             headers: { "Content-Type": "application/json", ...(await getAuthHeader()) },
@@ -329,7 +319,7 @@ export default function CheckoutPage() {
               description: `Order #${orderData.id.slice(0, 8).toUpperCase()} - ${piName}`,
               receipt_email: piEmail,
               customer_name: piName,
-              customer_phone: billing.phone,
+              customer_phone: billingWithEmail.phone,
             }),
           });
         }
@@ -418,11 +408,11 @@ export default function CheckoutPage() {
     setCouponError("");
   };
 
-  const states = billing.country ? Object.keys(COUNTRIES[billing.country]?.states || {}) : [];
-  const cities = billing.country && billing.region ? COUNTRIES[billing.country]?.states[billing.region] || [] : [];
+  const states = country ? Object.keys(COUNTRIES[country]?.states || {}) : [];
+  const cities = country && region ? COUNTRIES[country]?.states[region] || [] : [];
 
-  const renderInput = (field: keyof typeof billing, label: string, opts?: { type?: string; placeholder?: string; optional?: boolean }) => {
-    const err = getError(field, billing[field]);
+  const renderInput = (field: any, label: string, opts?: { type?: string; placeholder?: string; optional?: boolean }) => {
+    const err = errors[field]?.message as string;
     return (
       <div>
         <label className="text-sm font-medium text-gray-700 mb-1.5 block">
@@ -431,9 +421,7 @@ export default function CheckoutPage() {
         <div className="relative">
           <Input
             type={opts?.type || "text"}
-            value={billing[field]}
-            onChange={(e) => updateBilling(field, e.target.value)}
-            onBlur={() => markTouched(field)}
+            {...register(field)}
             placeholder={opts?.placeholder || ""}
             className={`h-11 border-gray-200 focus-visible:ring-brand-orange ${err ? "border-red-400 focus-visible:ring-red-400" : ""}`}
           />
@@ -457,7 +445,7 @@ export default function CheckoutPage() {
       </div>
 
       <div className="container mx-auto px-4 md:px-8 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
           
           <div className="lg:col-span-2 space-y-10">
@@ -471,20 +459,20 @@ export default function CheckoutPage() {
                   <label className="text-sm font-medium text-gray-700 mb-1.5 block">User name</label>
                   <div className="flex gap-4">
                     <div className="flex-1">
-                      <Input value={billing.firstName} onChange={(e) => updateBilling("firstName", e.target.value)} onBlur={() => markTouched("firstName")} placeholder="First name"
-                        className={`h-11 border-gray-200 focus-visible:ring-brand-orange ${getError("firstName", billing.firstName) ? "border-red-400 focus-visible:ring-red-400" : ""}`} />
-                      {getError("firstName", billing.firstName) && <p className="text-xs text-red-500 mt-1">{getError("firstName", billing.firstName)}</p>}
+                      <Input {...register("firstName")} placeholder="First name"
+                        className={`h-11 border-gray-200 focus-visible:ring-brand-orange ${errors.firstName ? "border-red-400 focus-visible:ring-red-400" : ""}`} />
+                      {errors.firstName && <p className="text-xs text-red-500 mt-1">{errors.firstName.message}</p>}
                     </div>
                     <div className="flex-1">
-                      <Input value={billing.lastName} onChange={(e) => updateBilling("lastName", e.target.value)} onBlur={() => markTouched("lastName")} placeholder="Last name"
-                        className={`h-11 border-gray-200 focus-visible:ring-brand-orange ${getError("lastName", billing.lastName) ? "border-red-400 focus-visible:ring-red-400" : ""}`} />
-                      {getError("lastName", billing.lastName) && <p className="text-xs text-red-500 mt-1">{getError("lastName", billing.lastName)}</p>}
+                      <Input {...register("lastName")} placeholder="Last name"
+                        className={`h-11 border-gray-200 focus-visible:ring-brand-orange ${errors.lastName ? "border-red-400 focus-visible:ring-red-400" : ""}`} />
+                      {errors.lastName && <p className="text-xs text-red-500 mt-1">{errors.lastName.message}</p>}
                     </div>
                   </div>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-1.5 block">Company Name <span className="text-gray-400 font-normal">(Optional)</span></label>
-                  <Input value={billing.company} onChange={(e) => updateBilling("company", e.target.value)} placeholder="" className="h-11 border-gray-200 focus-visible:ring-brand-orange" />
+                  <Input {...register("company")} placeholder="" className="h-11 border-gray-200 focus-visible:ring-brand-orange" />
                 </div>
               </div>
 
@@ -495,36 +483,57 @@ export default function CheckoutPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-1.5 block">Country</label>
-                  <Select value={billing.country} onValueChange={(v) => { updateBilling("country", v); updateBilling("region", ""); updateBilling("city", ""); }}>
-                    <SelectTrigger className={`h-11 ${getError("country", billing.country) ? "border-red-400" : ""}`}>
-                      <SelectValue placeholder="Select country..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {COUNTRY_OPTIONS.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+                  <Controller
+                    control={control}
+                    name="country"
+                    render={({ field }) => (
+                      <Select value={field.value} onValueChange={(v) => { field.onChange(v); setValue("region", ""); setValue("city", ""); }}>
+                        <SelectTrigger className={`h-11 ${errors.country ? "border-red-400" : ""}`}>
+                          <SelectValue placeholder="Select country..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {COUNTRY_OPTIONS.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  {errors.country && <p className="text-xs text-red-500 mt-1">{errors.country.message}</p>}
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-1.5 block">Region/State</label>
-                  <Select value={billing.region} onValueChange={(v) => { updateBilling("region", v); updateBilling("city", ""); }} disabled={!billing.country}>
-                    <SelectTrigger className={`h-11 ${getError("region", billing.region) ? "border-red-400" : ""}`}>
-                      <SelectValue placeholder="Select state..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {states.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+                  <Controller
+                    control={control}
+                    name="region"
+                    render={({ field }) => (
+                      <Select value={field.value} onValueChange={(v) => { field.onChange(v); setValue("city", ""); }} disabled={!country}>
+                        <SelectTrigger className={`h-11 ${errors.region ? "border-red-400" : ""}`}>
+                          <SelectValue placeholder="Select state..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {states.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  {errors.region && <p className="text-xs text-red-500 mt-1">{errors.region.message}</p>}
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-1.5 block">City</label>
-                  <Select value={billing.city} onValueChange={(v) => updateBilling("city", v)} disabled={!billing.region}>
-                    <SelectTrigger className={`h-11 ${getError("city", billing.city) ? "border-red-400" : ""}`}>
-                      <SelectValue placeholder="Select city..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {cities.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+                  <Controller
+                    control={control}
+                    name="city"
+                    render={({ field }) => (
+                      <Select value={field.value} onValueChange={field.onChange} disabled={!region}>
+                        <SelectTrigger className={`h-11 ${errors.city ? "border-red-400" : ""}`}>
+                          <SelectValue placeholder="Select city..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {cities.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  {errors.city && <p className="text-xs text-red-500 mt-1">{errors.city.message}</p>}
                 </div>
                 <div>
                   {renderInput("zipCode", "Zip Code")}
@@ -537,7 +546,7 @@ export default function CheckoutPage() {
               </div>
 
               <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                <input checked={shipDifferentAddress} onChange={(e) => setShipDifferentAddress(e.target.checked)} type="checkbox" className="rounded border-gray-300 text-brand-orange focus:ring-brand-orange w-4 h-4" />
+                <input type="checkbox" {...register("shipDifferentAddress")} className="rounded border-gray-300 text-brand-orange focus:ring-brand-orange w-4 h-4" />
                 Ship into different address
               </label>
             </div>
@@ -556,7 +565,7 @@ export default function CheckoutPage() {
                   settings.stripeEnabled && { id: "card", label: "Debit/Credit Card", icon: <CreditCard className="w-6 h-6 text-orange-500 mx-auto" /> },
                 ].filter(Boolean).map((method: any) => (
                   <button key={method.id} type="button" role="radio" aria-checked={paymentMethod === method.id}
-                    onClick={() => !method.disabled && setPaymentMethod(method.id)}
+                    onClick={() => !method.disabled && setValue("paymentMethod", method.id, { shouldValidate: true })}
                     className={`p-4 border-b border-r border-gray-100 transition-colors ${method.disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer hover:bg-gray-50'} ${paymentMethod === method.id ? 'bg-orange-50/30' : ''}`}>
                     <div className="mb-2 h-6 flex items-center justify-center">{method.icon}</div>
                     <div className="text-xs text-gray-700 mb-3">{method.label}{method.disabled && <span className="block text-[10px] text-red-400 mt-0.5">Unavailable</span>}</div>
@@ -586,29 +595,25 @@ export default function CheckoutPage() {
                   ) : (
                     <>
                       <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Name on Card</label>
-                        <Input value={fallbackCard.nameOnCard} onChange={(e) => setFallbackCard({ ...fallbackCard, nameOnCard: e.target.value })}
-                          onBlur={() => { setCardTouched(new Set(cardTouched).add("nameOnCard")); validateCardFields(); }}
-                          placeholder="" className={`h-11 border-gray-200 ${cardErrors.nameOnCard ? "border-red-400" : ""}`} />
-                        {cardErrors.nameOnCard && <p className="text-xs text-red-500 mt-1">{cardErrors.nameOnCard}</p>}
+                        <Input {...register("fallbackCard.nameOnCard")}
+                          placeholder="" className={`h-11 border-gray-200 ${errors.fallbackCard?.nameOnCard ? "border-red-400" : ""}`} />
+                        {errors.fallbackCard?.nameOnCard && <p className="text-xs text-red-500 mt-1">{errors.fallbackCard.nameOnCard.message}</p>}
                       </div>
                       <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Card Number</label>
-                        <Input value={fallbackCard.cardNumber} onChange={(e) => setFallbackCard({ ...fallbackCard, cardNumber: e.target.value })}
-                          onBlur={() => { setCardTouched(new Set(cardTouched).add("cardNumber")); validateCardFields(); }}
-                          placeholder="0000 0000 0000 0000" className={`h-11 border-gray-200 ${cardErrors.cardNumber ? "border-red-400" : ""}`} />
-                        {cardErrors.cardNumber && <p className="text-xs text-red-500 mt-1">{cardErrors.cardNumber}</p>}
+                        <Input {...register("fallbackCard.cardNumber")}
+                          placeholder="0000 0000 0000 0000" className={`h-11 border-gray-200 ${errors.fallbackCard?.cardNumber ? "border-red-400" : ""}`} />
+                        {errors.fallbackCard?.cardNumber && <p className="text-xs text-red-500 mt-1">{errors.fallbackCard.cardNumber.message}</p>}
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">Expire Date</label>
-                          <Input value={fallbackCard.expiry} onChange={(e) => setFallbackCard({ ...fallbackCard, expiry: e.target.value })}
-                            onBlur={() => { setCardTouched(new Set(cardTouched).add("expiry")); validateCardFields(); }}
-                            placeholder="MM/YY" className={`h-11 border-gray-200 ${cardErrors.expiry ? "border-red-400" : ""}`} />
-                          {cardErrors.expiry && <p className="text-xs text-red-500 mt-1">{cardErrors.expiry}</p>}
+                          <Input {...register("fallbackCard.expiry")}
+                            placeholder="MM/YY" className={`h-11 border-gray-200 ${errors.fallbackCard?.expiry ? "border-red-400" : ""}`} />
+                          {errors.fallbackCard?.expiry && <p className="text-xs text-red-500 mt-1">{errors.fallbackCard.expiry.message}</p>}
                         </div>
                         <div><label className="text-sm font-medium text-gray-700 mb-1.5 block">CVC</label>
-                          <Input value={fallbackCard.cvc} onChange={(e) => setFallbackCard({ ...fallbackCard, cvc: e.target.value })}
-                            onBlur={() => { setCardTouched(new Set(cardTouched).add("cvc")); validateCardFields(); }}
-                            placeholder="000" className={`h-11 border-gray-200 ${cardErrors.cvc ? "border-red-400" : ""}`} />
-                          {cardErrors.cvc && <p className="text-xs text-red-500 mt-1">{cardErrors.cvc}</p>}
+                          <Input {...register("fallbackCard.cvc")}
+                            placeholder="000" className={`h-11 border-gray-200 ${errors.fallbackCard?.cvc ? "border-red-400" : ""}`} />
+                          {errors.fallbackCard?.cvc && <p className="text-xs text-red-500 mt-1">{errors.fallbackCard.cvc.message}</p>}
                         </div>
                       </div>
                     </>
@@ -622,7 +627,7 @@ export default function CheckoutPage() {
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h2>
               <label className="text-sm font-medium text-gray-700 mb-1.5 block">Order Notes <span className="text-gray-400 font-normal">(Optional)</span></label>
               <textarea rows={4} placeholder="Notes about your order, e.g. special notes for delivery"
-                value={orderNotes} onChange={(e) => setOrderNotes(e.target.value)}
+                {...register("orderNotes")}
                 className="w-full border border-gray-200 rounded p-3 text-sm focus:outline-none focus:ring-1 focus:ring-brand-orange resize-none" />
             </div>
           </div>
@@ -706,7 +711,7 @@ export default function CheckoutPage() {
                 )}
               </div>
 
-              <Button onClick={handlePlaceOrder} disabled={isPlacingOrder || cart.length === 0}
+              <Button type="submit" disabled={isPlacingOrder || cart.length === 0 || (paymentMethod === "card" && stripePromise && !clientSecret)}
                 className="w-full bg-brand-orange hover:bg-orange-600 text-white font-bold h-14 uppercase tracking-wide flex items-center justify-center gap-2">
                 {isPlacingOrder ? <Loader2 className="w-6 h-6 animate-spin" /> : "PLACE ORDER"}
                 {!isPlacingOrder && <ArrowRight className="w-5 h-5" />}
@@ -714,7 +719,7 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-        </div>
+        </form>
       </div>
 
       

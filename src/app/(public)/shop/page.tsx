@@ -112,10 +112,10 @@ function ProductCard({ product }: { product: Product }) {
         />
 
       
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[95%] sm:w-auto flex flex-wrap justify-center gap-1.5 sm:gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200 z-20">
           <button
             onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, image: product.image })}
-            className="bg-white shadow-md rounded-full p-2 hover:bg-brand-orange hover:text-white transition-colors text-gray-700"
+            className="bg-white shadow-md rounded-full p-1.5 sm:p-2 hover:bg-brand-orange hover:text-white transition-colors text-gray-700"
             title="Add to Cart"
             aria-label="Add to cart"
           >
@@ -123,7 +123,7 @@ function ProductCard({ product }: { product: Product }) {
           </button>
           <button
             onClick={handleAddToWishlist}
-            className={`bg-white shadow-md rounded-full p-2 transition-colors ${inWishlist ? "text-red-500" : "hover:bg-brand-orange hover:text-white text-gray-700"}`}
+            className={`bg-white shadow-md rounded-full p-1.5 sm:p-2 transition-colors ${inWishlist ? "text-red-500" : "hover:bg-brand-orange hover:text-white text-gray-700"}`}
             title="Add to Wishlist"
             aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
           >
@@ -131,7 +131,7 @@ function ProductCard({ product }: { product: Product }) {
           </button>
           <button
             onClick={handleAddToCompare}
-            className={`bg-white shadow-md rounded-full p-2 transition-colors ${inCompare ? "text-brand-orange" : "hover:bg-brand-orange hover:text-white text-gray-700"}`}
+            className={`bg-white shadow-md rounded-full p-1.5 sm:p-2 transition-colors ${inCompare ? "text-brand-orange" : "hover:bg-brand-orange hover:text-white text-gray-700"}`}
             title="Add to Compare"
             aria-label="Add to compare"
           >
@@ -139,7 +139,7 @@ function ProductCard({ product }: { product: Product }) {
           </button>
           <Link
             href={`/products/${product.id}`}
-            className="bg-white shadow-md rounded-full p-2 hover:bg-brand-orange hover:text-white transition-colors text-gray-700"
+            className="bg-white shadow-md rounded-full p-1.5 sm:p-2 hover:bg-brand-orange hover:text-white transition-colors text-gray-700"
             title="View Details"
             aria-label="View details"
           >

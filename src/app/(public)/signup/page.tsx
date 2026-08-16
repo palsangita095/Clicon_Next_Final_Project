@@ -12,6 +12,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase.config";
 import { getDashboardPath } from "@/lib/auth-routing";
 import { customerSignupSchema } from "@/services/validation/customer-signup.validation";
+import { getSiteUrl } from "@/lib/siteUrl";
 
 type FormValues = yup.InferType<typeof customerSignupSchema>;
 
@@ -92,7 +93,7 @@ export default function SignUpPage() {
           full_name: values.name,
           role: "customer",
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${getSiteUrl()}/auth/callback`,
       }
     });
 
@@ -117,7 +118,7 @@ export default function SignUpPage() {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${getSiteUrl()}/auth/callback`,
       },
     });
   };
@@ -136,7 +137,7 @@ export default function SignUpPage() {
       type: "signup",
       email: getValues("email"),
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/account`,
+        emailRedirectTo: `${getSiteUrl()}/auth/callback?next=/account`,
       },
     });
     setResending(false);

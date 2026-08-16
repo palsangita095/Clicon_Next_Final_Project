@@ -6,6 +6,7 @@ import {
   signupFns,
 } from "@/api/api-function/auth.function";
 import { getErrorMessage } from "@/services/helper/global.helper";
+import { getSiteUrl } from "@/lib/siteUrl";
 import { user_role } from "@/types/enum/enum";
 import {
   AuthState,
@@ -147,7 +148,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   loginWithGoogle: async () => {
     set({ isError: null });
     try {
-      const redirectTo = `${window.location.origin}/auth/callback`;
+      const redirectTo = `${getSiteUrl()}/auth/callback`;
       await loginWithGoogleFns(redirectTo);
     } catch (error) {
       const err = getErrorMessage(error);
