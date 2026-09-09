@@ -45,7 +45,7 @@ const faqs = [
 
 export default function FaqPage() {
   const settings = useStoreSettings();
-  const [openIndex, setOpenIndex] = useState<number | null>(1); // Open second one by default
+  const [openIndex, setOpenIndex] = useState<number | null>(1); 
 
   return (
     <div className="bg-white min-h-screen">
