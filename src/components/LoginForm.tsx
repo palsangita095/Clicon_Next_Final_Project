@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "sonner";
@@ -17,6 +17,8 @@ import { Separator } from "./ui/separator";
 
 const LoginForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || "";
   const {
     loginUser,
     loginWithGoogle,
@@ -57,19 +59,23 @@ const LoginForm = () => {
 
       
 
-      switch (res.data?.role) {
-        case "customer":
-          router.push("/customer/dashboard");
-          break;
-        case "driver":
-          router.push("/driver/dashboard");
-          break;
-        case "dispatcher":
-          router.push("/dispatcher/dashboard");
-          break;
-        case "admin":
-          router.push("/admin/dashboard");
-          break;
+      if (redirectTo) {
+        router.push(redirectTo);
+      } else {
+        switch (res.data?.role) {
+          case "customer":
+            router.push("/customer/dashboard");
+            break;
+          case "driver":
+            router.push("/driver/dashboard");
+            break;
+          case "dispatcher":
+            router.push("/dispatcher/dashboard");
+            break;
+          case "admin":
+            router.push("/admin/dashboard");
+            break;
+        }
       }
 
       closeDrawer();

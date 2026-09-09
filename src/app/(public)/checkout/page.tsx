@@ -4,10 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useStorefront } from "@/store/useStorefront";
+import { useAuthStore } from "@/store/useAuthStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowRight, CreditCard, Loader2, XCircle, LogIn, X } from "lucide-react";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
+import { ArrowRight, CreditCard, Loader2, XCircle, LogIn, X, User, Lock, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { fixImageUrl } from "@/lib/imageFallback";
@@ -17,22 +19,27 @@ import { useStoreSettings } from "@/hooks/useStoreSettings";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-function StripeElementsInner({ onReady }: { onReady: (s: any, e: any) => void }) {
+function StripeElementsInner({ onReady, paymentElementOptions }: { onReady: (s: any, e: any) => void; paymentElementOptions?: any }) {
   const stripe = useStripe();
   const elements = useElements();
   useEffect(() => { if (stripe && elements) onReady(stripe, elements); }, [stripe, elements, onReady]);
-  return <PaymentElement />;
+  return <PaymentElement options={paymentElementOptions} />;
 }
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 const NAME_PATTERN = /^[A-Za-zÀ-ÿ\s\-']+$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_PATTERN = /^\d{10}$/;
+const LOCAL_PHONE_PATTERN = /^\d{10}$/;
+const E164_PHONE_PATTERN = /^\+[1-9]\d{1,14}$/;
 const CARD_PATTERN = /^\d{13,19}$/;
 const EXPIRY_PATTERN = /^(0[1-9]|1[0-2])\/\d{2}$/;
 const CVC_PATTERN = /^\d{3,4}$/;
-const ZIP_PATTERN = /^\d{5,10}$/;
+const US_ZIP_PATTERN = /^\d{5}(-\d{4})?$/;
+const UK_POSTAL_PATTERN = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+const CANADA_POSTAL_PATTERN = /^[A-Z]\d[A-Z]\s?\d[A-Z]\d$/i;
+const INDIA_PIN_PATTERN = /^\d{6}$/;
+const GLOBAL_POSTAL_PATTERN = /^[A-Za-z0-9][A-Za-z0-9\s-]{1,18}[A-Za-z0-9]$/;
 
 const COUNTRIES: Record<string, { states: Record<string, string[]> }> = {
   "United States": { states: { "California": ["Los Angeles", "San Francisco", "San Diego", "Sacramento"], "New York": ["New York City", "Buffalo", "Rochester", "Albany"], "Texas": ["Houston", "Dallas", "Austin", "San Antonio"], "Florida": ["Miami", "Orlando", "Tampa", "Jacksonville"], "Illinois": ["Chicago", "Aurora", "Naperville", "Springfield"] } },
@@ -49,6 +56,45 @@ const COUNTRIES: Record<string, { states: Record<string, string[]> }> = {
 
 const COUNTRY_OPTIONS = Object.keys(COUNTRIES);
 
+function isValidPhoneNumber(value?: string | null) {
+  const phone = (value ?? "").trim();
+  const localPhone = phone.replace(/\D/g, "");
+  const compactPhone = phone.replace(/[\s\-()]/g, "");
+  return LOCAL_PHONE_PATTERN.test(localPhone) || E164_PHONE_PATTERN.test(compactPhone);
+}
+
+function isValidPostalCode(value?: string | null, countryValue?: string | null) {
+  const postalCode = (value ?? "").trim();
+  const country = (countryValue ?? "").trim().toLowerCase();
+
+  if (!postalCode) return false;
+  if (GLOBAL_POSTAL_PATTERN.test(postalCode)) return true;
+  if (country === "united states") return US_ZIP_PATTERN.test(postalCode);
+  if (country === "united kingdom" || country === "uk") return UK_POSTAL_PATTERN.test(postalCode);
+  if (country === "canada") return CANADA_POSTAL_PATTERN.test(postalCode);
+  if (country === "india") return INDIA_PIN_PATTERN.test(postalCode);
+  return GLOBAL_POSTAL_PATTERN.test(postalCode);
+}
+
+function toStripeCountryCode(country?: string | null) {
+  const value = (country ?? "").trim().toLowerCase();
+  const countries: Record<string, string> = {
+    "united states": "US",
+    canada: "CA",
+    "united kingdom": "GB",
+    uk: "GB",
+    australia: "AU",
+    germany: "DE",
+    france: "FR",
+    india: "IN",
+    japan: "JP",
+    brazil: "BR",
+    "united arab emirates": "AE",
+  };
+
+  return countries[value];
+}
+
 const schema = yup.object().shape({
   firstName: yup.string().required("First name is required").matches(NAME_PATTERN, "Only letters, spaces, and hyphens allowed"),
   lastName: yup.string().required("Last name is required").matches(NAME_PATTERN, "Only letters, spaces, and hyphens allowed"),
@@ -57,9 +103,11 @@ const schema = yup.object().shape({
   country: yup.string().required("Country is required"),
   region: yup.string().required("Region/State is required"),
   city: yup.string().required("City is required"),
-  zipCode: yup.string().required("Zip Code is required").matches(ZIP_PATTERN, "Zip code must be numeric (4-10 digits)"),
+  zipCode: yup.string().required("Zip Code is required").test("postal-code", "Enter a valid postal code for the selected country", function (value) {
+    return isValidPostalCode(value, this.parent.country);
+  }),
   email: yup.string().required("Email is required").matches(EMAIL_PATTERN, "Invalid email format"),
-  phone: yup.string().required("Phone number is required").matches(PHONE_PATTERN, "Invalid phone number"),
+  phone: yup.string().required("Phone number is required").test("phone-number", "Enter a 10 digit phone number or E.164 number like +14155552671", isValidPhoneNumber),
   shipDifferentAddress: yup.boolean().default(false),
   orderNotes: yup.string(),
   paymentMethod: yup.string().required(),
@@ -88,23 +136,272 @@ export default function CheckoutPage() {
   const clearCart = useStorefront((s) => s.clearCart);
   const settings = useStoreSettings();
   const router = useRouter();
+  const { user, isAuthenticate } = useAuthStore();
+  const [checkoutUser, setCheckoutUser] = useState<any>(null);
   const [stripePromise, setStripePromise] = useState<any>(null);
+  const [profileData, setProfileData] = useState<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    country: string;
+    billingAddress: {
+      company: string;
+      address: string;
+      country: string;
+      region: string;
+      city: string;
+      zipCode: string;
+    } | null;
+  } | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [mounted, setMounted] = useState(true);
+  const [showCompleteProfilePopup, setShowCompleteProfilePopup] = useState(false);
+
+  const isLoggedIn = !!checkoutUser;
+  const isProfileComplete = Boolean(
+    profileData &&
+    profileData.firstName?.trim() &&
+    profileData.lastName?.trim() &&
+    profileData.email?.trim() &&
+    profileData.phone?.trim() &&
+    profileData.billingAddress &&
+    profileData.billingAddress.address?.trim() &&
+    profileData.billingAddress.country?.trim() &&
+    profileData.billingAddress.region?.trim() &&
+    profileData.billingAddress.city?.trim() &&
+    profileData.billingAddress.zipCode?.trim()
+  );
+
+  const billingDisplay = (() => {
+    if (!isLoggedIn || !profileData) return null;
+    const pd = profileData;
+    return (
+      <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">First Name</p>
+            <p className="font-medium text-gray-900">{pd.firstName}</p>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Last Name</p>
+            <p className="font-medium text-gray-900">{pd.lastName}</p>
+          </div>
+        </div>
+        {pd.billingAddress?.company && (
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Company Name</p>
+            <p className="font-medium text-gray-900">{pd.billingAddress.company}</p>
+          </div>
+        )}
+        <div className="bg-gray-50 rounded-lg p-4">
+          <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Address</p>
+          <p className="font-medium text-gray-900">{pd.billingAddress?.address || "—"}</p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Country</p>
+            <p className="font-medium text-gray-900">{pd.billingAddress?.country || pd.country || "United States"}</p>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Region/State</p>
+            <p className="font-medium text-gray-900">{pd.billingAddress?.region || "—"}</p>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">City</p>
+            <p className="font-medium text-gray-900">{pd.billingAddress?.city || "—"}</p>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Zip Code</p>
+            <p className="font-medium text-gray-900">{pd.billingAddress?.zipCode || "—"}</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Email</p>
+            <p className="font-medium text-gray-900">{pd.email}</p>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Phone Number</p>
+            <p className="font-medium text-gray-900">{pd.phone || "—"}</p>
+          </div>
+        </div>
+        <Button type="button" variant="outline" onClick={() => router.push("/account/settings?redirectTo=/checkout")} className="w-full border-gray-200 text-sm">
+          Edit Billing Details
+        </Button>
+      </div>
+    );
+  })();
+
+  // Don't render form until mounted to avoid hydration mismatch
+  if (false && !mounted) {
+    return (
+      <div className="bg-white min-h-screen">
+        <div className="bg-gray-50 border-b border-gray-100">
+          <div className="container mx-auto px-4 md:px-8 py-3 text-sm text-gray-500 flex items-center gap-2">
+            <Link href="/" className="hover:text-brand-orange flex items-center gap-1"><span>🏠</span> Home</Link>
+            <span className="text-gray-400">›</span>
+            <Link href="/cart" className="hover:text-brand-orange">Shopping Card</Link>
+            <span className="text-gray-400">›</span>
+            <span className="text-brand-orange font-medium">Checkout</span>
+          </div>
+        </div>
+        <div className="container mx-auto px-4 md:px-8 py-10">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-10">
+              <div className="animate-pulse space-y-6">
+                <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="h-11 bg-gray-200 rounded"></div>
+                  <div className="h-11 bg-gray-200 rounded"></div>
+                </div>
+                <div className="h-11 bg-gray-200 rounded"></div>
+                <div className="h-11 bg-gray-200 rounded"></div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="h-11 bg-gray-200 rounded"></div>
+                  <div className="h-11 bg-gray-200 rounded"></div>
+                  <div className="h-11 bg-gray-200 rounded"></div>
+                  <div className="h-11 bg-gray-200 rounded"></div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="h-11 bg-gray-200 rounded"></div>
+                  <div className="h-11 bg-gray-200 rounded"></div>
+                </div>
+              </div>
+            </div>
+            <div className="animate-pulse">
+              <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6 sticky top-6">
+                <div className="h-6 bg-gray-200 rounded w-1/3 mb-5"></div>
+                <div className="space-y-3">
+                  <div className="h-4 bg-gray-200 rounded"></div>
+                  <div className="h-4 bg-gray-200 rounded"></div>
+                  <div className="h-4 bg-gray-200 rounded"></div>
+                  <div className="h-4 bg-gray-200 rounded"></div>
+                </div>
+                <div className="border-t border-gray-100 pt-4 mt-2 space-y-3">
+                  <div className="flex justify-between"><div className="h-4 bg-gray-200 rounded w-1/4"></div><div className="h-4 bg-gray-200 rounded w-1/6"></div></div>
+                  <div className="flex justify-between"><div className="h-4 bg-gray-200 rounded w-1/4"></div><div className="h-4 bg-gray-200 rounded w-1/6"></div></div>
+                  <div className="flex justify-between"><div className="h-4 bg-gray-200 rounded w-1/4"></div><div className="h-4 bg-gray-200 rounded w-1/6"></div></div>
+                  <div className="border-t border-gray-100 pt-4 mt-2 flex justify-between"><div className="h-5 bg-gray-200 rounded w-1/4"></div><div className="h-5 bg-gray-200 rounded w-1/6"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   useEffect(() => {
-    const key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-    if (key) setStripePromise(loadStripe(key));
+    setMounted(true);
   }, []);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    async function fetchUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      setCheckoutUser(user ?? null);
+    }
+
+    fetchUser();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setCheckoutUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      const activeUser = checkoutUser ?? user;
+      if (!activeUser) {
+        setProfileData(null);
+        setProfileLoading(false);
+        return;
+      }
+      try {
+        setProfileLoading(true);
+        const supabase = createClient();
+        const { data } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", activeUser.id)
+          .maybeSingle();
+
+        if (data) {
+          const fullName = data.full_name ?? activeUser.email?.split("@")[0] ?? "";
+          const [firstName, ...rest] = fullName.split(" ");
+          const savedAddress = data.billing_address && typeof data.billing_address === "object"
+            ? data.billing_address
+            : null;
+
+          setProfileData({
+            firstName,
+            lastName: rest.join(" "),
+            email: data.email ?? activeUser.email ?? "",
+            phone: data.phone_number ?? "",
+            country: data.country ?? "United States",
+            billingAddress: savedAddress,
+          });
+        } else {
+          const fallbackName = activeUser.email?.split("@")[0] ?? "";
+          setProfileData({
+            firstName: fallbackName,
+            lastName: "",
+            email: activeUser.email ?? "",
+            phone: "",
+            country: "United States",
+            billingAddress: null,
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+      } finally {
+        setProfileLoading(false);
+      }
+    }
+    fetchProfile();
+  }, [checkoutUser, user]);
 
   const { register, handleSubmit, formState: { errors }, watch, setValue, control } = useForm<FormValues>({
     resolver: yupResolver(schema) as any,
     mode: "onBlur",
     defaultValues: {
-      firstName: "", lastName: "", company: "", address: "",
-      country: "United States", region: "", city: "", zipCode: "",
-      email: "", phone: "", shipDifferentAddress: false, orderNotes: "",
+      firstName: profileData?.firstName ?? "",
+      lastName: profileData?.lastName ?? "",
+      company: profileData?.billingAddress?.company ?? "",
+      address: profileData?.billingAddress?.address ?? "",
+      country: profileData?.billingAddress?.country ?? profileData?.country ?? "United States",
+      region: profileData?.billingAddress?.region ?? "",
+      city: profileData?.billingAddress?.city ?? "",
+      zipCode: profileData?.billingAddress?.zipCode ?? "",
+      email: profileData?.email ?? "",
+      phone: profileData?.phone ?? "",
+      shipDifferentAddress: false,
+      orderNotes: "",
       paymentMethod: "card",
       fallbackCard: { nameOnCard: "", cardNumber: "", expiry: "", cvc: "" }
     }
   });
+
+  // Update form values when profile data loads
+  useEffect(() => {
+    if (profileData && isLoggedIn) {
+      setValue("firstName", profileData.firstName ?? "", { shouldValidate: true });
+      setValue("lastName", profileData.lastName ?? "", { shouldValidate: true });
+      setValue("company", profileData.billingAddress?.company ?? "", { shouldValidate: true });
+      setValue("address", profileData.billingAddress?.address ?? "", { shouldValidate: true });
+      setValue("country", profileData.billingAddress?.country ?? profileData.country ?? "United States", { shouldValidate: true });
+      setValue("region", profileData.billingAddress?.region ?? "", { shouldValidate: true });
+      setValue("city", profileData.billingAddress?.city ?? "", { shouldValidate: true });
+      setValue("zipCode", profileData.billingAddress?.zipCode ?? "", { shouldValidate: true });
+      setValue("email", profileData.email ?? "", { shouldValidate: true });
+      setValue("phone", profileData.phone ?? "", { shouldValidate: true });
+    }
+  }, [profileData, isLoggedIn, setValue]);
 
   const paymentMethod = watch("paymentMethod");
   const shipDifferentAddress = watch("shipDifferentAddress");
@@ -112,6 +409,31 @@ export default function CheckoutPage() {
   const region = watch("region");
   const fallbackCard = watch("fallbackCard");
   const orderNotes = watch("orderNotes");
+  const stripePaymentElementOptions = profileData ? {
+    defaultValues: {
+      billingDetails: {
+        name: `${profileData.firstName} ${profileData.lastName}`.trim(),
+        email: profileData.email,
+        phone: profileData.phone,
+        address: {
+          line1: profileData.billingAddress?.address ?? "",
+          country: toStripeCountryCode(profileData.billingAddress?.country ?? profileData.country),
+          state: profileData.billingAddress?.region ?? "",
+          city: profileData.billingAddress?.city ?? "",
+          postal_code: profileData.billingAddress?.zipCode ?? "",
+        },
+      },
+    },
+    wallets: {
+      applePay: "never",
+      googlePay: "never",
+    },
+  } : undefined;
+
+  useEffect(() => {
+    const key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+    if (key && isLoggedIn && isProfileComplete && paymentMethod === "card") setStripePromise(loadStripe(key));
+  }, [isLoggedIn, isProfileComplete, paymentMethod]);
 
   const [outOfStockIds, setOutOfStockIds] = useState<Set<string | number>>(new Set());
   const [couponCode, setCouponCode] = useState("");
@@ -175,7 +497,7 @@ export default function CheckoutPage() {
   }, [cart]);
 
   useEffect(() => {
-    if (paymentMethod === "card" && stripePromise && total > 0 && !clientSecret && !creatingPiRef.current) {
+    if (isLoggedIn && isProfileComplete && paymentMethod === "card" && stripePromise && total > 0 && !clientSecret && !creatingPiRef.current) {
       creatingPiRef.current = true;
       lastTotalRef.current = total;
       stripeInstanceRef.current = null;
@@ -199,10 +521,10 @@ export default function CheckoutPage() {
         })
         .catch(() => { creatingPiRef.current = false; });
     }
-  }, [paymentMethod, total]);
+  }, [isLoggedIn, isProfileComplete, paymentMethod, stripePromise, total, clientSecret]);
 
   useEffect(() => {
-    if (paymentIntentId && paymentMethod === "card" && total > 0 && lastTotalRef.current !== total) {
+    if (isLoggedIn && isProfileComplete && paymentIntentId && paymentMethod === "card" && total > 0 && lastTotalRef.current !== total) {
       lastTotalRef.current = total;
       const updateIntent = async () => {
         const headers = await getAuthHeader();
@@ -214,7 +536,7 @@ export default function CheckoutPage() {
       };
       updateIntent().catch(() => {});
     }
-  }, [total, paymentIntentId, paymentMethod]);
+  }, [isLoggedIn, isProfileComplete, total, paymentIntentId, paymentMethod]);
 
 
   const onSubmit = async (data: any) => {
@@ -229,9 +551,15 @@ export default function CheckoutPage() {
     const supabase = createClient();
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
+      const { data: { user: activeUser } } = await supabase.auth.getUser();
+      if (!activeUser) {
         setShowLoginPopup(true);
+        setIsPlacingOrder(false);
+        return;
+      }
+
+      if (!isProfileComplete) {
+        setShowCompleteProfilePopup(true);
         setIsPlacingOrder(false);
         return;
       }
@@ -240,7 +568,7 @@ export default function CheckoutPage() {
         firstName: data.firstName, lastName: data.lastName, company: data.company,
         address: data.address, country: data.country, region: data.region,
         city: data.city, zipCode: data.zipCode, phone: data.phone,
-        email: data.email || user.email || "",
+        email: data.email || activeUser.email || "",
       };
 
       const productIdsToCheck = availableCart
@@ -285,7 +613,7 @@ export default function CheckoutPage() {
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
         .insert({
-          user_id: user.id,
+          user_id: activeUser.id,
           total_amount: total,
           status: 'Pending',
           payment_method: paymentMethod,
@@ -317,7 +645,7 @@ export default function CheckoutPage() {
           await supabase.from('orders').update({ stripe_payment_intent_id: paymentIntentId }).eq('id', orderData.id);
 
           const piName = `${billingWithEmail.firstName} ${billingWithEmail.lastName}`.trim();
-          const piEmail = billingWithEmail.email || user.email || "";
+          const piEmail = billingWithEmail.email || activeUser.email || "";
           await fetch("/api/create-payment-intent", {
             method: "POST",
             headers: { "Content-Type": "application/json", ...(await getAuthHeader()) },
@@ -421,8 +749,10 @@ export default function CheckoutPage() {
   const states = country ? Object.keys(COUNTRIES[country]?.states || {}) : [];
   const cities = country && region ? COUNTRIES[country]?.states[region] || [] : [];
 
-  const renderInput = (field: keyof FormValues, label: string, opts?: { type?: string; placeholder?: string; optional?: boolean }) => {
+  const renderInput = (field: keyof FormValues, label: string, opts?: { type?: string; placeholder?: string; optional?: boolean; disabled?: boolean }) => {
     const err = errors[field]?.message as string;
+    const isDisabled = opts?.disabled ?? (mounted && isLoggedIn);
+    const showError = err && (!isDisabled || !mounted || !isLoggedIn); // Don't show errors for disabled (auto-filled) fields
     return (
       <div>
         <label className="text-sm font-medium text-gray-700 mb-1.5 block">
@@ -433,13 +763,40 @@ export default function CheckoutPage() {
             type={opts?.type || "text"}
             {...register(field)}
             placeholder={opts?.placeholder || ""}
-            className={`h-11 border-gray-200 focus-visible:ring-brand-orange ${err ? "border-red-400 focus-visible:ring-red-400" : ""}`}
+            disabled={isDisabled}
+            className={`h-11 border-gray-200 focus-visible:ring-brand-orange ${isDisabled ? "bg-gray-50 cursor-not-allowed" : ""} ${showError ? "border-red-400 focus-visible:ring-red-400" : ""}`}
           />
-          {err && <XCircle className="w-4 h-4 text-red-400 absolute right-3 top-1/2 -translate-y-1/2" />}
+          {showError && <XCircle className="w-4 h-4 text-red-400 absolute right-3 top-1/2 -translate-y-1/2" />}
         </div>
-        {err && <p className="text-xs text-red-500 mt-1">{err}</p>}
+        {showError && <p className="text-xs text-red-500 mt-1">{err}</p>}
       </div>
     );
+  };
+
+  const handleCheckoutSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      setError(null);
+      setShowLoginPopup(true);
+      return;
+    }
+
+    if (!isProfileComplete) {
+      e.preventDefault();
+      setError(null);
+      setShowCompleteProfilePopup(true);
+      return;
+    }
+
+    handleSubmit(onSubmit)(e);
+  };
+
+  const handlePaymentMethodSelect = (methodId: string) => {
+    setValue("paymentMethod", methodId, { shouldValidate: true });
+
+    if (!isLoggedIn) {
+      setError("Please sign in to make payment.");
+    }
   };
 
   return (
@@ -455,111 +812,23 @@ export default function CheckoutPage() {
       </div>
 
       <div className="container mx-auto px-4 md:px-8 py-10">
-        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <form onSubmit={handleCheckoutSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
           
           <div className="lg:col-span-2 space-y-10">
 
           
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Billing Information</h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">User name</label>
-                  <div className="flex gap-4">
-                    <div className="flex-1">
-                      <Input {...register("firstName")} placeholder="First name"
-                        className={`h-11 border-gray-200 focus-visible:ring-brand-orange ${errors.firstName ? "border-red-400 focus-visible:ring-red-400" : ""}`} />
-                      {errors.firstName && <p className="text-xs text-red-500 mt-1">{errors.firstName.message}</p>}
-                    </div>
-                    <div className="flex-1">
-                      <Input {...register("lastName")} placeholder="Last name"
-                        className={`h-11 border-gray-200 focus-visible:ring-brand-orange ${errors.lastName ? "border-red-400 focus-visible:ring-red-400" : ""}`} />
-                      {errors.lastName && <p className="text-xs text-red-500 mt-1">{errors.lastName.message}</p>}
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">Company Name <span className="text-gray-400 font-normal">(Optional)</span></label>
-                  <Input {...register("company")} placeholder="" className="h-11 border-gray-200 focus-visible:ring-brand-orange" />
-                </div>
+              <div className="flex items-center gap-2 mb-6">
+                <h2 className="text-lg font-semibold text-gray-900">Billing Information</h2>
+                {isLoggedIn && profileData && (
+                  <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded flex items-center gap-1">
+                    <User className="w-3 h-3" /> Auto-filled from account
+                  </span>
+                )}
               </div>
 
-              <div className="mb-4">
-                {renderInput("address", "Address", { placeholder: "Street address, P.O. box, etc." })}
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">Country</label>
-                  <Controller
-                    control={control}
-                    name="country"
-                    render={({ field }) => (
-                      <Select value={field.value} onValueChange={(v) => { field.onChange(v); setValue("region", ""); setValue("city", ""); }}>
-                        <SelectTrigger className={`h-11 ${errors.country ? "border-red-400" : ""}`}>
-                          <SelectValue placeholder="Select country..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {COUNTRY_OPTIONS.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  {errors.country && <p className="text-xs text-red-500 mt-1">{errors.country.message}</p>}
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">Region/State</label>
-                  <Controller
-                    control={control}
-                    name="region"
-                    render={({ field }) => (
-                      <Select value={field.value} onValueChange={(v) => { field.onChange(v); setValue("city", ""); }} disabled={!country}>
-                        <SelectTrigger className={`h-11 ${errors.region ? "border-red-400" : ""}`}>
-                          <SelectValue placeholder="Select state..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {states.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  {errors.region && <p className="text-xs text-red-500 mt-1">{errors.region.message}</p>}
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">City</label>
-                  <Controller
-                    control={control}
-                    name="city"
-                    render={({ field }) => (
-                      <Select value={field.value} onValueChange={field.onChange} disabled={!region}>
-                        <SelectTrigger className={`h-11 ${errors.city ? "border-red-400" : ""}`}>
-                          <SelectValue placeholder="Select city..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {cities.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  {errors.city && <p className="text-xs text-red-500 mt-1">{errors.city.message}</p>}
-                </div>
-                <div>
-                  {renderInput("zipCode", "Zip Code")}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                {renderInput("email", "Email", { type: "email" })}
-                {renderInput("phone", "Phone Number", { type: "tel", placeholder: "+1 (555) 000-0000" })}
-              </div>
-
-              <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                <input type="checkbox" {...register("shipDifferentAddress")} className="rounded border-gray-300 text-brand-orange focus:ring-brand-orange w-4 h-4" />
-                Ship into different address
-              </label>
-            </div>
+{billingDisplay}
 
            
             <div className="border border-gray-100 rounded-lg overflow-hidden">
@@ -569,13 +838,13 @@ export default function CheckoutPage() {
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 text-center text-sm font-medium">
                 {[
                   settings.codEnabled && { id: "cod", label: "Cash on Delivery", icon: <span className="text-orange-500 font-bold text-xl">₹</span> },
-                  { id: "venmo", label: "Venmo", icon: <span className="text-blue-500 font-bold text-xl">v</span> },
-                  settings.paypalEnabled && { id: "paypal", label: "Paypal", icon: <span className="text-blue-800 font-bold text-xl">P</span> },
-                  { id: "amazon", label: "Amazon Pay", icon: <span className="text-black font-bold text-xl">a</span> },
+                  // { id: "venmo", label: "Venmo", icon: <span className="text-blue-500 font-bold text-xl">v</span> },
+                  // settings.paypalEnabled && { id: "paypal", label: "Paypal", icon: <span className="text-blue-800 font-bold text-xl">P</span> },
+                  // { id: "amazon", label: "Amazon Pay", icon: <span className="text-black font-bold text-xl">a</span> },
                   settings.stripeEnabled && { id: "card", label: "Debit/Credit Card", icon: <CreditCard className="w-6 h-6 text-orange-500 mx-auto" /> },
                 ].filter(Boolean).map((method: any) => (
                   <button key={method.id} type="button" role="radio" aria-checked={paymentMethod === method.id}
-                    onClick={() => !method.disabled && setValue("paymentMethod", method.id, { shouldValidate: true })}
+                    onClick={() => !method.disabled && handlePaymentMethodSelect(method.id)}
                     className={`p-4 border-b border-r border-gray-100 transition-colors ${method.disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer hover:bg-gray-50'} ${paymentMethod === method.id ? 'bg-orange-50/30' : ''}`}>
                     <div className="mb-2 h-6 flex items-center justify-center">{method.icon}</div>
                     <div className="text-xs text-gray-700 mb-3">{method.label}{method.disabled && <span className="block text-[10px] text-red-400 mt-0.5">Unavailable</span>}</div>
@@ -585,15 +854,31 @@ export default function CheckoutPage() {
                   </button>
                 ))}
               </div>
+              {(!mounted || !isLoggedIn) && (
+                <div className="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-lg flex items-center gap-3">
+                  <Lock className="w-5 h-5 text-brand-orange flex-shrink-0" />
+                  <span className="text-sm font-medium text-gray-700">Please <Link href="/signin?redirectTo=/checkout" className="text-brand-orange hover:underline font-semibold">sign in</Link> to make payment</span>
+                </div>
+              )}
               {paymentMethod === "card" && (
                 <div className="p-6 space-y-4">
-                  {stripePromise ? (
+                  {!isLoggedIn ? (
+                    <div className="flex items-center justify-center gap-3 text-sm text-gray-500 p-8 bg-gray-50 rounded-lg border border-gray-200">
+                      <Lock className="w-5 h-5 text-brand-orange" />
+                      <span className="font-medium text-gray-700">Please <Link href="/signin?redirectTo=/checkout" className="text-brand-orange hover:underline font-semibold">sign in</Link> to enable Debit/Credit Card payment</span>
+                    </div>
+                  ) : !isProfileComplete ? (
+                    <div className="flex items-center justify-center gap-3 text-sm text-gray-500 p-8 bg-gray-50 rounded-lg border border-gray-200">
+                      <AlertCircle className="w-5 h-5 text-brand-orange" />
+                      <span className="font-medium text-gray-700">Please complete your account details to make payment</span>
+                    </div>
+                  ) : stripePromise ? (
                     clientSecret ? (
                       <Elements stripe={stripePromise} options={{ clientSecret }}>
                         <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 mb-4">
                           <p className="text-sm font-medium text-blue-700">Secure payment via Stripe</p>
                         </div>
-                        <StripeElementsInner onReady={(s, e) => { stripeInstanceRef.current = s; elementsInstanceRef.current = e; }} />
+                        <StripeElementsInner paymentElementOptions={stripePaymentElementOptions} onReady={(s, e) => { stripeInstanceRef.current = s; elementsInstanceRef.current = e; }} />
                         {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
                       </Elements>
                     ) : (
@@ -628,9 +913,9 @@ export default function CheckoutPage() {
                       </div>
                     </>
                   )}
-                </div>
-              )}
-            </div>
+</div>
+               )}
+             </div>
 
            
             <div>
@@ -642,7 +927,8 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          
+          </div>
+
           <div>
             <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6 sticky top-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-5">Order Summary</h2>
@@ -721,7 +1007,7 @@ export default function CheckoutPage() {
                 )}
               </div>
 
-              <Button type="submit" disabled={isPlacingOrder || cart.length === 0 || (paymentMethod === "card" && stripePromise && !clientSecret)}
+              <Button type="submit" disabled={isPlacingOrder || cart.length === 0 || (isLoggedIn && isProfileComplete && paymentMethod === "card" && stripePromise && !clientSecret)}
                 className="w-full bg-brand-orange hover:bg-orange-600 text-white font-bold h-14 uppercase tracking-wide flex items-center justify-center gap-2">
                 {isPlacingOrder ? <Loader2 className="w-6 h-6 animate-spin" /> : "PLACE ORDER"}
                 {!isPlacingOrder && <ArrowRight className="w-5 h-5" />}
@@ -752,6 +1038,30 @@ export default function CheckoutPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {showCompleteProfilePopup && (
+        <AlertDialog open={showCompleteProfilePopup} onOpenChange={setShowCompleteProfilePopup}>
+          <AlertDialogContent className="max-w-md">
+            <AlertDialogHeader>
+              <AlertCircle className="w-10 h-10 text-orange-500 mx-auto mb-3" />
+              <AlertDialogTitle className="text-lg font-bold text-gray-900">Complete Your Profile</AlertDialogTitle>
+              <AlertDialogDescription className="text-sm text-gray-500">
+                Please complete your account details to make payment.
+                Update your details in <strong>Account Settings</strong> before placing an order.
+                We need your billing address and contact information to process your order.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setShowCompleteProfilePopup(false)}>Cancel</AlertDialogCancel>
+              <AlertDialogAction asChild>
+                <Link href="/account/settings?redirectTo=/checkout">
+                  <Button className="bg-brand-orange hover:bg-orange-600">Go to Account Settings</Button>
+                </Link>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       )}
     </div>
   );

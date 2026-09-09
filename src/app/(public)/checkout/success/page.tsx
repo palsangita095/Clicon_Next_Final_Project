@@ -42,7 +42,7 @@ export default function CheckoutSuccessPage() {
             </Link>
           </Button>
           <Button asChild className="flex-1 bg-brand-orange hover:bg-orange-600 text-white font-semibold h-12 gap-2">
-            <Link href={orderId ? `/track-order/${orderId}` : "/track-order"}>
+            <Link href={orderId ? `/account/orders/${orderId}` : "/account/orders"}>
               VIEW ORDER <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>

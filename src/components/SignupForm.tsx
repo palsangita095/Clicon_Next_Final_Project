@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Loader2, RadioTower, Truck } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -33,6 +34,9 @@ const roles: { value: Role; label: string; icon: React.ReactNode }[] = [
 ];
 
 const SignupForm = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || "";
   const { registerUser, isLoading, isError, setActiveTab } = useAuthStore();
 
   const {
@@ -52,8 +56,10 @@ const SignupForm = () => {
       toast.success("SignUp Successfully");
       reset();
       setActiveTab("login");
+      if (redirectTo) {
+        router.push(redirectTo);
+      }
     }
-    
   };
 
   return (

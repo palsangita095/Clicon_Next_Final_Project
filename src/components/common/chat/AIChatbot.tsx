@@ -81,6 +81,7 @@ export default function AIChatbot() {
           onClick={() => setIsOpen(true)}
           className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-brand-orange to-orange-500 text-white shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 flex items-center justify-center group"
           aria-label="Open AI Chatbot"
+          suppressHydrationWarning
         >
           <DotLottieReact
             data={botAnimation}
@@ -107,6 +108,7 @@ export default function AIChatbot() {
               onClick={() => setIsOpen(false)}
               aria-label="Close AI assistant"
               className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
+              suppressHydrationWarning
             >
               <X className="w-4 h-4" />
             </button>
@@ -144,6 +146,7 @@ export default function AIChatbot() {
                     key={action}
                     onClick={() => handleQuickAction(action)}
                     className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:bg-brand-orange hover:text-white hover:border-brand-orange transition-colors"
+                    suppressHydrationWarning
                   >
                     {action}
                   </button>
@@ -162,12 +165,14 @@ export default function AIChatbot() {
                 onKeyDown={(e) => { if (e.key === "Enter") sendMessage(input); }}
                 placeholder="Type your message..."
                 className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 outline-none py-1.5"
+                suppressHydrationWarning
               />
               <button
                 onClick={() => sendMessage(input)}
                 disabled={isLoading || !input.trim()}
                 aria-label="Send message"
                 className="w-8 h-8 rounded-lg bg-brand-orange text-white flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:bg-orange-600 transition-colors shrink-0"
+                suppressHydrationWarning
               >
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </button>

@@ -41,20 +41,24 @@ export const useAuthStore = create<AuthState>((set) => ({
       const res = await signupFns(payload);
 
       if (res.success) {
-        if (res.data) {
-          set({
-            user: res.data,
-            role: res.data.role,
-            isAuthenticate: !res.pending,
-          });
+if (res.data) {
+        set({
+          user: res.data,
+          role: res.data.role,
+          isAuthenticate: !res.pending,
+        });
 
-          if (res.pending) {
-            toast.info(res.message);
-          } else {
-            toast.success(res.message);
-          }
+        if (res.pending) {
+          toast.info(res.message);
+        } else {
+          toast.success(res.message);
         }
-        return res;
+      }
+      if (res.success && !res.pending) {
+        useStorefront.getState().setGuestMode(false);
+        await useStorefront.getState().syncGuestToSupabase();
+      }
+      return res;
       }
 
       
@@ -68,7 +72,8 @@ export const useAuthStore = create<AuthState>((set) => ({
               isAuthenticate: true,
             });
           }
-          useStorefront.getState().rehydrate();
+          useStorefront.getState().setGuestMode(false);
+          await useStorefront.getState().syncGuestToSupabase();
           toast.success(adminRes.message);
           return adminRes;
         }
@@ -122,7 +127,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         return res;
       }
 
-      if (res.data) {
+if (res.data) {
         set({
           user: res.data,
           role: res.data.role,
@@ -132,7 +137,8 @@ export const useAuthStore = create<AuthState>((set) => ({
         toast.success(res.message);
       }
 
-      useStorefront.getState().rehydrate();
+      useStorefront.getState().setGuestMode(false);
+      await useStorefront.getState().syncGuestToSupabase();
       return res;
     } catch (error) {
       const err = getErrorMessage(error);
@@ -144,7 +150,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
- 
   loginWithGoogle: async () => {
     set({ isError: null });
     try {
@@ -187,7 +192,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         return res;
       }
 
-      if (res.data) {
+if (res.data) {
         set({
           user: res.data,
           role: res.data.role,
@@ -197,7 +202,8 @@ export const useAuthStore = create<AuthState>((set) => ({
         toast.success(res.message);
       }
 
-      useStorefront.getState().rehydrate();
+      useStorefront.getState().setGuestMode(false);
+      await useStorefront.getState().syncGuestToSupabase();
       return res;
     } catch (error) {
       const err = getErrorMessage(error);
@@ -209,7 +215,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  
   logout: async () => {
     try {
       await supabase.auth.signOut();
@@ -219,7 +224,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     deleteCookie("role");
     deleteCookie("user");
 
-    set({
+set({
       isAuthenticate: false,
       role: null,
       user: null,
@@ -227,12 +232,11 @@ export const useAuthStore = create<AuthState>((set) => ({
       isError: null,
     });
 
-  
-    useStorefront.getState().reset();
+    useStorefront.getState().setGuestMode(true);
+    useStorefront.getState().loadGuestData();
     window.location.href = "/";
    
-
-    toast.success("Logged out successfully");
-    return true;
+  toast.success("Logged out successfully");
+  return true;
   },
 }));

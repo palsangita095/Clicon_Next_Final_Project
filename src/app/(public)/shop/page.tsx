@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { ShoppingCart, Heart, Eye, Star, SlidersHorizontal, ChevronDown, X, RefreshCcw } from "lucide-react";
 import { toast } from "sonner";
 import { useStorefront } from "@/store/useStorefront";
-import { createClient } from "@/lib/supabase/client";
 import { useShopPageData } from "@/hooks/queries/customer/useShopPageData";
 
 
@@ -57,20 +56,8 @@ function ProductCard({ product }: { product: Product }) {
   const inWishlist = isInWishlist(product.id);
   const inCompare = isInCompare(product.id);
 
-  const handleAddToWishlist = async () => {
+  const handleAddToWishlist = () => {
     addToWishlist({ id: product.id, name: product.name, price: product.price, image: product.image });
-
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    await supabase.from("wishlist").upsert(
-      {
-        user_id: user.id,
-        product_id: product.id,
-      },
-      { onConflict: "user_id,product_id" },
-    );
   };
 
   const handleAddToCompare = () => {

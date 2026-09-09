@@ -36,7 +36,7 @@ export async function GET(request: Request) {
         data: { user },
       } = await supabase.auth.getUser()
 
-      if (!next || !user) {
+      if (!user) {
         await supabase.auth.signOut()
         return NextResponse.redirect(`${origin}/signin?verified=true`)
       }
@@ -48,7 +48,9 @@ export async function GET(request: Request) {
         .maybeSingle()
 
       const role = profile?.role ?? 'customer'
-      const destination = isAllowedRedirect(next, role) ? next : getDashboardPath(role)
+      const fallbackDestination = getDashboardPath(role)
+      const requestedDestination = next || fallbackDestination
+      const destination = isAllowedRedirect(requestedDestination, role) ? requestedDestination : fallbackDestination
 
       return NextResponse.redirect(`${origin}${destination}`)
     }

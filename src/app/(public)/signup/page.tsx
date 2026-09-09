@@ -13,11 +13,13 @@ import { supabase } from "@/lib/supabase.config";
 import { getDashboardPath } from "@/lib/auth-routing";
 import { customerSignupSchema } from "@/services/validation/customer-signup.validation";
 import { getSiteUrl } from "@/lib/siteUrl";
+import { useStorefront } from "@/store/useStorefront";
 
 type FormValues = yup.InferType<typeof customerSignupSchema>;
 
 export default function SignUpPage() {
   const router = useRouter();
+  const [redirectTo, setRedirectTo] = useState("/account");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
@@ -33,6 +35,13 @@ export default function SignUpPage() {
     mode: "onTouched",
   });
 
+  useEffect(() => {
+    const next = new URLSearchParams(window.location.search).get("redirectTo");
+    if (next?.startsWith("/")) {
+      setRedirectTo(next);
+    }
+  }, []);
+  
   
   useEffect(() => {
     if (resendCooldown <= 0) return;
@@ -93,7 +102,7 @@ export default function SignUpPage() {
           full_name: values.name,
           role: "customer",
         },
-        emailRedirectTo: `${getSiteUrl()}/auth/callback`,
+        emailRedirectTo: `${getSiteUrl()}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
       }
     });
 
@@ -107,7 +116,9 @@ export default function SignUpPage() {
 
     if (data?.session && data.user) {
       await ensureProfile(data.user.id, data.user.email);
-      router.push(getDashboardPath("customer"));
+      useStorefront.getState().setGuestMode(false);
+      await useStorefront.getState().syncGuestToSupabase();
+      router.push(redirectTo || getDashboardPath("customer"));
     } else {
       setSuccess(true);
       setResendCooldown(60);
@@ -118,7 +129,7 @@ export default function SignUpPage() {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${getSiteUrl()}/auth/callback`,
+        redirectTo: `${getSiteUrl()}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
       },
     });
   };
@@ -137,7 +148,7 @@ export default function SignUpPage() {
       type: "signup",
       email: getValues("email"),
       options: {
-        emailRedirectTo: `${getSiteUrl()}/auth/callback?next=/account`,
+        emailRedirectTo: `${getSiteUrl()}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
       },
     });
     setResending(false);
@@ -171,7 +182,7 @@ export default function SignUpPage() {
           
           
           <div className="flex border-b border-gray-100">
-            <Link href="/signin" className="flex-1 text-center py-4 text-gray-500 font-medium hover:text-gray-900 transition-colors cursor-pointer">
+            <Link href={`/signin?redirectTo=${encodeURIComponent(redirectTo)}`} className="flex-1 text-center py-4 text-gray-500 font-medium hover:text-gray-900 transition-colors cursor-pointer">
               Sign In
             </Link>
             <div className="flex-1 text-center py-4 border-b-2 border-brand-orange text-gray-900 font-semibold cursor-pointer">
@@ -207,7 +218,7 @@ export default function SignUpPage() {
                   {resending ? "Sending..." : resendCooldown > 0 ? `Resend available in ${resendCooldown}s` : "Resend Verification Email"}
                 </Button>
                 <Button asChild className="mt-3 bg-brand-orange hover:bg-orange-600 text-white">
-                  <Link href="/signin">Go to Sign In</Link>
+                  <Link href={`/signin?redirectTo=${encodeURIComponent(redirectTo)}`}>Go to Sign In</Link>
                 </Button>
               </div>
             ) : (

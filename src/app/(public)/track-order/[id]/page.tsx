@@ -50,7 +50,69 @@ function OrderTrackingDetailInner() {
       setLoading(true);
       const supabase = createClient();
       try {
-       
+        if (!email) {
+          const { data: authData } = await supabase.auth.getUser();
+          const user = authData?.user;
+
+          if (user) {
+            const { data: userOrder, error: userOrderError } = await supabase
+              .from("orders")
+              .select(`
+                id,
+                status,
+                total_amount,
+                created_at,
+                order_items(
+                  id,
+                  product_id,
+                  product_name,
+                  quantity,
+                  price_at_time,
+                  products(id, name, image_urls)
+                )
+              `)
+              .eq("id", id)
+              .eq("user_id", user.id)
+              .maybeSingle();
+
+            if (userOrderError) throw userOrderError;
+            if (userOrder) {
+              setOrder(userOrder as unknown as TrackableOrder);
+              setLoading(false);
+              return;
+            }
+
+            if (user.email) {
+              const { data: emailOrder, error: emailOrderError } = await supabase
+                .from("orders")
+                .select(`
+                  id,
+                  status,
+                  total_amount,
+                  created_at,
+                  order_items(
+                    id,
+                    product_id,
+                    product_name,
+                    quantity,
+                    price_at_time,
+                    products(id, name, image_urls)
+                  )
+                `)
+                .eq("id", id)
+                .filter("billing_address->>email", "eq", user.email)
+                .maybeSingle();
+
+              if (emailOrderError) throw emailOrderError;
+              if (emailOrder) {
+                setOrder(emailOrder as unknown as TrackableOrder);
+                setLoading(false);
+                return;
+              }
+            }
+          }
+        }
+
         const { data, error } = await supabase.rpc("get_trackable_order", {
           p_order_id: id,
           p_email: email ?? "",

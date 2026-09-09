@@ -238,22 +238,10 @@ export default function ProductDetailPage() {
     addToCart({ id: product.id, name: product.name, price: displayPrice, image: img }, quantity);
   };
 
-  const handleAddToWishlist = async () => {
+  const handleAddToWishlist = () => {
     if (!product) return;
     const img = fixImageUrl(displayImages[0], product.name);
     addToWishlist({ id: product.id, name: product.name, price: displayPrice, image: img });
-
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    await supabase.from("wishlist").upsert(
-      {
-        user_id: user.id,
-        product_id: product.id,
-      },
-      { onConflict: "user_id,product_id" },
-    );
   };
 
   const handleAddToCompare = () => {

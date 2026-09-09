@@ -207,7 +207,7 @@ export default function AdminSettingsPage() {
               {[
                 ["codEnabled", "Cash on Delivery"],
                 ["stripeEnabled", "Stripe"],
-                ["paypalEnabled", "PayPal"],
+                // ["paypalEnabled", "PayPal"],
               ].map(([key, label]) => (
                 <label key={key} className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 p-3 text-sm font-medium text-gray-700">
                   {label}

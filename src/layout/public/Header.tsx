@@ -312,7 +312,7 @@ const Header = () => {
 
          
           <div className="w-full md:max-w-2xl flex-1 px-0 md:px-8 hidden md:block" ref={searchRef}>
-            <form onSubmit={handleSearchSubmit} className="relative w-full flex items-center bg-white rounded-sm overflow-hidden">
+            {/* <form onSubmit={handleSearchSubmit} className="relative w-full flex items-center bg-white rounded-sm overflow-hidden">
               
               <select
                 value={selectedSearchCategory}
@@ -362,7 +362,7 @@ const Header = () => {
                   ))}
                 </div>
               )}
-            </form>
+            </form> */}
           </div>
 
         

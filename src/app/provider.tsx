@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeProvider } from "next-themes";
 import { setupStorefrontSessionIsolation } from "@/lib/storefrontSession";
+import { GuestSyncProvider } from "@/components/common/GuestSyncProvider";
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(
@@ -39,7 +40,9 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
         enableSystem
       >
         <QueryClientProvider client={queryClient}>
-          {children}
+          <GuestSyncProvider>
+            {children}
+          </GuestSyncProvider>
 
           {process.env.NODE_ENV === "development" && mounted && (
             <ReactQueryDevtools initialIsOpen={false} />

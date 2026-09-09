@@ -13,6 +13,7 @@ import { supabase } from "@/lib/supabase.config";
 import { getDashboardPath, isAllowedRedirect } from "@/lib/auth-routing";
 import { loginSchema } from "@/services/validation/login.validation";
 import { getSiteUrl } from "@/lib/siteUrl";
+import { useStorefront } from "@/store/useStorefront";
 
 type FormValues = yup.InferType<typeof loginSchema>;
 
@@ -112,6 +113,9 @@ function SignInForm() {
         .update({ last_login: new Date().toISOString() })
         .eq("id", data.user.id);
 
+      useStorefront.getState().setGuestMode(false);
+      await useStorefront.getState().syncGuestToSupabase();
+
       const role = profile?.role ?? "customer";
       const destination = isAllowedRedirect(next, role)
         ? next
@@ -125,7 +129,7 @@ function SignInForm() {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${getSiteUrl()}/auth/callback?next=${next}`,
+        redirectTo: `${getSiteUrl()}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     });
   }
@@ -179,7 +183,7 @@ function SignInForm() {
             <div className="flex-1 text-center py-4 border-b-2 border-brand-orange text-gray-900 font-semibold cursor-pointer">
               Sign In
             </div>
-            <Link href="/signup" className="flex-1 text-center py-4 text-gray-500 font-medium hover:text-gray-900 transition-colors cursor-pointer">
+            <Link href={`/signup?redirectTo=${encodeURIComponent(next)}`} className="flex-1 text-center py-4 text-gray-500 font-medium hover:text-gray-900 transition-colors cursor-pointer">
               Sign Up
             </Link>
           </div>

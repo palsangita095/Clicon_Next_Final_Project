@@ -36,16 +36,6 @@ export default function WishlistPage() {
       }
       setUser(user);
 
-      if (localWishlist.length > 0) {
-        await supabase.from("wishlist").upsert(
-          localWishlist.map((item) => ({
-            user_id: user.id,
-            product_id: item.id,
-          })),
-          { onConflict: "user_id,product_id" },
-        );
-      }
-
       const { data } = await supabase
         .from("wishlist")
         .select(`
@@ -90,29 +80,12 @@ export default function WishlistPage() {
   const handleRemove = async (productId: string) => {
     removeFromWishlist(productId);
 
-    if (user) {
-      const supabase = createClient();
-      await supabase
-        .from("wishlist")
-        .delete()
-        .eq("user_id", user.id)
-        .eq("product_id", productId);
-    }
-    
     setWishlistItems(wishlistItems.filter(item => item.id !== productId));
   };
 
   const handleClear = async () => {
     clearWishlist();
 
-    if (user) {
-      const supabase = createClient();
-      await supabase
-        .from("wishlist")
-        .delete()
-        .eq("user_id", user.id);
-    }
-      
     setWishlistItems([]);
   };
 
